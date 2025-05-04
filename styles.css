@@ -1,474 +1,301 @@
-body {
+:root {
+    --purple: #2E0B40;
+    --dark-gray: #191919;
+    --black: #000;
+    --white: #fff;
+    --border-radius: 12px;
+    --heading-font: 'Fredoka', sans-serif;
+    --body-font: 'IBM Plex Sans', sans-serif;
+  }
+  
+  * {
+    box-sizing: border-box;
     margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #fff;
-}
-.navbar {
-    background-color: #2d0a45; /* Dark purple */
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 4rem;
-}
-.navbar-left {
-    font-size: 1.5rem;
-    font-weight: bold;
-    font-family: 'Pacifico', cursive; /* Assuming Pacifico is desired based on the image */
-}
-.navbar-middle a {
-    color: white;
-    margin: 0 1rem;
-    text-decoration: none;
-    font-size: 1rem;
-}
-.join-button {
-    background-color: white;
-    color: #2d0a45;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    text-decoration: none;
-    font-weight: bold;
-}
-.hero {
-    display: flex;
-    align-items: flex-start; /* Changed from 'left' to standard value */
-    justify-content: center; /* This centers the content block if its max-width is less than container */
-    flex-direction: column;
-    text-align: left;
-    padding: 4rem 7.5rem;
-    background: url('/images/home_page_img.jpeg') center/cover no-repeat; /* Ensure this path is correct */
-    color: white;
-    position: relative;
-    min-height: 80vh;
-}
-.hero::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1;
-}
-.hero-content {
-    position: relative;
-    z-index: 2;
-    max-width: 600px;
-    /* If you want hero content truly aligned left, remove justify-content from .hero */
-    /* and potentially add margin-right: auto; here */
-}
-
-.hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-}
-.hero p {
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-}
-.button-group a {
-    background-color: white;
-    color: #2d0a45;
-    padding: 0.75rem 1.5rem;
-    margin-right: 1rem;
-    border-radius: 20px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1rem;
-    display: inline-block; /* Good practice for padding/margin on inline elements */
-}
-.button-group a:nth-child(2) {
-    background-color: transparent;
-    color: white;
-    border: 2px solid white;
-}
-
-/* --- Features Section --- */
-
-.features {
-    background-color: #2d0a45;
-    color: white;
-    padding: 4rem 2rem;
-}
-
-.features-header {
-    max-width: 1200px;
-    margin: 0 auto 3rem;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 2rem; /* Add gap for better wrapping */
-}
-
-.features-text {
-    text-align: left;
-    flex-basis: 55%; /* Adjust basis for responsiveness */
-    min-width: 300px; /* Prevent getting too small */
-}
-
-.features-text h4 {
-    font-size: 1rem;
-    color: #bbb;
-    margin-bottom: 0.5rem;
-}
-
-.features-text h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-}
-
-.features-description {
-    text-align: left;
-    font-size: 1rem;
-    color: #ccc;
-    flex-basis: 40%; /* Adjust basis */
-    min-width: 300px;
-}
-
-/* Container for all feature items */
-.features-cards {
-    max-width: 1200px; /* Align with header */
-    margin: 3rem auto 0; /* Center container and add space above */
-    display: flex;
-    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
-    justify-content: center; /* Center items horizontally */
-    gap: 2rem; /* Space between feature items */
-    align-items: flex-start; /* Align items to the top */
-}
-
-/* New wrapper for each image + text block */
-.feature-item {
-    display: flex;
-    flex-direction: column;
-    /* Set a width or basis for each item */
-    flex-basis: 375px; /* Example width, adjust as needed */
-    max-width: 100%; /* Ensure it doesn't overflow container */
-    text-align: left; /* Align text within the item */
-}
-
-/* Styles for the image container (the white rounded box) */
-.feature-card {
-    background-color: white;
-    border-radius: 20px;
-    overflow: hidden;
-    width: 100%; /* Take full width of parent .feature-item */
-    margin-bottom: 1.5rem; /* Space between image card and text below */
-    /* Removed styles: color, text-align, display:flex, flex-direction */
-}
-
-.feature-card img {
-    width: 100%;
-    height: 200px; /* Or use aspect-ratio */
-    /* aspect-ratio: 3 / 2; */ /* Example: maintains a 3:2 ratio */
-    object-fit: cover;
-    display: block; /* Prevents extra space beneath the image */
-}
-
-/* Styles for the text block (now outside the white card) */
-.feature-card-text {
-    padding: 0; /* Remove old padding */
-    width: 100%; /* Ensure text block takes full width of item */
-}
-
-.feature-card-text h3 {
-    font-size: 1.3rem;
-    margin-top: 0; /* Reset margin */
-    margin-bottom: 0.5rem;
-    color: white; /* Text color against purple background */
-}
-
-.feature-card-text p {
-    font-size: 1rem;
-    color: #ccc; /* Lighter text color for description */
-    margin-top: 0;
-    /* Removed old color: #555 */
-}
-
-/* Buttons below the cards */
-.features-buttons {
-    margin-top: 3rem;
-    text-align: left;
-    max-width: 1200px; /* Align with cards/header */
-    margin-left: auto; /* Center the button container */
-    margin-right: auto;
-    padding: 0; /* Remove padding if max-width centers it */
-}
-
-.features-buttons a {
-    margin-right: 1rem;
-    padding: 0.75rem 1.5rem;
-    border-radius: 20px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1rem;
-    display: inline-block; /* Ensure padding works correctly */
-}
-
-.learn-more-btn {
-    background-color: transparent;
-    color: white;
-    border: 2px solid white;
-}
-
-.sign-up-btn {
-    background-color: white;
-    color: #2d0a45;
-}
-
-/* --- Testimonials Section --- */
-.testimonials {
-    background-color: #191919; /* Or use #000000 for black like the example */
-    color: white;
-    padding: 4rem 2rem; /* Vertical and horizontal padding */
-    text-align: center; /* Center align content */
-}
-
-.testimonial-content {
-    max-width: 700px; /* Adjust max-width for optimal line length */
-    margin: 0 auto 3rem auto; /* Center horizontally, add space between testimonials */
-}
-
-.testimonial-content:last-child {
-    margin-bottom: 0; /* No bottom margin for the last testimonial */
-}
-
-/* Optional Logo Styling */
-.testimonial-logo {
-    height: 30px; /* Adjust size */
-    margin-bottom: 2rem;
-    opacity: 0.8;
-}
-
-.quote {
-    font-size: 1.5rem; /* Prominent quote size */
-    font-style: italic;
+    padding: 0;
+  }
+  
+  body {
+    font-family: var(--body-font);
+    color: var(--white);
+    background: var(--black);
     line-height: 1.6;
-    margin: 0 auto 2rem auto; /* Center block, space below */
-    max-width: 95%; /* Ensure it doesn't touch edges */
-    quotes: '"' '"'; /* Use blockquote's default quote handling */
-}
-
-.testimonial-avatar {
-    width: 80px; /* Avatar dimensions */
-    height: 80px;
-    border-radius: 50%; /* Circular */
-    object-fit: cover; /* Image scaling */
-    margin-bottom: 1rem; /* Space below avatar */
-    border: 3px solid rgba(255, 255, 255, 0.8); /* Optional subtle border */
-}
-
-.testimonial-name {
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-top: 0;
-    margin-bottom: 0.25rem; /* Space between name and title */
-}
-
-.testimonial-title {
-    font-size: 0.9rem;
-    color: #ccc; /* Lighter grey for title */
-    margin: 0;
-}
-
-/* --- End Testimonials Section --- */
-
-.unlock-section {
-    background-color: #200032;
-    color: white;
-    padding: 100px 40px;
-    display: flex;
-    justify-content: center;
   }
   
-  .unlock-container {
-    display: flex;
-    flex-wrap: wrap;
-    max-width: 1200px;
-    width: 100%;
-    align-items: center;
-    gap: 50px;
-  }
-  
-  .unlock-text {
-    flex: 1;
-    min-width: 300px;
-  }
-  
-  .unlock-text h1 {
-    font-size: 42px;
-    margin-bottom: 20px;
-  }
-  
-  .unlock-text p {
-    font-size: 18px;
-    color: #ccc;
-    margin-bottom: 30px;
-  }
-  
-  .unlock-buttons {
-    display: flex;
-    gap: 20px;
-  }
-  
-  .btn-primary {
-    background: white;
-    color: black;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 999px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
-  .btn-secondary {
-    background: transparent;
-    color: white;
-    border: 1px solid white;
-    padding: 12px 24px;
-    border-radius: 999px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
-  .btn-primary:hover, .btn-secondary:hover {
-    opacity: 0.8;
-  }
-  
-  .unlock-image {
-    flex: 1;
-    min-width: 300px;
-    display: flex;
-    justify-content: center;
-  }
-  
-  .placeholder-image {
-    background-color: #ccc;
-    width: 100%;
-    max-width: 400px;
-    height: 250px;
-    border-radius: 20px;
-  }
-
-/* --- Footer Styles --- */
-.footer {
-    background-color: #191919; /* Match testimonial background */
-    color: white;
-    padding: 2rem; /* Adjust padding as needed */
-}
-
-.footer-top {
+  /* Navbar */
+  .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
-    margin: 0 auto 1.5rem auto; /* Center and add space below */
-    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
-    gap: 1rem; /* Add space between items when wrapped */
-}
-
-.footer-logo {
+    background: #2E0B40;
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  }  
+  
+  .logo {
+    font-family: cursive;
+    font-style: italic;
     font-size: 1.5rem;
-    font-weight: bold;
-    font-family: 'Pacifico', cursive; /* Use the same font as navbar logo */
-}
-
-.footer-nav a {
-    color: white;
-    margin: 0 1rem;
+  }
+  
+  .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+  }
+  
+  .nav-links a {
+    color: var(--white);
     text-decoration: none;
-    font-size: 1rem;
-}
-
-.footer-social a {
-    color: white;
-    margin-left: 1rem; /* Space between icons */
-    font-size: 1.2rem;
-    text-decoration: none;
-}
-
-.footer-divider {
+    font-weight: 500;
+  }
+  
+  .nav-btn {
+    background: #663399;
     border: none;
-    height: 1px;
-    max-width: 1200px;
-    background-color: #444; /* Color for the dividing line */
-    margin: 1.5rem auto; /* Space above and below the line */
-}
-
-.footer-bottom {
-    display: flex; /* Use flexbox to put items on the same row */
-    justify-content: center; /* Center the items horizontally */
-    align-items: center; /* Vertically align items in the center */
-    font-size: 0.9rem;
-    color: #ccc;
-    flex-wrap: wrap; /* Allow wrapping on smaller screens */
-    gap: 1rem; /* Add space between the copyright and legal links */
-    /* Outline added for debugging - remove after fixing */
-    /* outline: 1px solid red; */
-}
-
-.footer-bottom p {
-    margin-bottom: 5; /* Ensure no bottom margin */
-    padding: 0; /* Explicitly set padding to zero */
-    /* outline: 1px solid blue; */ /* Outline added for debugging - remove after fixing */
-}
-
-.footer-legal {
-    /* outline: 1px solid green; */ /* Outline added for debugging - remove after fixing */
-    padding: 0; /* Explicitly set padding to zero */
-}
-
-.footer-legal a {
-    color: #ccc;
-    margin: 0 0.5rem;
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+  }
+  
+  /* Hero */
+  .hero {
+    background: url('https://source.unsplash.com/featured/?technology,education') no-repeat center center/cover;
+    padding: 5rem 2rem;
+    color: var(--white);
+    text-align: left;
+    position: relative;
+  }
+  
+  .hero-content {
+    max-width: 700px;
+  }
+  
+  .hero-image {
+    display: none;
+  }
+  
+  .hero-buttons .primary, .feature-buttons .primary, .cta .primary {
+    background: var(--purple);
+    color: var(--white);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    margin-right: 0.5rem;
+    border-radius: var(--border-radius);
+  }
+  
+  .secondary {
+    background: transparent;
+    color: var(--white);
+    border: 1px solid var(--white);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+  }
+  
+  .hero-image, .image-placeholder {
+    width: 300px;
+    height: 200px;
+    background: #999;
+    border-radius: var(--border-radius);
+    margin-top: 2rem;
+  }
+  
+  /* Features */
+  .features {
+    background: var(--purple);
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+  
+  .features h2 {
+    font-family: var(--heading-font);
+    font-size: 1.75rem;
+    margin: 0.5rem 0;
+  }
+  
+  .feature-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    margin: 3rem 0;
+  }
+  
+  .card {
+    background: #3e3e3e;
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    width: 300px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .card .image-placeholder {
+    height: 150px;
+    width: 100%;
+    background: #999;
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+  }
+  
+  .feature-buttons {
+    margin-top: 2rem;
+  }
+  
+  
+  /* CTA */
+  .cta {
+    background: var(--dark-gray);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 4rem 2rem;
+    gap: 2rem;
+  }
+  
+  .cta-content {
+    flex: 1;
+    min-width: 250px;
+  }
+  
+  .cta h2 {
+    font-family: var(--heading-font);
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Testimonial */
+  .testimonial {
+    background: var(--purple);
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+  
+  .testimonial .quote-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #ccc;
+    display: block;
+    margin: 0 auto 1rem;
+    object-fit: cover;
+  }  
+  
+  .testimonial p {
+    font-style: italic;
+    max-width: 600px;
+    margin: 0 auto 1rem;
+  }
+  
+  .testimonial .author {
+    font-weight: bold;
+  }
+  
+  /* Footer */
+  .footer {
+    background: var(--black);
+    color: var(--white);
+    padding: 2rem;
+    font-family: var(--body-font);
+  }
+  
+  .footer-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+  
+  .footer-logo {
+    font-family: cursive;
+    font-style: italic;
+    font-size: 1.5rem;
+  }
+  
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .footer-links a {
+    color: var(--white);
     text-decoration: none;
-    /* You could try vertical-align here, but align-items on parent is usually preferred in flexbox */
-    /* vertical-align: middle; */
-}
-
-.footer-legal a:hover,
-.footer-nav a:hover,
-.footer-social a:hover {
-    text-decoration: underline;
-}
-
-/* Responsive adjustments for the footer */
-@media (max-width: 768px) {
-    .footer-top {
+    font-size: 0.95rem;
+  }
+  
+  .footer-socials {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .footer-socials a {
+    color: var(--white);
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+  }
+  
+  .footer-socials a:hover {
+    color: #aaa;
+  }
+  
+  .footer hr {
+    border: none;
+    border-top: 1px solid #444;
+    margin: 2rem 0 1rem;
+  }
+  
+  .footer-bottom {
+    text-align: center;
+    color: #aaa;
+    font-size: 0.9rem;
+  }
+  
+  .footer-bottom ul {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    list-style: none;
+    padding-top: 0.5rem;
+    margin: 0;
+  }
+  
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero, .cta {
+      flex-direction: column;
+    }
+  
+    .feature-cards {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .footer-nav {
         flex-direction: column;
+        align-items: center;
         text-align: center;
-    }
-
-    .footer-logo,
-    .footer-nav,
-    .footer-social {
-        margin-bottom: 1rem; /* Add space between stacked items */
-    }
-
-    .footer-nav a,
-    .footer-social a {
-        margin: 0 0.5rem; /* Adjust spacing for smaller screens */
-    }
-
-    .footer-divider {
-        margin: 1rem auto;
-    }
-
+      }
+  
     .footer-bottom {
-        flex-direction: column; /* Stack items vertically on small screens */
-        gap: 0.5rem; /* Adjust gap for stacked items */
+      flex-direction: column;
+      gap: 1rem;
     }
 
-     .footer-bottom p {
-        margin-bottom: 0; /* Ensure no extra margin when stacked */
+    .footer-links,
+    .footer-socials {
+    justify-content: center;
     }
-
-    .footer-legal {
-        display: flex; /* Keep legal links in a row even when stacked */
-        justify-content: center;
-        gap: 0.5rem; /* Space between legal links */
-    }
-
-     .footer-legal a {
-         margin: 0; /* Remove horizontal margin when stacked */
-     }
-}
+  }
+  
