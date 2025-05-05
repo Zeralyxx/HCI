@@ -106,6 +106,8 @@
   .nav-btn:hover {
     background: #ccc;
   }
+
+    /* === Home Page Styles === */
   
   /* Hero */
   .hero {
@@ -131,6 +133,10 @@
     padding: 0.75rem 1.5rem;
     margin-right: 0.5rem;
     border-radius: var(--border-radius);
+  }
+
+  .hero-buttons{
+    padding-top: 1rem;
   }
   
   .secondary {
@@ -212,8 +218,12 @@
   .cta h2 {
     font-family: var(--heading-font);
     font-size: 1.75rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
   }
+
+    .cta p {
+        margin-bottom: 1rem;
+    }
   
   /* Testimonial */
   .testimonial {
@@ -378,6 +388,267 @@
     .footer-links,
     .footer-socials {
     justify-content: center;
+    }
+  }
+  
+  /* === About Page Styles === */
+
+/* Header Section */
+.about-header {
+    background: url('https://source.unsplash.com/featured/?technology,education') no-repeat center center/cover;
+    padding: 5rem 2rem;
+    color: var(--white);
+    text-align: left;
+    position: relative;
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+  
+  .about-header h1 {
+    font-family: var(--heading-font);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .about-header p {
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: 1rem;
+    color: #ddd;
+  }
+  
+  /* About Section */
+  .about-cta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    background: var(--purple);
+    padding: 4rem 2rem;
+    gap: 2rem;
+  }
+  
+  .about-cta .about-image {
+    flex: 1;
+    max-width: 400px;
+    min-width: 280px;
+    max-height: 400px;
+    min-height: 280px;
+    height: 100px;
+    background: #999;
+    border-radius: var(--border-radius);
+    margin-top: 2rem;
+    overflow: hidden;
+  }
+
+  .hero-image, .image-placeholder {
+    width: 300px;
+    height: 200px;
+    background: #999;
+    border-radius: var(--border-radius);
+    margin-top: 2rem;
+  }
+  
+  .about-cta img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--border-radius);
+  }
+  
+  .about-cta .about-text {
+    flex: 1;
+    min-width: 280px;
+    color: var(--white);
+  }
+  
+  .about-cta .about-text h2 {
+    font-family: var(--heading-font);
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+  
+  .about-cta .about-text p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #ccc;
+  }
+  
+  /* Team Section */
+  .team-section {
+    background: var(--dark-gray);
+    color: var(--white);
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+  
+  .team-section h2 {
+    font-family: var(--heading-font);
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .team-section .subtitle {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-bottom: 2rem;
+  }
+  
+  .team-members {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+  }
+  
+  .team-member {
+    background: #2a2a2a;
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    max-width: 280px;
+    flex: 1;
+    text-align: center;
+  }
+  
+  .team-member img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+  }
+  
+  .team-member h3 {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .team-member .role {
+    font-size: 0.9rem;
+    color: #bbb;
+    margin-bottom: 1rem;
+  }
+  
+  .team-member p {
+    font-size: 0.85rem;
+    color: #ccc;
+    margin-bottom: 1rem;
+  }
+  
+  .team-member .social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .team-member .social-icons a {
+    color: #aaa;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+  }
+  
+  .team-member .social-icons a:hover {
+    color: var(--white);
+  }
+  
+  /* Reviews Section */
+  .reviews-section {
+    background: var(--purple);
+    color: var(--white);
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+  
+  .reviews-section h2 {
+    font-family: var(--heading-font);
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .reviews-section p.subtitle {
+    font-size: 0.9rem;
+    color: #ddd;
+    margin-bottom: 2rem;
+  }
+  
+  .review-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+  }
+  
+  .review-card {
+    background: #3f114e;
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    flex: 1;
+    max-width: 280px;
+    text-align: left;
+  }
+  
+  .review-card .stars {
+    color: gold;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .review-card p.quote {
+    font-style: italic;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  
+  .review-card .reviewer {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  .review-card .reviewer img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .review-card .reviewer-info {
+    font-size: 0.8rem;
+  }
+  
+  .review-card .reviewer-info .name {
+    font-weight: bold;
+  }
+  
+  .review-card .reviewer-info .title {
+    color: #ccc;
+  }
+
+  .review-icon{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #ccc;
+    display: block;
+    margin: 0 auto 1rem;
+    object-fit: cover;
+  }
+  
+  /* Responsive Tweaks */
+  @media (max-width: 768px) {
+    .about-cta {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .team-members {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .review-cards {
+      flex-direction: column;
+      align-items: center;
     }
   }
   
