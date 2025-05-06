@@ -1,6 +1,7 @@
 :root {
     --purple: #2E0B40;
     --dark-gray: #191919;
+    --light-gray: #ccc;
     --black: #000;
     --white: #fff;
     --border-radius: 12px;
@@ -786,4 +787,151 @@ textarea {
   }
 }
 
+/* === Icon Library Page Styles === */
+
+.library-hero {
+    background-color: var(--dark-gray);
+    padding: 30px 0;
+    color: #ffffff;
+  }
+  
+  .hero-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 60px;
+    align-items: flex-start;
+
+  }
+  
+  .hero-left {
+    flex: 1;
+    min-width: 220px;
+  }
+  
+  .hero-left h1 {
+    font-size: 2.5rem;
+    margin: 0;
+  }
+  
+  .hero-right {
+    flex: 2;
+    min-width: 260px;
+    max-width: 1200px;
+  }
+  
+  .hero-right p {
+    color: var(--light-gray);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+  
+  .library-gallery {
+    background-color: var(--purple);
+    padding: 30px 00px;
+    text-align: center;
+  }
+  
+  .icon-gallery h2 {
+    font-size: 2rem;
+    color: #ffffff;
+    margin-bottom: 10px;
+  }
+  
+  .icon-gallery p {
+    color: #ddd;
+    margin-bottom: 40px;
+  }
+  
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 20px;
+    justify-items: center;
+  }
+  
+  .gallery-grid .icon-card {
+    background-color: #e0e0e0;
+    width: 100%;
+    height: 160px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* FAQ Section */
+  .library-faq {
+    background-color: var(--dark-gray);
+    padding: 30px 0px;
+    color: #ffffff;
+  }
+  
+  .faq-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 60px;
+    align-items: flex-start;
+  }
+  
+  .faq-left {
+    flex: 1;
+    min-width: 220px;
+  }
+  
+  .faq-left h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  
+  .faq-left p {
+    color: var(--light-gray);
+    font-size: 0.95rem;
+  }
+  
+  .faq-right {
+    flex: 2;
+    min-width: 260px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .faq-item {
+    padding: 20px;
+    border-radius: 12px;
+    background-color: #1f1f1f; /* subtle background */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* soft shadow */
+  }
+  
+  .faq-item strong {
+    display: block;
+    font-size: 1.05rem;
+    color: #ffffff;
+    margin-bottom: 8px;
+  }
+  
+  .faq-item p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #ccc;
+  }
+  
+  /* Responsive Text Alignment */
+  @media (max-width: 768px) {
+    .icon-library-hero {
+      flex-direction: column;
+      text-align: left;
+      gap: 20px;
+    }
+  
+    .faq-section {
+      flex-direction: column;
+    }
+  
+    .faq-left, .faq-right {
+      width: 100%;
+    }
+  }
+  
   

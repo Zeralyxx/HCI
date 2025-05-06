@@ -1,90 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Icons Quiz</title>
-        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-        <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=IBM+Plex+Sans&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="styles.css" />
-    </head>
-    <body>
-    
-    <!-- Navbar -->
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Icons Quiz</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <!-- Reuse Navbar from Home Page -->
     <nav class="navbar">
-        <div class="logo">Logo</div>
+    <div class="logo">Logo</div>
     
-        <div class="hamburger" id="hamburger">
+    <div class="hamburger" id="hamburger">
         <span></span>
         <span></span>
         <span></span>
-        </div>
+    </div>
     
-        <ul class="nav-links" id="nav-links">
+    <ul class="nav-links" id="nav-links">
         <li><a href="home.html">Home Page</a></li>
         <li><a href="about.html">About Us</a></li>
         <li><a href="contact.html">Contact Us</a></li>
         <li><a href="library.html">Icon Library</a></li>
-        </ul>
-        <button class="nav-btn">Start</button>
+    </ul>
+    <button class="nav-btn">Start</button>
     </nav>
 
-  <!-- Header Section -->
-  <section class="hero-section" data-aos="fade-left">
-    <div class="container hero-content">
-      <h1>Get in Touch</h1>
-      <p>We’d love to hear from you! Reach out with any questions or feedback you may have.</p>
+  <!-- Hero Section -->
+<section class="library-hero">
+    <div class="container hero-grid" data-aos="fade-left">
+      <div class="hero-left">
+        <h1>Explore Our Icons</h1>
+      </div>
+      <div class="hero-right">
+        <p>
+          Welcome to our Library, your ultimate resource for studying icons. Here, you'll find a comprehensive collection of all available icons, designed to enhance your learning experience.
+        </p>
+      </div>
     </div>
-  </section>
+  </section>  
 
-  <!-- Contact Info Section -->
-  <section class="contact-info-section dark-bg" data-aos="fade-right">
+  <!-- Gallery Section -->
+  <section class="library-gallery" data-aos="fade-right">
     <div class="container">
-      <div class="contact-info-columns">
-        <div class="contact-header">
-          <p class="section-label">Reach</p>
-          <h2>Contact Us</h2>
-          <p class="section-subtext">
-            We are here to assist you with any inquiries or support you may need.
-          </p>
-        </div>
-        <div class="contact-details">
-          <p><strong>Email:</strong><br><a href="mailto:hello@emailme.io">hello@emailme.io</a></p>
-          <p><strong>Phone:</strong><br><a href="tel:+16561234567">+1 (656) 123-4567</a></p>
-        </div>
+      <h2 class="text-center">Icon Showcase</h2>
+      <p class="text-center">Explore our collection of iconic designs and symbols.</p>
+      <div class="icon-grid">
+        <!-- Repeat the icon card 8 times as a sample -->
+        <div class="icon-card"></div>
+        <div class="icon-card"></div>
+        <div class="icon-card"></div>
+        <div class="icon-card"></div>
+        <div class="icon-card"></div>
+        <div class="icon-card"></div>
+        <div class="icon-card"></div>
+        <div class="icon-card"></div>
       </div>
-      <div class="map-large"></div>
-    </div>
-  </section>
-  
-
-  <!-- Contact Form Section -->
-  <section class="contact-form-section purple-bg" data-aos="fade-left">
-    <div class="container form-flex">
-      <div class="form-column">
-        <p class="section-label">Connect</p>
-        <h2>Get in Touch</h2>
-        <p class="section-subtext">We’d love to hear from you!</p>
-        <form>
-          <label for="name" data-aos="zoom-in">Name</label>
-          <input type="text" id="name" placeholder="Your name..." data-aos="zoom-in">
-          
-          <label for="email" data-aos="zoom-in">Email</label>
-          <input type="email" id="email" placeholder="Your email..." data-aos="zoom-in">
-          
-          <label for="message" data-aos="zoom-in">Message</label>
-          <textarea id="message" placeholder="Type your message..." data-aos="zoom-in"></textarea>
-
-          <button type="submit" class="submit-button" data-aos="zoom-in">Submit</button>
-        </form>
-      </div>
-      <div class="map-vertical"></div>
     </div>
   </section>
 
- <!-- Footer -->
- <footer class="footer">
+  <!-- FAQ Section -->
+  <section class="library-faq" data-aos="fade-left">
+    <div class="container faq-grid">
+      <div class="faq-left" data-aos="zoom-in">
+        <h2>FAQs</h2>
+        <p>Explore our frequently asked questions to enhance your experience in the Library.</p>
+      </div>
+      <div class="faq-right">
+        <div class="faq-item" data-aos="zoom-in">
+          <strong>How to use the Library?</strong>
+          <p>To use the Library, simply browse through our extensive collection of icons...</p>
+        </div>
+        <div class="faq-item" data-aos="zoom-in">
+          <strong>Can I save icons?</strong>
+          <p>Yes, you can save your favorite icons for easy access later...</p>
+        </div>
+        <div class="faq-item" data-aos="zoom-in">
+          <strong>Are there study guides?</strong>
+          <p>Absolutely! Our Library offers various study guides tailored to icon categories...</p>
+        </div>
+        <div class="faq-item" data-aos="zoom-in">
+          <strong>How to contact support?</strong>
+          <p>You can contact our support team through the "Contact" button on the website...</p>
+        </div>
+        <div class="faq-item" data-aos="zoom-in">
+          <strong>Is the Library free?</strong>
+          <p>Yes, access to the Library is completely free. Enjoy exploring our icons without any cost!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
     <div class="footer-nav">
       <div class="footer-logo">Logo</div>
   
@@ -95,7 +106,6 @@
         <li><a href="#">Our Library</a></li>
         <li><a href="#">Flashcard Quiz</a></li>
       </ul>
-  
       <div class="footer-socials">
         <a href="YOUR_FACEBOOK_URL_HERE">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24px" height="24px">
