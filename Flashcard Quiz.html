@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Flashcard Quiz</title>
+  <style>
+    :root {
+      --bg-light: #f0f2f5;
+      --white: #ffffff;
+      --gray: #e0e0e0;
+      --green: #d2f6d2;
+      --red: #f8d2d2;
+      --rounded: 20px;
+      --shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      --primary-font: 'Segoe UI', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+        font-family: var(--primary-font);
+        margin: 0;
+        background: linear-gradient(135deg, #2E0B40, #3E1A58, #4E2A70);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        padding: 16px;
+    }
+
+    #start-screen, #quiz-screen {
+      background: var(--white);
+      padding: 24px;
+      border-radius: var(--rounded);
+      box-shadow: var(--shadow);
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    #quiz-screen {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    h1, h2 {
+      margin-bottom: 16px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: none;
+      border-radius: var(--rounded);
+      font-size: 16px;
+      cursor: pointer;
+      background-color: var(--gray);
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #d0d0d0;
+    }
+
+    .option {
+      background: var(--gray);
+      transition: background 0.3s ease;
+    }
+
+    .correct {
+      background-color: var(--green) !important;
+    }
+
+    .incorrect {
+      background-color: var(--red) !important;
+    }
+
+    #icon-placeholder {
+      font-size: 60px;
+      background: #ccc;
+      border-radius: var(--rounded);
+      padding: 20px;
+      width: 100px;
+      height: 100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #progress {
+      font-weight: bold;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 480px) {
+      #start-screen, #quiz-screen {
+        padding: 16px;
+      }
+
+      .btn {
+        font-size: 14px;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="start-screen">
+    <h1>Start Quiz</h1>
+    <p>Select difficulty:</p>
+    <button class="btn" onclick="startQuiz('easy')">🟢 Easy</button>
+    <button class="btn" onclick="startQuiz('normal')">🟡 Normal</button>
+    <button class="btn" onclick="startQuiz('hard')">🔴 Hard</button>
+  </div>
+
+  <div id="quiz-screen">
+    <h2>What is this icon?</h2>
+    <div id="icon-placeholder">🔲</div>
+    <div id="options">
+      <!-- Answer buttons injected here -->
+    </div>
+    <div id="progress">1/10</div>
+  </div>
+
+  <script>
+    const quizzes = {
+      easy: [
+        { icon: "📱", options: ["Phone", "Laptop", "TV", "Camera"], answer: "Phone" },
+        { icon: "💡", options: ["Fan", "Lamp", "Heater", "Bulb"], answer: "Bulb" },
+        { icon: "🖥️", options: ["Monitor", "Printer", "Scanner", "Router"], answer: "Monitor" },
+        { icon: "🎧", options: ["Speaker", "Headphones", "Mic", "Remote"], answer: "Headphones" },
+        { icon: "📷", options: ["Microwave", "Camera", "Phone", "Router"], answer: "Camera" },
+        { icon: "🔋", options: ["Plug", "Charger", "Battery", "Power Bank"], answer: "Battery" },
+        { icon: "🕹️", options: ["Controller", "Console", "TV", "PC"], answer: "Controller" },
+        { icon: "🔌", options: ["Wire", "Plug", "Switch", "Battery"], answer: "Plug" },
+        { icon: "🖨️", options: ["Scanner", "Printer", "Monitor", "Speaker"], answer: "Printer" },
+        { icon: "📺", options: ["Phone", "Monitor", "TV", "Tablet"], answer: "TV" }
+      ],
+      normal: [
+        { icon: "💻", options: ["Monitor", "Desktop", "Laptop", "Tablet"], answer: "Laptop" },
+        { icon: "🖱️", options: ["Joystick", "Remote", "Mouse", "Keypad"], answer: "Mouse" },
+        { icon: "⌨️", options: ["Screen", "Keyboard", "Mouse", "Speaker"], answer: "Keyboard" },
+        { icon: "📡", options: ["Tower", "Router", "Antenna", "Modem"], answer: "Antenna" },
+        { icon: "🧭", options: ["Clock", "Timer", "Compass", "Scanner"], answer: "Compass" },
+        { icon: "🎙️", options: ["Camera", "Mic", "Speaker", "Remote"], answer: "Mic" },
+        { icon: "🔈", options: ["Speaker", "Headphones", "Receiver", "Echo"], answer: "Speaker" },
+        { icon: "📠", options: ["Printer", "Scanner", "Fax", "Copier"], answer: "Fax" },
+        { icon: "🖲️", options: ["Mouse", "Trackball", "Joystick", "Remote"], answer: "Trackball" },
+        { icon: "📀", options: ["Floppy", "Disc", "USB", "Tape"], answer: "Disc" }
+      ],
+      hard: [
+        { icon: "🧮", options: ["Calculator", "Abacus", "Counter", "Machine"], answer: "Abacus" },
+        { icon: "💾", options: ["CD", "Floppy", "SSD", "RAM"], answer: "Floppy" },
+        { icon: "🧬", options: ["DNA", "Code", "Logic", "Pattern"], answer: "DNA" },
+        { icon: "🧰", options: ["Kit", "Toolbox", "Storage", "Drawer"], answer: "Toolbox" },
+        { icon: "📉", options: ["Graph", "Chart", "Fall", "Trend"], answer: "Chart" },
+        { icon: "🗜️", options: ["Clip", "Clamp", "Compressor", "Vice"], answer: "Clamp" },
+        { icon: "⚙️", options: ["Gear", "Knob", "Cog", "Wheel"], answer: "Gear" },
+        { icon: "🧲", options: ["Magnet", "Metal", "Attract", "Compass"], answer: "Magnet" },
+        { icon: "🔧", options: ["Hammer", "Spanner", "Wrench", "Driver"], answer: "Wrench" },
+        { icon: "📛", options: ["ID", "Label", "Badge", "Warning"], answer: "Badge" }
+      ]
+    };
+
+    let quizData = [];
+    let currentQuestion = 0;
+    let score = 0;
+
+    const startScreen = document.getElementById("start-screen");
+    const quizScreen = document.getElementById("quiz-screen");
+    const iconPlaceholder = document.getElementById("icon-placeholder");
+    const optionsDiv = document.getElementById("options");
+    const progressText = document.getElementById("progress");
+
+    function startQuiz(difficulty) {
+      quizData = quizzes[difficulty];
+      currentQuestion = 0;
+      score = 0;
+      startScreen.style.display = "none";
+      quizScreen.style.display = "flex";
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = quizData[currentQuestion];
+      iconPlaceholder.textContent = q.icon;
+      optionsDiv.innerHTML = "";
+      progressText.textContent = `${currentQuestion + 1}/10`;
+
+      q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.classList.add("btn", "option");
+        btn.textContent = option;
+        btn.onclick = () => checkAnswer(btn, q.answer);
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selectedBtn, correctAnswer) {
+      const buttons = document.querySelectorAll(".option");
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        if (btn.textContent === correctAnswer) {
+          btn.classList.add("correct");
+        } else {
+          btn.classList.add("incorrect");
+        }
+      });
+
+      if (selectedBtn.textContent === correctAnswer) {
+        score++;
+      }
+
+      setTimeout(() => {
+        currentQuestion++;
+        if (currentQuestion < quizData.length) {
+          showQuestion();
+        } else {
+          showScore();
+        }
+      }, 1000);
+    }
+
+    function showScore() {
+      setTimeout(() => {
+        if (confirm(`🎉 Quiz Complete!\nYou scored ${score} out of 10\n\nTry again?`)) {
+          location.reload();
+        } else {
+          startScreen.style.display = "block";
+          quizScreen.style.display = "none";
+        }
+      }, 200);
+    }
+  </script>
+</body>
+</html>
