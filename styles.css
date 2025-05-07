@@ -68,7 +68,7 @@
   }
   
   .nav-links a {
-    color: var(--white);
+    color: var(--light-gray);
     text-decoration: none;
     transition: color 0.3s ease;
   }
@@ -106,6 +106,12 @@
 
   .nav-btn:hover {
     background: #ccc;
+  }
+
+  .nav-links a.active {
+    color: white; /* Bright yellow for visibility */
+    font-weight: bold;
+    border-bottom: 2px solid white;
   }
 
     /* === Home Page Styles === */
@@ -224,6 +230,7 @@
 
     .cta p {
         margin-bottom: 1rem;
+        color: var(--light-gray);
     }
   
   /* Testimonial */
@@ -488,6 +495,10 @@
     font-size: 1.75rem;
     margin-bottom: 0.5rem;
   }
+
+  .team-section .team-subtext{
+    color: var(--light-gray);
+  }
   
   .team-section .subtitle {
     font-size: 0.9rem;
@@ -696,6 +707,10 @@
     gap: 2rem;
     margin-bottom: 2rem;
   }
+
+.contact-info-columns .contact-header .section-subtext{
+    color: var(--light-gray);
+}
   
   .contact-header,
   .contact-details {
@@ -789,6 +804,7 @@ textarea {
 
 /* === Icon Library Page Styles === */
 
+/* === Hero Section === */
 .library-hero {
     background-color: var(--dark-gray);
     padding: 30px 0;
@@ -800,7 +816,6 @@ textarea {
     flex-wrap: wrap;
     gap: 60px;
     align-items: flex-start;
-
   }
   
   .hero-left {
@@ -826,39 +841,155 @@ textarea {
     margin: 0;
   }
   
+  /* === Gallery Section === */
   .library-gallery {
     background-color: var(--purple);
-    padding: 30px 00px;
+    padding: 30px 0;
     text-align: center;
   }
+
+  /* === Category Tabs === */
+  .category-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 30px 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 0 10px;
+  }
   
-  .icon-gallery h2 {
-    font-size: 2rem;
-    color: #ffffff;
+  .tab-button {
+    flex: 1;
+    min-width: 100px;
+    max-width: 200px;
+    background-color: var(--purple);
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-align: center;
+    white-space: nowrap;
+  }
+  
+  .tab-button.active {
+    background-color: #49155f;
+  }
+  
+  .tab-content {
+    display: none;
+  }
+  
+  .tab-content.active {
+    display: block;
+  }
+  
+  /* === Icon Grids === */
+  .icon-grid,
+  .icon-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 20px;
+    padding: 0 20px;
+    margin-top: 40px;
+  }
+  
+  .icon-list {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    padding-top: 10px;
+  }
+  
+  .icon-list.open {
+    max-height: 3000px;
+  }
+  
+  /* === Icon Card === */
+  .icon-grid {
+    display: grid;
+    gap: 20px;
+    padding: 0 20px;
+    margin-top: 40px;
+    grid-template-columns: repeat(9, 1fr);
+  }
+  
+  /* === Icon Card Fixes === */
+  .icon-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    color: var(--dark-gray);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    width: 100%;
+    max-width: 120px;     /* Fixed width */
+    height: 130px;        /* Fixed height */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+  
+  .icon-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .icon-card .material-symbols-outlined {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 10px;
   }
   
-  .icon-gallery p {
-    color: #ddd;
-    margin-bottom: 40px;
+  /* Prevent text overflow / wrapping */
+  .icon-card p {
+    font-size: 0.75rem;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+  /* === Category Toggles (Accordion Style) === */
+  .icon-gallery-categories {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
   }
   
-  .gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 20px;
-    justify-items: center;
+  .icon-category {
+    margin-bottom: 30px;
+    text-align: center;
   }
   
-  .gallery-grid .icon-card {
-    background-color: #e0e0e0;
+  .category-toggle {
+    background-color: var(--purple);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    transition: background 0.3s ease;
     width: 100%;
-    height: 160px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    text-align: left;
   }
+  
+  .category-toggle.active {
+    background-color: #49155f;
+  }
+  
   
   /* FAQ Section */
   .library-faq {
@@ -919,10 +1050,48 @@ textarea {
   
   /* Responsive Text Alignment */
   @media (max-width: 768px) {
-    .icon-library-hero {
-      flex-direction: column;
-      text-align: left;
-      gap: 20px;
+    .icon-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    
+    .icon-card {
+        max-width: 100px;
+        height: 120px;
+    }
+    
+}
+
+@media (max-width: 480px) {
+    .icon-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+      }
+    
+    .icon-card {
+        max-width: 100px;
+        height: 120px;
+    }
+    
+    .icon-card p {
+        font-size: 0.6rem;
+    }
+
+    .icon-card p {
+        font-size: 0.7rem;
+    }
+
+    .tab-button {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .category-tabs {
+        gap: 10px;
+    }
+    
+    .tab-button {
+        flex: 1 1 100%;
+        max-width: 100%;
     }
   
     .faq-section {
@@ -932,6 +1101,7 @@ textarea {
     .faq-left, .faq-right {
       width: 100%;
     }
-  }
+}
+  
   
   
