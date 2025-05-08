@@ -55,9 +55,8 @@
     flex-wrap: wrap;
   }
   
-  .logo {
-    font-family: cursive;
-    font-style: italic;
+  .logo, .footer-logo {
+    font-family: var(--heading-font);
     font-size: 1.5rem;
   }
   
@@ -160,6 +159,10 @@
     background: #999;
     border-radius: var(--border-radius);
     margin-top: 2rem;
+  }
+
+  .hero-content h1{
+    font-family: var(--heading-font);
   }
   
   /* Features */
@@ -293,12 +296,6 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 2rem;
-  }
-  
-  .footer-logo {
-    font-family: cursive;
-    font-style: italic;
-    font-size: 1.5rem;
   }
   
   .footer-links {
