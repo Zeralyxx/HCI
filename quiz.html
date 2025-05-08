@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Flashcard Quiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+  <title>MindBlast | Quiz</title>
   <style>
     :root {
       --bg-light: #f0f2f5;
@@ -89,6 +91,8 @@
       padding: 20px;
       width: 100px;
       height: 100px;
+      font-size: 60px;
+      color: #333;
       margin: 0 auto;
       display: flex;
       justify-content: center;
@@ -130,44 +134,43 @@
     </div>
     <div id="progress">1/10</div>
   </div>
-
   <script>
     const quizzes = {
       easy: [
-        { icon: "📱", options: ["Phone", "Laptop", "TV", "Camera"], answer: "Phone" },
-        { icon: "💡", options: ["Fan", "Lamp", "Heater", "Bulb"], answer: "Bulb" },
-        { icon: "🖥️", options: ["Monitor", "Printer", "Scanner", "Router"], answer: "Monitor" },
-        { icon: "🎧", options: ["Speaker", "Headphones", "Mic", "Remote"], answer: "Headphones" },
-        { icon: "📷", options: ["Microwave", "Camera", "Phone", "Router"], answer: "Camera" },
-        { icon: "🔋", options: ["Plug", "Charger", "Battery", "Power Bank"], answer: "Battery" },
-        { icon: "🕹️", options: ["Controller", "Console", "TV", "PC"], answer: "Controller" },
-        { icon: "🔌", options: ["Wire", "Plug", "Switch", "Battery"], answer: "Plug" },
-        { icon: "🖨️", options: ["Scanner", "Printer", "Monitor", "Speaker"], answer: "Printer" },
-        { icon: "📺", options: ["Phone", "Monitor", "TV", "Tablet"], answer: "TV" }
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">home</span>', options: ["Bahay na Bato", "House", "Nipa Hut", "Home"], answer: "Home" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">close</span>', options: ["Quit", "Close", "X", "Sarado"], answer: "Close" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">favorite</span>', options: ["U ;)", "Heart", "Favorite", "Valentines"], answer: "Favorite" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">help</span>', options: ["Help", "Question Mark", "?", "Circle ?"], answer: "Help" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">phone</span>', options: ["Phone", "Camera", "Blackberry", "Telephone"], answer: "Phone" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">refresh</span>', options: ["Loop", "Arrow Circle", "Back", "Refresh"], answer: "Refresh" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">edit</span>', options: ["Edit", "Erase", "Pencil", "Ballpen"], answer: "Edit" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">map</span>', options: ["Elder Scroll", "Map", "Scroll of Wisdom", "Navigate"], answer: "Map" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">download</span>', options: ["Arrow Down", "Download", "Insert Here", "Put Down"], answer: "Download" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">bluetooth</span>', options: ["Wifi", "Router", "Share", "Bluetooth"], answer: "Bluetooth" }
       ],
       normal: [
-        { icon: "💻", options: ["Monitor", "Desktop", "Laptop", "Tablet"], answer: "Laptop" },
-        { icon: "🖱️", options: ["Joystick", "Remote", "Mouse", "Keypad"], answer: "Mouse" },
-        { icon: "⌨️", options: ["Screen", "Keyboard", "Mouse", "Speaker"], answer: "Keyboard" },
-        { icon: "📡", options: ["Tower", "Router", "Antenna", "Modem"], answer: "Antenna" },
-        { icon: "🧭", options: ["Clock", "Timer", "Compass", "Scanner"], answer: "Compass" },
-        { icon: "🎙️", options: ["Camera", "Mic", "Speaker", "Remote"], answer: "Mic" },
-        { icon: "🔈", options: ["Speaker", "Headphones", "Receiver", "Echo"], answer: "Speaker" },
-        { icon: "📠", options: ["Printer", "Scanner", "Fax", "Copier"], answer: "Fax" },
-        { icon: "🖲️", options: ["Mouse", "Trackball", "Joystick", "Remote"], answer: "Trackball" },
-        { icon: "📀", options: ["Floppy", "Disc", "USB", "Tape"], answer: "Disc" }
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">security</span>', options: ["Firewall", "Protection", "Security", "Shield"], answer: "Security" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">update</span>', options: ["Update", "Refresh", "Cycle", "Return"], answer: "Update" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">receipt</span>', options: ["Ticket", "Receipt", "Text", "Notes"], answer: "Receipt" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">event</span>', options: ["Set", "Set Date", "Event", "Calendar"], answer: "Event" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">group</span>', options: ["Avatar", "Account", "Friends", "Group"], answer: "Group" },//stopped here
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">forum</span>', options: ["Camera", "Mic", "Speaker", "Remote"], answer: "Mic" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">analytics</span>', options: ["Speaker", "Headphones", "Receiver", "Echo"], answer: "Speaker" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">language</span>', options: ["Printer", "Scanner", "Fax", "Copier"], answer: "Fax" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">tune</span>', options: ["Mouse", "Trackball", "Joystick", "Remote"], answer: "Trackball" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">bar_chart</span>', options: ["Floppy", "Disc", "USB", "Tape"], answer: "Disc" }
       ],
       hard: [
-        { icon: "🧮", options: ["Calculator", "Abacus", "Counter", "Machine"], answer: "Abacus" },
-        { icon: "💾", options: ["CD", "Floppy", "SSD", "RAM"], answer: "Floppy" },
-        { icon: "🧬", options: ["DNA", "Code", "Logic", "Pattern"], answer: "DNA" },
-        { icon: "🧰", options: ["Kit", "Toolbox", "Storage", "Drawer"], answer: "Toolbox" },
-        { icon: "📉", options: ["Graph", "Chart", "Fall", "Trend"], answer: "Chart" },
-        { icon: "🗜️", options: ["Clip", "Clamp", "Compressor", "Vice"], answer: "Clamp" },
-        { icon: "⚙️", options: ["Gear", "Knob", "Cog", "Wheel"], answer: "Gear" },
-        { icon: "🧲", options: ["Magnet", "Metal", "Attract", "Compass"], answer: "Magnet" },
-        { icon: "🔧", options: ["Hammer", "Spanner", "Wrench", "Driver"], answer: "Wrench" },
-        { icon: "📛", options: ["ID", "Label", "Badge", "Warning"], answer: "Badge" }
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">psychology</span>', options: ["Psychology", "Settings", "Mental Health", "Human Mind"], answer: "Psychology" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">dns</span>', options: ["Tape", "Storage", "DNS", "RAM"], answer: "DNS" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">public</span>', options: ["WWW", "Public", "Globe", "Internet"], answer: "Public" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">pageless</span>', options: ["Record", "Toolbox", "Storage", "Drawer"], answer: "Toolbox" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">storm</span>', options: ["Graph", "Chart", "Fall", "Trend"], answer: "Chart" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">variables</span>', options: ["Clip", "Clamp", "Compressor", "Vice"], answer: "Clamp" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">dirty_lens</span>', options: ["Gear", "Knob", "Cog", "Wheel"], answer: "Gear" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">menu_book</span>', options: ["Magnet", "Metal", "Attract", "Compass"], answer: "Magnet" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">account_tree</span>', options: ["Hammer", "Spanner", "Wrench", "Driver"], answer: "Wrench" },
+        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">wifi_channel</span>', options: ["ID", "Label", "Badge", "Warning"], answer: "Badge" }
       ]
     };
 
@@ -191,19 +194,20 @@
     }
 
     function showQuestion() {
-      const q = quizData[currentQuestion];
-      iconPlaceholder.textContent = q.icon;
-      optionsDiv.innerHTML = "";
-      progressText.textContent = `${currentQuestion + 1}/10`;
+    const q = quizData[currentQuestion];
+    iconPlaceholder.innerHTML = q.icon; // Changed from textContent
+    optionsDiv.innerHTML = "";
+    progressText.textContent = `${currentQuestion + 1}/10`;
 
-      q.options.forEach(option => {
-        const btn = document.createElement("button");
-        btn.classList.add("btn", "option");
-        btn.textContent = option;
-        btn.onclick = () => checkAnswer(btn, q.answer);
-        optionsDiv.appendChild(btn);
-      });
-    }
+    q.options.forEach(option => {
+      const btn = document.createElement("button");
+      btn.classList.add("btn", "option");
+      btn.textContent = option;
+      btn.onclick = () => checkAnswer(btn, q.answer);
+      optionsDiv.appendChild(btn);
+    });
+  }
+
 
     function checkAnswer(selectedBtn, correctAnswer) {
       const buttons = document.querySelectorAll(".option");
@@ -241,6 +245,5 @@
       }, 200);
     }
   </script>
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 </body>
 </html>
