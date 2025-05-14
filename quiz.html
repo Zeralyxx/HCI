@@ -125,9 +125,9 @@
   <div id="start-screen">
     <h1>Start Quiz</h1>
     <p>Select difficulty:</p>
-    <button class="btn " id="easyb">🟢 Easy</button>
-    <button class="btn " id="normalb">🟡 Normal</button>
-    <button class="btn " id="hardb">🔴 Hard</button>
+    <button class="btn" id="easy-btn-icon">🟢 Easy</button>
+    <button class="btn" id="medium-btn-icon">🟡 Medium</button>
+    <button class="btn" id="hard-btn-icon">🔴 Hard</button>
   </div>
 
   <div id="quiz-screen">
@@ -250,21 +250,22 @@
 
   // Inject random icons from Firestore into the difficulty buttons
   async function setDifficultyIcons() {
-    const difficulties = ["Easy", "Normal", "Hard"];
+    const difficulties = ["Easy", "Medium", "Hard"];
     for (let diff of difficulties) {
       const colRef = collection(db, diff);
       const snapshot = await getDocs(colRef);
       const docs = snapshot.docs;
       const randomDoc = docs[Math.floor(Math.random() * docs.length)];
       const iconName = randomDoc.data().icon;
-      document.getElementById(`${diff.toLowerCase()}-btn-icon`).textContent = iconName;
+      document.getElementById(buttonIdMap[diff]).innerHTML = `
+  <span class="material-symbols-outlined">${iconName}</span> ${diff}`;
     }
   }
 
   window.onload = setDifficultyIcons;
-  document.getElementById("easyb").addEventListener("click", () => startQuiz("easy"));
-  document.getElementById("normalb").addEventListener("click", () => startQuiz("normal"));
-  document.getElementById("hardb").addEventListener("click", () => startQuiz("hard"));
+  document.getElementById("easy-btn-icon").addEventListener("click", () => startQuiz("Easy"));
+  document.getElementById("medium-btn-icon").addEventListener("click", () => startQuiz("Medium"));
+  document.getElementById("hard-btn-icon").addEventListener("click", () => startQuiz("Hard"));
 </script>
 </body>
 </html>
