@@ -41,6 +41,7 @@
       max-width: 420px;
       text-align: center;
       transition: all 0.3s ease;
+      position: relative;
     }
 
     #quiz-screen {
@@ -108,6 +109,14 @@
       margin-top: 12px;
     }
 
+    #timer {
+      position: absolute;
+      top: 16px;
+      right: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+
     @media (max-width: 480px) {
       #start-screen, #quiz-screen {
         padding: 16px;
@@ -116,6 +125,12 @@
       .btn {
         font-size: 14px;
         padding: 10px;
+      }
+
+      #timer {
+        top: 12px;
+        right: 16px;
+        font-size: 14px;
       }
     }
   </style>
@@ -131,141 +146,248 @@
   </div>
 
   <div id="quiz-screen">
+    <div id="timer">⏱️ 60s</div>
     <h2>What is this icon?</h2>
     <div id="icon-placeholder">🔲</div>
-    <div id="options">
-      <!-- Answer buttons injected here -->
-    </div>
+    <div id="options"></div>
     <div id="progress">1/10</div>
   </div>
+
   <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
-  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-analytics.js";
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      addDoc,
+      serverTimestamp,
+      query,
+      where,
+      updateDoc
+    } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
+    import {
+      getAnalytics
+    } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-analytics.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyAZLZPVAlZUJWLturWzJ3nqyceZbSIevl4",
-    authDomain: "mindblast-icons.firebaseapp.com",
-    projectId: "mindblast-icons",
-    storageBucket: "mindblast-icons.firebasestorage.app",
-    messagingSenderId: "807795058423",
-    appId: "1:807795058423:web:2066a5d149852a43af55f2",
-    measurementId: "G-LSJ3SWQP6M"
-  };
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZLZPVAlZUJWLturWzJ3nqyceZbSIevl4",
+      authDomain: "mindblast-icons.firebaseapp.com",
+      projectId: "mindblast-icons",
+      storageBucket: "mindblast-icons.firebasestorage.app",
+      messagingSenderId: "807795058423",
+      appId: "1:807795058423:web:2066a5d149852a43af55f2",
+      measurementId: "G-LSJ3SWQP6M"
+    };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const analytics = getAnalytics(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const analytics = getAnalytics(app);
 
-  let quizData = [];
-  let currentQuestion = 0;
-  let score = 0;
+    let quizData = [];
+    let currentQuestion = 0;
+    let score = 0;
+    let correctAnswers = 0;
+    let difficulty = '';
+    let questionStartTime = 0;
+    let timeRemaining = 60;
+    let timerInterval;
 
-  const startScreen = document.getElementById("start-screen");
-  const quizScreen = document.getElementById("quiz-screen");
-  const iconPlaceholder = document.getElementById("icon-placeholder");
-  const optionsDiv = document.getElementById("options");
-  const progressText = document.getElementById("progress");
+    const startScreen = document.getElementById("start-screen");
+    const quizScreen = document.getElementById("quiz-screen");
+    const iconPlaceholder = document.getElementById("icon-placeholder");
+    const optionsDiv = document.getElementById("options");
+    const progressText = document.getElementById("progress");
+    const timerDisplay = document.getElementById("timer");
 
-  async function startQuiz(difficulty) {
-    quizData = await loadQuestions(difficulty);
-    currentQuestion = 0;
-    score = 0;
-    startScreen.style.display = "none";
-    quizScreen.style.display = "flex";
-    showQuestion();
-  }
-
-  async function loadQuestions(difficulty) {
-    const colRef = collection(db, difficulty.charAt(0).toUpperCase() + difficulty.slice(1));
-    const snapshot = await getDocs(colRef);
-    let questions = [];
-
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      questions.push({
-        icon: `<span class="material-symbols-outlined">${data.icon}</span>`,
-        options: shuffleArray([...data.options]), // clone then shuffle
-        answer: data.answer
-      });
-    });
-
-    return shuffleArray(questions).slice(0, 10); // take 10 random questions
-  }
-
-  function shuffleArray(array) {
-    return array.sort(() => Math.random() - 0.5);
-  }
-
-  function showQuestion() {
-    const q = quizData[currentQuestion];
-    iconPlaceholder.innerHTML = q.icon;
-    optionsDiv.innerHTML = "";
-    progressText.textContent = `${currentQuestion + 1}/10`;
-
-    q.options.forEach(option => {
-      const btn = document.createElement("button");
-      btn.classList.add("btn", "option");
-      btn.textContent = option;
-      btn.onclick = () => checkAnswer(btn, q.answer);
-      optionsDiv.appendChild(btn);
-    });
-  }
-
-  function checkAnswer(selectedBtn, correctAnswer) {
-    const buttons = document.querySelectorAll(".option");
-    buttons.forEach(btn => {
-      btn.disabled = true;
-      if (btn.textContent === correctAnswer) {
-        btn.classList.add("correct");
-      } else {
-        btn.classList.add("incorrect");
-      }
-    });
-
-    if (selectedBtn.textContent === correctAnswer) {
-      score++;
+    async function startQuiz(diff) {
+      difficulty = diff;
+      quizData = await loadQuestions(diff);
+      currentQuestion = 0;
+      score = 0;
+      correctAnswers = 0;
+      startScreen.style.display = "none";
+      quizScreen.style.display = "flex";
+      startTimer();
+      showQuestion();
     }
 
-    setTimeout(() => {
-      currentQuestion++;
-      if (currentQuestion < quizData.length) {
-        showQuestion();
-      } else {
-        showScore();
-      }
-    }, 1000);
-  }
-
-  function showScore() {
-    setTimeout(() => {
-      if (confirm(`🎉 Quiz Complete!\nYou scored ${score} out of 10\n\nTry again?`)) {
-        location.reload();
-      } else {
-        startScreen.style.display = "block";
-        quizScreen.style.display = "none";
-      }
-    }, 200);
-  }
-
-  // Inject random icons from Firestore into the difficulty buttons
-  async function setDifficultyIcons() {
-    const difficulties = ["Easy", "Medium", "Hard"];
-    for (let diff of difficulties) {
-      const colRef = collection(db, diff);
+    async function loadQuestions(difficulty) {
+      const colRef = collection(db, difficulty.charAt(0).toUpperCase() + difficulty.slice(1));
       const snapshot = await getDocs(colRef);
-      const docs = snapshot.docs;
-      const randomDoc = docs[Math.floor(Math.random() * docs.length)];
-      const iconName = randomDoc.data().icon;
-      document.getElementById(buttonIdMap[diff]).innerHTML = `
-  <span class="material-symbols-outlined">${iconName}</span> ${diff}`;
-    }
-  }
+      let questions = [];
 
-  window.onload = setDifficultyIcons;
-  document.getElementById("easy-btn-icon").addEventListener("click", () => startQuiz("Easy"));
-  document.getElementById("medium-btn-icon").addEventListener("click", () => startQuiz("Medium"));
-  document.getElementById("hard-btn-icon").addEventListener("click", () => startQuiz("Hard"));
-</script>
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        questions.push({
+          icon: `<span class="material-symbols-outlined">${data.icon}</span>`,
+          options: shuffleArray([...data.options]),
+          answer: data.answer
+        });
+      });
+
+      return shuffleArray(questions).slice(0, 10);
+    }
+
+    function shuffleArray(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
+    function startTimer() {
+      timeRemaining = 60;
+      timerDisplay.textContent = `⏱️ ${timeRemaining}s`;
+      timerInterval = setInterval(() => {
+        timeRemaining--;
+        timerDisplay.textContent = `⏱️ ${timeRemaining}s`;
+        if (timeRemaining <= 0) {
+          clearInterval(timerInterval);
+          alert("⏰ Time's up! You failed the quiz.");
+          location.reload();
+        }
+      }, 1000);
+    }
+
+    function showQuestion() {
+      const q = quizData[currentQuestion];
+      iconPlaceholder.innerHTML = q.icon;
+      optionsDiv.innerHTML = "";
+      progressText.textContent = `${currentQuestion + 1}/10`;
+      questionStartTime = Date.now();
+
+      q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.classList.add("btn", "option");
+        btn.textContent = option;
+        btn.onclick = () => checkAnswer(btn, q.answer);
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selectedBtn, correctAnswer) {
+      const timeTaken = (Date.now() - questionStartTime) / 1000;
+
+      const buttons = document.querySelectorAll(".option");
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        if (btn.textContent === correctAnswer) {
+          btn.classList.add("correct");
+        } else {
+          btn.classList.add("incorrect");
+        }
+      });
+
+      if (selectedBtn.textContent === correctAnswer) {
+        correctAnswers++;
+        let multiplier = 0;
+
+        if (difficulty === "Easy") {
+          if (timeTaken <= 15) multiplier = 1.5;
+          else if (timeTaken <= 40) multiplier = 1.0;
+          else if (timeTaken <= 60) multiplier = 0.5;
+        } else if (difficulty === "Medium") {
+          if (timeTaken <= 15) multiplier = 2.5;
+          else if (timeTaken <= 40) multiplier = 2.0;
+          else if (timeTaken <= 60) multiplier = 1.5;
+        } else if (difficulty === "Hard") {
+          if (timeTaken <= 15) multiplier = 4;
+          else if (timeTaken <= 40) multiplier = 3;
+          else if (timeTaken <= 60) multiplier = 2;
+        }
+
+        if (multiplier === 0) {
+          alert("⏱️ Too slow! You failed the question.");
+        } else {
+          score += Math.round(10 * multiplier);
+        }
+      }
+
+      setTimeout(() => {
+        currentQuestion++;
+        if (currentQuestion < quizData.length) {
+          showQuestion();
+        } else {
+          clearInterval(timerInterval);
+          showScore();
+        }
+      }, 1000);
+    }
+
+    async function showScore() {
+      setTimeout(async () => {
+        const playerName = prompt(`🎉 Quiz Complete!\nYou scored ${score}.\nCorrect Answers: ${correctAnswers}\n\nEnter your name for the leaderboard:`);
+
+        if (playerName) {
+          await uploadToLeaderboard(playerName.trim(), score, correctAnswers, difficulty);
+          alert("✅ Your score has been uploaded to the leaderboard!");
+        }
+
+        if (confirm("Try again?")) {
+          location.reload();
+        } else {
+          startScreen.style.display = "block";
+          quizScreen.style.display = "none";
+        }
+      }, 200);
+    }
+
+    async function uploadToLeaderboard(name, score, correct, difficulty) {
+      const leaderboardRef = collection(db, "Leaderboard");
+
+      const q = query(leaderboardRef, where("name", "==", name));
+      const snapshot = await getDocs(q);
+
+      if (!snapshot.empty) {
+        const docRef = snapshot.docs[0].ref;
+        const data = snapshot.docs[0].data();
+
+        await updateDoc(docRef, {
+          score: (data.score || 0) + score,
+          correct: (data.correct || 0) + correct,
+          quizzesCompleted: (data.quizzesCompleted || 0) + 1,
+          lastPlayed: serverTimestamp()
+        });
+      } else {
+        await addDoc(leaderboardRef, {
+          name,
+          score,
+          correct,
+          difficulty,
+          quizzesCompleted: 1,
+          timestamp: serverTimestamp()
+        });
+      }
+    }
+
+    const emojiMap = {
+      Easy: "🟢",
+      Medium: "🟡",
+      Hard: "🔴"
+    };
+
+    const buttonIdMap = {
+      Easy: "easy-btn-icon",
+      Medium: "medium-btn-icon",
+      Hard: "hard-btn-icon"
+    };
+
+    async function setDifficultyIcons() {
+      const difficulties = ["Easy", "Medium", "Hard"];
+      for (let diff of difficulties) {
+        const colRef = collection(db, diff);
+        const snapshot = await getDocs(colRef);
+        const docs = snapshot.docs;
+        const randomDoc = docs[Math.floor(Math.random() * docs.length)];
+        const iconName = randomDoc.data().icon;
+        document.getElementById(emojiMap[diff]).innerHTML = `
+          ${emojiMap[diff]} <span class="material-symbols-outlined">${iconName}</span> ${diff}`;
+      }
+    }
+
+    window.onload = setDifficultyIcons;
+    document.getElementById("easy-btn-icon").addEventListener("click", () => startQuiz("Easy"));
+    document.getElementById("medium-btn-icon").addEventListener("click", () => startQuiz("Medium"));
+    document.getElementById("hard-btn-icon").addEventListener("click", () => startQuiz("Hard"));
+  </script>
 </body>
 </html>

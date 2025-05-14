@@ -11,176 +11,139 @@
 </head>
 <body>
 
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="logo">MindBlast</div>
-  
-    <div class="hamburger" id="hamburger">
-      <span></span>
-      <span></span>
-      <span></span>
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="logo">MindBlast</div>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="home.html">Home</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="contact.html">Contact Us</a></li>
+    <li><a href="leaderboard.html">Leaderboard</a></li>
+    <li><a href="library.html">Icon Library</a></li>
+  </ul>
+  <button class="nav-btn" onclick="window.location.href='quiz.html'">Start</button>
+</nav>
+
+<!-- Leaderboard Section -->
+<section class="leaderboard-section" data-aos="zoom-out">
+  <div class="leaderboard-container">
+    <h1 class="leaderboard-title">Top Icon Masters</h1>
+    <p class="leaderboard-subtitle">See how you rank among the best learners</p>
+
+    <div class="leaderboard-table-wrapper" data-aos="zoom-in">
+      <table class="leaderboard-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Username</th>
+            <th>Score</th>
+            <th>Quizzes Completed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Firebase-populated rows -->
+        </tbody>
+      </table>
     </div>
-  
-    <ul class="nav-links" id="nav-links">
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-nav">
+    <div class="footer-logo">MindBlast</div>
+    <ul class="footer-links">
       <li><a href="home.html">Home</a></li>
       <li><a href="about.html">About Us</a></li>
       <li><a href="contact.html">Contact Us</a></li>
       <li><a href="leaderboard.html">Leaderboard</a></li>
-      <li><a href="library.html">Icon Library</a></li>
+      <li><a href="library.html">Our Library</a></li>
     </ul>
-    <button class="nav-btn" onclick="window.location.href='quiz.html'">Start</button>
-  </nav>
-  
-
-  <!-- Hero Header -->
-  <section class="leaderboard-section" data-aos="zoom-out">
-    <div class="leaderboard-container">
-        <h1 class="leaderboard-title">Top Icon Masters</h1>
-        <p class="leaderboard-subtitle">See how you rank among the best learners</p>
-
-        <div class="leaderboard-table-wrapper" data-aos="zoom-in">
-        <table class="leaderboard-table">
-            <thead>
-            <tr>
-                <th>Rank</th>
-                <th>Username</th>
-                <th>Score</th>
-                <th>Quizzes Completed</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>1 🥇</td>
-                <td>@IconHero</td>
-                <td>980</td>
-                <td>50</td>
-            </tr>
-            <tr>
-                <td>2 🥈</td>
-                <td>@FlashMaster</td>
-                <td>920</td>
-                <td>45</td>
-            </tr>
-            <tr>
-                <td>3 🥉</td>
-                <td>@QuizCracker</td>
-                <td>890</td>
-                <td>42</td>
-            </tr>
-            <!-- More rows as needed -->
-            </tbody>
-        </table>
-        </div>
+    <div class="footer-socials">
+      <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">
+        <i class="fab fa-facebook"></i>
+      </a>
+      <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
+        <i class="fab fa-youtube"></i>
+      </a>
+      <a href="https://www.github.com/" target="_blank" rel="noopener noreferrer">
+        <i class="fab fa-github"></i>
+      </a>
     </div>
-  </section>
+  </div>
+  <hr />
+  <div class="footer-bottom">
+    <p>© 2025 MindBlast. All rights reserved.</p>
+    <ul>
+      <li><a href="#">Privacy Policy</a></li>
+      <li><a href="#">Terms of Use</a></li>
+      <li><a href="#">Cookie Policy</a></li>
+    </ul>
+  </div>
+</footer>
 
+<!-- Scripts -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="script.js"></script>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-nav">
-      <div class="footer-logo">MindBlast</div>
-  
-      <ul class="footer-links">
-        <li><a href="home.html">Home</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="contact.html">Contact Us</a></li>
-        <li><a href="leaderboard.html">Leaderboard</a></li>
-        <li><a href="library.html">Our Library</a></li>
-      </ul>
-  
-      <div class="footer-socials">
-        <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24px" height="24px">
-                <path d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.347V11.91h2.347V9.272c0-2.31 1.392-3.594 3.5-3.594 1.007 0 1.965.075 2.225.109v2.43h-1.44c-1.149 0-1.374.548-1.374 1.353v1.667h2.77l-.362 2.906h-2.408V22C17.343 21.128 22 16.991 22 12 22 6.477 17.523 2 12 2z"/>
-            </svg>
-        </a>
-        <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24px" height="24px">
-                <path d="M19.615 3.184c-1.342-.18-3.53-.341-6.615-.389V.595l-3.001 2.689c-.136.121-.326.178-.517.179a.59.59 0 0 1-.407-.16l-3.001-2.689v2.2c-3.085.048-5.273.21-6.615.39C.387 3.45 0 4.12 0 5.077v13.846c0 .957.387 1.628 1.385 1.764 1.342.18 3.53.341 6.615.389v2.2l3.001-2.689a.59.59 0 0 1 .924 0l3.001 2.689v-2.2c3.085-.048 5.273-.21 6.615-.389.998-.136 1.385-.807 1.385-1.764V5.077c0-.957-.387-1.628-1.385-1.764zM9 16.5v-9L15 12l-6 4.5z"/>
-            </svg>
-        </a>
-        <a href="https://www.github.com/" target="_blank" rel="noopener noreferrer">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24px" height="24px">
-                <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.73.084-.73 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.49.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.33-5.466-5.934 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.4 3-.4.92 0 1.94.133 3 .4 2.28-1.552 3.295-1.23 3.295-1.23.645 1.653.24 2.873.105 3.176.77.84 1.235 1.91 1.235 3.22 0 4.61-2.805 5.624-5.475 5.92.42.36.81 1.096.81 2.215 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12z"/>
-            </svg>
-        </a>
-    </div>
-    </div>
-  
-    <hr />
-  
-    <div class="footer-bottom">
-      <p>© 2025 MindBlast. All rights reserved.</p>
-      <ul>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Terms of Use</a></li>
-        <li><a href="#">Cookie Policy</a></li>
-      </ul>
-    </div>
-  </footer>
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script src="script.js"></script>
-    <!-- Firebase Setup -->
-    <script type="module">
-    // Import Firebase modules
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+<!-- Firebase Setup -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
+  import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-analytics.js";
 
-    // TODO: Replace with your own Firebase config
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_SENDER_ID",
-        appId: "YOUR_APP_ID"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyAZLZPVAlZUJWLturWzJ3nqyceZbSIevl4",
+    authDomain: "mindblast-icons.firebaseapp.com",
+    projectId: "mindblast-icons",
+    storageBucket: "mindblast-icons.firebasestorage.app",
+    messagingSenderId: "807795058423",
+    appId: "1:807795058423:web:2066a5d149852a43af55f2",
+    measurementId: "G-LSJ3SWQP6M"
+  };
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const analytics = getAnalytics(app);
 
-    // Load leaderboard data
-    async function loadLeaderboard() {
-        const leaderboardTable = document.querySelector('.leaderboard-table tbody');
-        leaderboardTable.innerHTML = ''; // Clear default rows
+  async function loadLeaderboard() {
+    const leaderboardTable = document.querySelector('.leaderboard-table tbody');
+    leaderboardTable.innerHTML = '';
 
-        try {
-        const q = query(
-            collection(db, "leaderboard"),
-            orderBy("score", "desc"),
-            limit(10)
-        );
-        const querySnapshot = await getDocs(q);
+    try {
+      const q = query(
+        collection(db, "Leaderboard"),
+        orderBy("score", "desc"),
+        limit(10)
+      );
+      const querySnapshot = await getDocs(q);
+      let rank = 1;
 
-        let rank = 1;
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            const row = document.createElement("tr");
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const row = document.createElement("tr");
+        row.setAttribute("data-aos", "zoom-in");
+        row.innerHTML = `
+          <td>${rank} ${rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : ''}</td>
+          <td>@${data.name}</td>
+          <td>${data.score}</td>
+          <td>${data.quizzesCompleted}</td>
+        `;
+        leaderboardTable.appendChild(row);
+        rank++;
+      });
 
-            // Add zoom-in animation
-            row.setAttribute("data-aos", "zoom-in");
-
-            row.innerHTML = `
-            <td>${rank} ${rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : ''}</td>
-            <td>@${data.username}</td>
-            <td>${data.score}</td>
-            <td>${data.quizzesCompleted}</td>
-            `;
-            leaderboardTable.appendChild(row);
-            rank++;
-        });
-
-        // Reinitialize AOS after DOM updates
-        AOS.init({ once: true });
-
-        } catch (error) {
-        console.error("Error loading leaderboard:", error);
-        }
+      AOS.init({ once: true });
+    } catch (error) {
+      console.error("Error loading leaderboard:", error);
     }
+  }
 
-    // Call it on load
-    window.addEventListener('DOMContentLoaded', loadLeaderboard);
-    </script>
+  window.addEventListener('DOMContentLoaded', loadLeaderboard);
+</script>
+
 </body>
 </html>
