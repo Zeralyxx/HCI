@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MindBlast | Login & Signup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="auth-body">
+
+  <section class="auth-container">
+    <div class="auth-card">
+
+      <!-- Login Form -->
+      <div id="login-form-container">
+        <h2>Log In</h2>
+        <form id="login-form">
+          <input type="email" id="login-email" placeholder="Email" required />
+          <input type="password" id="login-password" placeholder="Password" required />
+          <div id="login-message" class="auth-message"></div>
+          <div id="login-spinner" class="spinner">⏳ Processing...</div>
+          <button type="submit" class="primary">Log In</button>
+        </form>
+        <p class="auth-switch">
+          Don't have an account? <a href="#" id="show-signup">Sign Up</a>
+        </p>
+      </div>
+
+      <!-- Signup Form -->
+      <div id="signup-form-container" style="display: none;">
+        <h2>Sign Up</h2>
+        <form id="signup-form">
+          <input type="text" id="signup-username" placeholder="Username" required />
+          <input type="email" id="signup-email" placeholder="Email" required />
+          <input type="password" id="signup-password" placeholder="Password" required />
+          <div id="signup-message" class="auth-message"></div>
+          <div id="signup-spinner" class="spinner">⏳ Processing...</div>
+          <button type="submit" class="primary">Sign Up</button>
+        </form>
+        <p class="auth-switch">
+          Already have an account? <a href="#" id="show-login">Log In</a>
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      updateProfile
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZLZPVAlZUJWLturWzJ3nqyceZbSIevl4",
+      authDomain: "mindblast-icons.firebaseapp.com",
+      projectId: "mindblast-icons",
+      storageBucket: "mindblast-icons.appspot.com",
+      messagingSenderId: "807795058423",
+      appId: "1:807795058423:web:2066a5d149852a43af55f2",
+      measurementId: "G-LSJ3SWQP6M"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Switch UI views
+    document.getElementById('show-signup').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.getElementById('login-form-container').style.display = 'none';
+      document.getElementById('signup-form-container').style.display = 'block';
+    });
+
+    document.getElementById('show-login').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.getElementById('signup-form-container').style.display = 'none';
+      document.getElementById('login-form-container').style.display = 'block';
+    });
+
+    const showMessage = (element, text, type = 'error') => {
+    element.textContent = text;
+    element.className = `auth-message ${type}`;
+    element.style.display = 'block';
+    setTimeout(() => {
+        element.style.opacity = '1';
+    }, 10);
+    };
+
+    const hideMessage = (element) => {
+    element.style.opacity = '0';
+    setTimeout(() => {
+        element.style.display = 'none';
+    }, 300);
+    };
+
+
+    // Login form submit
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value.trim();
+        const messageBox = document.getElementById('login-message');
+        const spinner = document.getElementById('login-spinner');
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+
+        spinner.style.display = 'block';
+        submitBtn.disabled = true;
+
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            showMessage(messageBox, `Welcome back, ${userCredential.user.email}`, 'success');
+            setTimeout(() => {
+            window.location.href = 'home.html';
+            }, 1000);
+        } catch (error) {
+            showMessage(messageBox, error.message, 'error');
+        } finally {
+            spinner.style.display = 'none';
+            submitBtn.disabled = false;
+        }
+    });
+
+
+    // Signup form submit
+    document.getElementById('signup-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('signup-username').value.trim();
+        const email = document.getElementById('signup-email').value.trim();
+        const password = document.getElementById('signup-password').value.trim();
+        const messageBox = document.getElementById('signup-message');
+        const spinner = document.getElementById('signup-spinner');
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+
+        spinner.style.display = 'block';
+        submitBtn.disabled = true;
+
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            await updateProfile(userCredential.user, { displayName: username });
+            showMessage(messageBox, `Signed up as ${username}`, 'success');
+            setTimeout(() => {
+            window.location.href = 'home.html';
+            }, 1000);
+        } catch (error) {
+            showMessage(messageBox, error.message, 'error');
+        } finally {
+            spinner.style.display = 'none';
+            submitBtn.disabled = false;
+        }
+    });
+
+  </script>
+
+</body>
+</html>

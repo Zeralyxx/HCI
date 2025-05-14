@@ -14,13 +14,13 @@
   <!-- Navbar -->
   <nav class="navbar">
     <div class="logo">MindBlast</div>
-  
+
     <div class="hamburger" id="hamburger">
       <span></span>
       <span></span>
       <span></span>
     </div>
-  
+
     <ul class="nav-links" id="nav-links">
       <li><a href="home.html">Home</a></li>
       <li><a href="about.html">About Us</a></li>
@@ -28,7 +28,9 @@
       <li><a href="leaderboard.html">Leaderboard</a></li>
       <li><a href="library.html">Icon Library</a></li>
     </ul>
-    <button class="nav-btn" onclick="window.location.href='quiz.html'">Start</button>
+    <div id="auth-section">
+      <button class="nav-btn" id="loginBtn" onclick="window.location.href='auth.html'">Login</button>
+    </div>
   </nav>
   
 
@@ -120,67 +122,99 @@
   </footer>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="script.js"></script>
-    <!-- Firebase Setup -->
-    <script type="module">
-    // Import Firebase modules
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+   <script type="module">
+  // Import Firebase modules
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+  import { getFirestore, collection, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-    // TODO: Replace with your own Firebase config
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_SENDER_ID",
-        appId: "YOUR_APP_ID"
-    };
+  // Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyAZLZPVAlZUJWLturWzJ3nqyceZbSIevl4", // Use the correct API key
+    authDomain: "mindblast-icons.firebaseapp.com",
+    projectId: "mindblast-icons",
+    storageBucket: "mindblast-icons.firebasestorage.app", // Use the correct storage bucket
+    messagingSenderId: "807795058423",
+    appId: "1:807795058423:web:2066a5d149852a43af55f2",
+    measurementId: "G-LSJ3SWQP6M"
+  };
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app); // Get Firestore
 
-    // Load leaderboard data
-    async function loadLeaderboard() {
-        const leaderboardTable = document.querySelector('.leaderboard-table tbody');
-        leaderboardTable.innerHTML = ''; // Clear default rows
+  const authSection = document.getElementById("auth-section");
 
-        try {
-        const q = query(
-            collection(db, "leaderboard"),
-            orderBy("score", "desc"),
-            limit(10)
-        );
-        const querySnapshot = await getDocs(q);
-
-        let rank = 1;
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            const row = document.createElement("tr");
-
-            // Add zoom-in animation
-            row.setAttribute("data-aos", "zoom-in");
-
-            row.innerHTML = `
-            <td>${rank} ${rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : ''}</td>
-            <td>@${data.username}</td>
-            <td>${data.score}</td>
-            <td>${data.quizzesCompleted}</td>
-            `;
-            leaderboardTable.appendChild(row);
-            rank++;
-        });
-
-        // Reinitialize AOS after DOM updates
-        AOS.init({ once: true });
-
-        } catch (error) {
-        console.error("Error loading leaderboard:", error);
-        }
+  // --- Authentication Logic ---
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      authSection.innerHTML = `
+        <div class="profile-wrapper">
+          <img src="https://www.gravatar.com/avatar/${user.uid}?d=identicon" class="profile-icon" onclick="toggleProfileMenu()">
+          <div id="profileMenu" class="profile-menu" style="display: none;">
+            <button onclick="logoutUser()">Logout</button>
+          </div>
+        </div>
+      `;
+    } else {
+      authSection.innerHTML = `<button class="nav-btn" id="loginBtn" onclick="window.location.href='auth.html'">Login</button>`;
     }
+  });
 
-    // Call it on load
-    window.addEventListener('DOMContentLoaded', loadLeaderboard);
-    </script>
+  window.toggleProfileMenu = function () {
+    const menu = document.getElementById('profileMenu');
+    if (menu) menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+  };
+
+  window.logoutUser = function () {
+    signOut(auth).then(() => {
+      window.location.reload();
+    });
+  };
+
+  // --- Leaderboard Logic ---
+  // Load leaderboard data
+  async function loadLeaderboard() {
+    const leaderboardTable = document.querySelector('.leaderboard-table tbody');
+    leaderboardTable.innerHTML = ''; // Clear default rows
+
+    try {
+      const q = query(
+        collection(db, "leaderboard"),
+        orderBy("score", "desc"),
+        limit(10)
+      );
+      const querySnapshot = await getDocs(q);
+
+      let rank = 1;
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const row = document.createElement("tr");
+
+        // Add zoom-in animation
+        row.setAttribute("data-aos", "zoom-in");
+
+        row.innerHTML = `
+          <td>${rank} ${rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : ''}</td>
+          <td>@${data.username}</td>
+          <td>${data.score}</td>
+          <td>${data.quizzesCompleted}</td>
+        `;
+        leaderboardTable.appendChild(row);
+        rank++;
+      });
+
+      // Reinitialize AOS after DOM updates
+      AOS.init({ once: true });
+
+    } catch (error) {
+      console.error("Error loading leaderboard:", error);
+    }
+  }
+
+  // Call it on load
+  window.addEventListener('DOMContentLoaded', loadLeaderboard);
+</script>
 </body>
 </html>

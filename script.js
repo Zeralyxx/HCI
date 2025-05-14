@@ -62,4 +62,16 @@ tabButtons.forEach(button => {
   });
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  const loginBtn = document.getElementById('login-btn');
+  const profileIcon = document.getElementById('profile-icon');
 
+  if (isLoggedIn) {
+    loginBtn.classList.add('hidden');
+    profileIcon.classList.remove('hidden');
+  } else {
+    loginBtn.classList.remove('hidden');
+    profileIcon.classList.add('hidden');
+  }
+});

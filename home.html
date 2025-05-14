@@ -14,13 +14,13 @@
   <!-- Navbar -->
   <nav class="navbar">
     <div class="logo">MindBlast</div>
-  
+
     <div class="hamburger" id="hamburger">
       <span></span>
       <span></span>
       <span></span>
     </div>
-  
+
     <ul class="nav-links" id="nav-links">
       <li><a href="home.html">Home</a></li>
       <li><a href="about.html">About Us</a></li>
@@ -28,7 +28,9 @@
       <li><a href="leaderboard.html">Leaderboard</a></li>
       <li><a href="library.html">Icon Library</a></li>
     </ul>
-    <button class="nav-btn" onclick="window.location.href='quiz.html'">Start</button>
+    <div id="auth-section">
+      <button class="nav-btn" id="loginBtn" onclick="window.location.href='auth.html'">Login</button>
+    </div>
   </nav>
   
 
@@ -39,7 +41,7 @@
       <p>Welcome to our platform, where learning icons becomes fun and interactive. Our flashcard quizzes are designed to enhance your knowledge and retention effortlessly.</p>
       <div class="hero-buttons">
         <button class="primary" onclick="window.location.href='quiz.html'">Start</button>
-        <button class="secondary">Sign Up</button>
+        <button class="secondary" onclick="window.location.href='auth.html'">Sign Up</button>
       </div>
     </div>
     <div class="hero-image">
@@ -134,5 +136,51 @@
   </footer>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="script.js"></script>
+  <!-- Firebase Auth Display Logic -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZLZPVAlZUJWLturWzJ3nqyceZbSIevl4",
+      authDomain: "mindblast-icons.firebaseapp.com",
+      projectId: "mindblast-icons",
+      storageBucket: "mindblast-icons.firebasestorage.app",
+      messagingSenderId: "807795058423",
+      appId: "1:807795058423:web:2066a5d149852a43af55f2",
+      measurementId: "G-LSJ3SWQP6M"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const authSection = document.getElementById("auth-section");
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        authSection.innerHTML = `
+          <div class="profile-wrapper">
+            <img src="https://www.gravatar.com/avatar/${user.uid}?d=identicon" class="profile-icon" onclick="toggleProfileMenu()">
+            <div id="profileMenu" class="profile-menu" style="display: none;">
+              <button onclick="logoutUser()">Logout</button>
+            </div>
+          </div>
+        `;
+      } else {
+        authSection.innerHTML = `<button class="nav-btn" id="loginBtn" onclick="window.location.href='auth.html'">Login</button>`;
+      }
+    });
+
+    window.toggleProfileMenu = function () {
+      const menu = document.getElementById('profileMenu');
+      if (menu) menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    }
+
+    window.logoutUser = function () {
+      signOut(auth).then(() => {
+        window.location.reload();
+      });
+    }
+  </script>
 </body>
 </html>
