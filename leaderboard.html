@@ -33,61 +33,47 @@
   
 
   <!-- Hero Header -->
-  <header class="hero" data-aos="fade-left">
-    <div class="hero-content">
-      <h1>Master Icons with <br />Engaging Flashcard Quizzes</h1>
-      <p>Welcome to our platform, where learning icons becomes fun and interactive. Our flashcard quizzes are designed to enhance your knowledge and retention effortlessly.</p>
-      <div class="hero-buttons">
-        <button class="primary" onclick="window.location.href='quiz.html'">Start</button>
-        <button class="secondary">Sign Up</button>
-      </div>
-    </div>
-    <div class="hero-image">
-      <div class="image-placeholder"><img src="/images/home_page_img.jpeg"></div>
-    </div>
-  </header>
+  <section class="leaderboard-section" data-aos="zoom-out">
+    <div class="leaderboard-container">
+        <h1 class="leaderboard-title">Top Icon Masters</h1>
+        <p class="leaderboard-subtitle">See how you rank among the best learners</p>
 
-  <!-- Feature List -->
-  <section class="features" data-aos="fade-right">
-    <h4>Explore</h4>
-    <h2>Unlock Your Learning Potential with Icons</h2>
-    <p>Dive into the world of icons with our engaging flashcard quizzes. Enhance your knowledge and retention while having fun.</p>
-    <div class="feature-cards">
-      <div class="card" data-aos="zoom-in">
-        <img src="/images/feature1.png" alt="" class="image-placeholder">
-        <h3>Engaging Flashcard Quizzes for Icon Mastery</h3>
-        <p>Challenge yourself with interactive quizzes that make learning icons enjoyable.</p>
-      </div>
-      <div class="card" data-aos="zoom-in">
-        <img src="/images/feature2.png" alt="" class="image-placeholder">
-        <h3>Extensive Icon Library for Comprehensive Study</h3>
-        <p>Access a vast collection of icons to study and reference.</p>
-      </div>
-      <div class="card" data-aos="zoom-in">
-        <img src="/images/feature3.png" alt="" class="image-placeholder">
-        <h3>Compliant with ISO 9241 for Optimal Usability</h3>
-        <p>Our platform adheres to ISO 9241 standards, ensuring a user-friendly experience.</p>
-      </div>
+        <div class="leaderboard-table-wrapper" data-aos="zoom-in">
+        <table class="leaderboard-table">
+            <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Username</th>
+                <th>Score</th>
+                <th>Quizzes Completed</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1 🥇</td>
+                <td>@IconHero</td>
+                <td>980</td>
+                <td>50</td>
+            </tr>
+            <tr>
+                <td>2 🥈</td>
+                <td>@FlashMaster</td>
+                <td>920</td>
+                <td>45</td>
+            </tr>
+            <tr>
+                <td>3 🥉</td>
+                <td>@QuizCracker</td>
+                <td>890</td>
+                <td>42</td>
+            </tr>
+            <!-- More rows as needed -->
+            </tbody>
+        </table>
+        </div>
     </div>
   </section>
 
-  <!-- Call To Action -->
-  <section class="cta" data-aos="fade-left">
-    <div class="cta-content">
-      <h2>Start Your Icon Journey Today</h2>
-      <p>Join our community and enhance your knowledge of icons with engaging flashcard quizzes.</p>
-    </div>
-    <img src="/images/cta1.png" alt="" class="cta-image">
-  </section>
-
-  <!-- Testimonial -->
-  <section class="testimonial" data-aos="fade-right">
-    <div class="testimonial-text">
-      <img src="https://assets.website-files.com/placeholder.svg" alt="Quote" class="quote-icon">
-      <p>“Using this site has transformed my study sessions. The flashcards make learning icons both fun and effective!”</p>
-      <div class="author">Emily Johnson<br><span>Graphic Designer, Freelancer</span></div>
-    </div>
-  </section>
 
   <!-- Footer -->
   <footer class="footer">
@@ -134,5 +120,67 @@
   </footer>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="script.js"></script>
+    <!-- Firebase Setup -->
+    <script type="module">
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // TODO: Replace with your own Firebase config
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_SENDER_ID",
+        appId: "YOUR_APP_ID"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Load leaderboard data
+    async function loadLeaderboard() {
+        const leaderboardTable = document.querySelector('.leaderboard-table tbody');
+        leaderboardTable.innerHTML = ''; // Clear default rows
+
+        try {
+        const q = query(
+            collection(db, "leaderboard"),
+            orderBy("score", "desc"),
+            limit(10)
+        );
+        const querySnapshot = await getDocs(q);
+
+        let rank = 1;
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            const row = document.createElement("tr");
+
+            // Add zoom-in animation
+            row.setAttribute("data-aos", "zoom-in");
+
+            row.innerHTML = `
+            <td>${rank} ${rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : ''}</td>
+            <td>@${data.username}</td>
+            <td>${data.score}</td>
+            <td>${data.quizzesCompleted}</td>
+            `;
+            leaderboardTable.appendChild(row);
+            rank++;
+        });
+
+        // Reinitialize AOS after DOM updates
+        AOS.init({ once: true });
+
+        } catch (error) {
+        console.error("Error loading leaderboard:", error);
+        }
+    }
+
+    // Call it on load
+    window.addEventListener('DOMContentLoaded', loadLeaderboard);
+    </script>
 </body>
 </html>
