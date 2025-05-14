@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-
   <title>MindBlast | Quiz</title>
   <style>
     :root {
@@ -23,14 +22,14 @@
     }
 
     body {
-        font-family: var(--primary-font);
-        margin: 0;
-        background: linear-gradient(135deg, #2E0B40, #3E1A58, #4E2A70);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        padding: 16px;
+      font-family: var(--primary-font);
+      margin: 0;
+      background: linear-gradient(135deg, #2E0B40, #3E1A58, #4E2A70);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 16px;
     }
 
     #start-screen, #quiz-screen {
@@ -67,6 +66,12 @@
       transition: background 0.3s ease;
     }
 
+    .btn span {
+      font-size: 20px;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
     .btn:hover {
       background-color: #d0d0d0;
     }
@@ -91,7 +96,6 @@
       padding: 20px;
       width: 100px;
       height: 100px;
-      font-size: 60px;
       color: #333;
       margin: 0 auto;
       display: flex;
@@ -121,9 +125,9 @@
   <div id="start-screen">
     <h1>Start Quiz</h1>
     <p>Select difficulty:</p>
-    <button class="btn" onclick="startQuiz('easy')">🟢 Easy</button>
-    <button class="btn" onclick="startQuiz('normal')">🟡 Normal</button>
-    <button class="btn" onclick="startQuiz('hard')">🔴 Hard</button>
+    <button class="btn " id="easyb">🟢 Easy</button>
+    <button class="btn " id="normalb">🟡 Normal</button>
+    <button class="btn " id="hardb">🔴 Hard</button>
   </div>
 
   <div id="quiz-screen">
@@ -134,68 +138,68 @@
     </div>
     <div id="progress">1/10</div>
   </div>
-  <script>
-    const quizzes = {
-      easy: [
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">home</span>', options: ["Bahay na Bato", "House", "Nipa Hut", "Home"], answer: "Home" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">close</span>', options: ["Quit", "Close", "X", "Sarado"], answer: "Close" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">favorite</span>', options: ["U ;)", "Heart", "Favorite", "Valentines"], answer: "Favorite" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">help</span>', options: ["Help", "Question Mark", "?", "Circle ?"], answer: "Help" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">phone</span>', options: ["Phone", "Camera", "Blackberry", "Telephone"], answer: "Phone" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">refresh</span>', options: ["Loop", "Arrow Circle", "Back", "Refresh"], answer: "Refresh" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">edit</span>', options: ["Edit", "Erase", "Pencil", "Ballpen"], answer: "Edit" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">map</span>', options: ["Elder Scroll", "Map", "Scroll of Wisdom", "Navigate"], answer: "Map" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">download</span>', options: ["Arrow Down", "Download", "Insert Here", "Put Down"], answer: "Download" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">bluetooth</span>', options: ["Wifi", "Router", "Share", "Bluetooth"], answer: "Bluetooth" }
-      ],
-      normal: [
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">security</span>', options: ["Firewall", "Protection", "Security", "Shield"], answer: "Security" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">update</span>', options: ["Update", "Refresh", "Cycle", "Return"], answer: "Update" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">receipt</span>', options: ["Ticket", "Receipt", "Text", "Notes"], answer: "Receipt" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">event</span>', options: ["Set", "Set Date", "Event", "Calendar"], answer: "Event" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">group</span>', options: ["Avatar", "Account", "Friends", "Group"], answer: "Group" },//stopped here
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">forum</span>', options: ["Camera", "Mic", "Speaker", "Remote"], answer: "Mic" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">analytics</span>', options: ["Speaker", "Headphones", "Receiver", "Echo"], answer: "Speaker" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">language</span>', options: ["Printer", "Scanner", "Fax", "Copier"], answer: "Fax" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">tune</span>', options: ["Mouse", "Trackball", "Joystick", "Remote"], answer: "Trackball" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">bar_chart</span>', options: ["Floppy", "Disc", "USB", "Tape"], answer: "Disc" }
-      ],
-      hard: [
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">psychology</span>', options: ["Psychology", "Settings", "Mental Health", "Human Mind"], answer: "Psychology" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">dns</span>', options: ["Tape", "Storage", "DNS", "RAM"], answer: "DNS" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">public</span>', options: ["WWW", "Public", "Globe", "Internet"], answer: "Public" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">pageless</span>', options: ["Record", "Toolbox", "Storage", "Drawer"], answer: "Toolbox" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">storm</span>', options: ["Graph", "Chart", "Fall", "Trend"], answer: "Chart" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">variables</span>', options: ["Clip", "Clamp", "Compressor", "Vice"], answer: "Clamp" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">dirty_lens</span>', options: ["Gear", "Knob", "Cog", "Wheel"], answer: "Gear" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">menu_book</span>', options: ["Magnet", "Metal", "Attract", "Compass"], answer: "Magnet" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">account_tree</span>', options: ["Hammer", "Spanner", "Wrench", "Driver"], answer: "Wrench" },
-        { icon: '<span class="material-symbols-outlined" id="icon-placeholder">wifi_channel</span>', options: ["ID", "Label", "Badge", "Warning"], answer: "Badge" }
-      ]
-    };
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-analytics.js";
 
-    let quizData = [];
-    let currentQuestion = 0;
-    let score = 0;
+  const firebaseConfig = {
+    apiKey: "AIzaSyAZLZPVAlZUJWLturWzJ3nqyceZbSIevl4",
+    authDomain: "mindblast-icons.firebaseapp.com",
+    projectId: "mindblast-icons",
+    storageBucket: "mindblast-icons.firebasestorage.app",
+    messagingSenderId: "807795058423",
+    appId: "1:807795058423:web:2066a5d149852a43af55f2",
+    measurementId: "G-LSJ3SWQP6M"
+  };
 
-    const startScreen = document.getElementById("start-screen");
-    const quizScreen = document.getElementById("quiz-screen");
-    const iconPlaceholder = document.getElementById("icon-placeholder");
-    const optionsDiv = document.getElementById("options");
-    const progressText = document.getElementById("progress");
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const analytics = getAnalytics(app);
 
-    function startQuiz(difficulty) {
-      quizData = quizzes[difficulty];
-      currentQuestion = 0;
-      score = 0;
-      startScreen.style.display = "none";
-      quizScreen.style.display = "flex";
-      showQuestion();
-    }
+  let quizData = [];
+  let currentQuestion = 0;
+  let score = 0;
 
-    function showQuestion() {
+  const startScreen = document.getElementById("start-screen");
+  const quizScreen = document.getElementById("quiz-screen");
+  const iconPlaceholder = document.getElementById("icon-placeholder");
+  const optionsDiv = document.getElementById("options");
+  const progressText = document.getElementById("progress");
+
+  async function startQuiz(difficulty) {
+    quizData = await loadQuestions(difficulty);
+    currentQuestion = 0;
+    score = 0;
+    startScreen.style.display = "none";
+    quizScreen.style.display = "flex";
+    showQuestion();
+  }
+
+  async function loadQuestions(difficulty) {
+    const colRef = collection(db, difficulty.charAt(0).toUpperCase() + difficulty.slice(1));
+    const snapshot = await getDocs(colRef);
+    let questions = [];
+
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      questions.push({
+        icon: `<span class="material-symbols-outlined">${data.icon}</span>`,
+        options: shuffleArray([...data.options]), // clone then shuffle
+        answer: data.answer
+      });
+    });
+
+    return shuffleArray(questions).slice(0, 10); // take 10 random questions
+  }
+
+  function shuffleArray(array) {
+    return array.sort(() => Math.random() - 0.5);
+  }
+
+  function showQuestion() {
     const q = quizData[currentQuestion];
-    iconPlaceholder.innerHTML = q.icon; // Changed from textContent
+    iconPlaceholder.innerHTML = q.icon;
     optionsDiv.innerHTML = "";
     progressText.textContent = `${currentQuestion + 1}/10`;
 
@@ -208,42 +212,59 @@
     });
   }
 
-
-    function checkAnswer(selectedBtn, correctAnswer) {
-      const buttons = document.querySelectorAll(".option");
-      buttons.forEach(btn => {
-        btn.disabled = true;
-        if (btn.textContent === correctAnswer) {
-          btn.classList.add("correct");
-        } else {
-          btn.classList.add("incorrect");
-        }
-      });
-
-      if (selectedBtn.textContent === correctAnswer) {
-        score++;
+  function checkAnswer(selectedBtn, correctAnswer) {
+    const buttons = document.querySelectorAll(".option");
+    buttons.forEach(btn => {
+      btn.disabled = true;
+      if (btn.textContent === correctAnswer) {
+        btn.classList.add("correct");
+      } else {
+        btn.classList.add("incorrect");
       }
+    });
 
-      setTimeout(() => {
-        currentQuestion++;
-        if (currentQuestion < quizData.length) {
-          showQuestion();
-        } else {
-          showScore();
-        }
-      }, 1000);
+    if (selectedBtn.textContent === correctAnswer) {
+      score++;
     }
 
-    function showScore() {
-      setTimeout(() => {
-        if (confirm(`🎉 Quiz Complete!\nYou scored ${score} out of 10\n\nTry again?`)) {
-          location.reload();
-        } else {
-          startScreen.style.display = "block";
-          quizScreen.style.display = "none";
-        }
-      }, 200);
+    setTimeout(() => {
+      currentQuestion++;
+      if (currentQuestion < quizData.length) {
+        showQuestion();
+      } else {
+        showScore();
+      }
+    }, 1000);
+  }
+
+  function showScore() {
+    setTimeout(() => {
+      if (confirm(`🎉 Quiz Complete!\nYou scored ${score} out of 10\n\nTry again?`)) {
+        location.reload();
+      } else {
+        startScreen.style.display = "block";
+        quizScreen.style.display = "none";
+      }
+    }, 200);
+  }
+
+  // Inject random icons from Firestore into the difficulty buttons
+  async function setDifficultyIcons() {
+    const difficulties = ["Easy", "Normal", "Hard"];
+    for (let diff of difficulties) {
+      const colRef = collection(db, diff);
+      const snapshot = await getDocs(colRef);
+      const docs = snapshot.docs;
+      const randomDoc = docs[Math.floor(Math.random() * docs.length)];
+      const iconName = randomDoc.data().icon;
+      document.getElementById(`${diff.toLowerCase()}-btn-icon`).textContent = iconName;
     }
-  </script>
+  }
+
+  window.onload = setDifficultyIcons;
+  document.getElementById("easyb").addEventListener("click", () => startQuiz("easy"));
+  document.getElementById("normalb").addEventListener("click", () => startQuiz("normal"));
+  document.getElementById("hardb").addEventListener("click", () => startQuiz("hard"));
+</script>
 </body>
 </html>
