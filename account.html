@@ -176,43 +176,41 @@
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut, updateProfile, deleteUser } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut, updateProfile, deleteUser } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"; // <-- Add deleteDoc here
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAZLZPVAlZUJWLturWzJ3nqyceZbSIevl4",
-      authDomain: "mindblast-icons.firebaseapp.com",
-      projectId: "mindblast-icons",
-      storageBucket: "mindblast-icons.appspot.com",
-      messagingSenderId: "807795058423",
-      appId: "1:807795058423:web:2066a5d149852a43af55f2",
-      measurementId: "G-LSJ3SWQP6M"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyAZLZPVAlZUJWLturWzJ3nqyceZbSIevl4",
+    authDomain: "mindblast-icons.firebaseapp.com",
+    projectId: "mindblast-icons",
+    storageBucket: "mindblast-icons.appspot.com",
+    messagingSenderId: "807795058423",
+    appId: "1:807795058423:web:2066a5d149852a43af55f2",
+    measurementId: "G-LSJ3SWQP6M"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-    const usernameEl = document.getElementById('account-username');
-    const emailEl = document.getElementById('account-email');
-    const uidEl = document.getElementById('account-uid');
-    const createdEl = document.getElementById('account-created');
-    const quizzesEl = document.getElementById('total-quizzes');
-    const highScoreEl = document.getElementById('high-score');
-    const achievementsEl = document.getElementById('achievements');
+  const usernameEl = document.getElementById('account-username');
+  const emailEl = document.getElementById('account-email');
+  const uidEl = document.getElementById('account-uid');
+  const createdEl = document.getElementById('account-created');
+  const quizzesEl = document.getElementById('total-quizzes');
+  const highScoreEl = document.getElementById('high-score');
+  const achievementsEl = document.getElementById('achievements');
+  const accountAvatarEl = document.getElementById('account-initial-avatar'); // Added this line to get the avatar element
 
-    let isEditing = false;
+  let isEditing = false;
 
-    onAuthStateChanged(auth, async (user) => {
+  onAuthStateChanged(auth, async (user) => {
     if (user) {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
 
-        // Get the element for the initial avatar
-        const accountAvatarEl = document.getElementById('account-initial-avatar');
-
-        if (docSnap.exists()) {
+      if (docSnap.exists()) {
         const data = docSnap.data();
         usernameEl.textContent = data.username || user.displayName || "Unknown";
         emailEl.textContent = user.email;
@@ -222,57 +220,77 @@
         highScoreEl.textContent = data.highScore || 0;
         achievementsEl.textContent = (data.achievements || []).join(', ') || 'None';
 
-        // **Set the initial for the avatar**
+        // Set the initial for the avatar
         const userInitial = (data.username || user.displayName ? (data.username || user.displayName)[0] : '?').toUpperCase();
         accountAvatarEl.textContent = userInitial;
 
-        } else {
+      } else {
         // If user data not found in Firestore, still try to get initial from Auth
         const userInitial = (user.displayName ? user.displayName[0] : '?').toUpperCase();
         accountAvatarEl.textContent = userInitial;
-        // You might also want to display a message or redirect if user data is missing
-        }
+      }
     } else {
-        window.location.href = 'auth.html'; // Changed to auth.html for consistency with other files
+      window.location.href = 'auth.html';
     }
-    });
+  });
 
-    document.getElementById('logout-btn').addEventListener('click', async () => {
-      await signOut(auth);
-      window.location.href = 'home.html';
-    });
+  document.getElementById('logout-btn').addEventListener('click', async () => {
+    await signOut(auth);
+    window.location.href = 'home.html';
+  });
 
-    document.getElementById('delete-account').addEventListener('click', async () => {
-      if (confirm("Are you sure you want to delete your account?")) {
-        const user = auth.currentUser;
-        if (user) {
+  document.getElementById('delete-account').addEventListener('click', async () => {
+    if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+      const user = auth.currentUser;
+      if (user) {
+        try {
+          // 1. Delete user's entry from the Leaderboard collection
+          const leaderboardDocRef = doc(db, "Leaderboard", user.uid);
+          await deleteDoc(leaderboardDocRef);
+          
+          // 2. Delete user's data from the users collection
+          const userDocRef = doc(db, "users", user.uid);
+          await deleteDoc(userDocRef);
+
+          // 3. Delete the user's authentication record
           await deleteUser(user);
-          alert("Account deleted");
+
+          alert("Account and associated data deleted successfully.");
           window.location.href = 'home.html';
+        } catch (error) {
+          console.error("Error deleting account or associated data:", error);
+          alert("Failed to delete account. Please try again. If you've recently signed in, try logging out and logging back in, then attempting the deletion again. This is often required for security reasons.");
+          // Handle specific errors, e.g., 'auth/requires-recent-login'
+          if (error.code === 'auth/requires-recent-login') {
+            alert("For security reasons, you must re-authenticate before deleting your account. Please log out and log back in, then try again.");
+            signOut(auth); // Log out the user for re-authentication
+            window.location.href = 'auth.html';
+          }
         }
       }
-    });
+    }
+  });
 
-    document.getElementById('edit-btn').addEventListener('click', async () => {
+  document.getElementById('edit-btn').addEventListener('click', async () => {
     const user = auth.currentUser;
     const userRef = doc(db, "users", user.uid);
     const leaderboardRef = doc(db, "Leaderboard", user.uid);
 
     if (!isEditing) {
-        usernameEl.contentEditable = true;
-        usernameEl.style.backgroundColor = "#fff";
-        usernameEl.style.color = "#000";
-        usernameEl.focus();
-        document.getElementById('edit-btn').textContent = "Save";
-        isEditing = true;
+      usernameEl.contentEditable = true;
+      usernameEl.style.backgroundColor = "#fff";
+      usernameEl.style.color = "#000";
+      usernameEl.focus();
+      document.getElementById('edit-btn').textContent = "Save";
+      isEditing = true;
     } else {
-        const newUsername = usernameEl.textContent.trim();
-        if (newUsername.length < 3) {
+      const newUsername = usernameEl.textContent.trim();
+      if (newUsername.length < 3) {
         alert("Username must be at least 3 characters.");
         return;
-        }
+      }
 
-        try {
+      try {
         // Update Firebase Auth display name
         await updateProfile(user, { displayName: newUsername });
 
@@ -282,24 +300,22 @@
         // Only update leaderboard if it exists
         const leaderboardSnap = await getDoc(leaderboardRef);
         if (leaderboardSnap.exists()) {
-            await updateDoc(leaderboardRef, { name: newUsername });
+          await updateDoc(leaderboardRef, { name: newUsername });
         }
 
         alert("Account updated!");
-        } catch (error) {
+      } catch (error) {
         console.error("Failed to update account:", error);
         alert("An error occurred while updating your account.");
-        }
+      }
 
-        usernameEl.contentEditable = false;
-        usernameEl.style.backgroundColor = "";
-        usernameEl.style.color = "";
-        document.getElementById('edit-btn').textContent = "Edit Account";
-        isEditing = false;
+      usernameEl.contentEditable = false;
+      usernameEl.style.backgroundColor = "";
+      usernameEl.style.color = "";
+      document.getElementById('edit-btn').textContent = "Edit Account";
+      isEditing = false;
     }
-    });
-
-
-  </script>
+  });
+</script>
 </body>
 </html>
