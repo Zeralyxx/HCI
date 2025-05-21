@@ -55,10 +55,12 @@
     updateProfile
   } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import {
-    getFirestore,
-    doc,
-    setDoc
-  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  getFirestore,
+  doc,
+  setDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
 
   const firebaseConfig = {
     apiKey: "AIzaSyAZLZPVAlZUJWLturWzJ3nqyceZbSIevl4",
@@ -150,12 +152,18 @@
       await updateProfile(user, { displayName: username });
 
       // Store user data in Firestore
-      await setDoc(doc(db, "users", user.uid), {
-        uid: user.uid,
-        username: username,
-        email: user.email,
-        createdAt: new Date()
-      });
+      const userData = {
+      uid: user.uid,
+      username: username,
+      email: user.email,
+      createdAt: new Date(),
+      totalQuizzes: 0,
+      highScore: 0,
+      achievements: []
+    };
+
+    await setDoc(doc(db, "users", user.uid), userData);
+
 
       showMessage(messageBox, `Signed up as ${username}`, 'success');
       setTimeout(() => {

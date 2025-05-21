@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MindBlast | Account</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .account-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      color: white;
+      font-family: 'IBM Plex Sans', sans-serif;
+      background-color: #191919;
+      min-height: 100vh;
+    }
+
+    .account-card {
+      background: #2E0B40;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      width: 100%;
+      max-width: 500px;
+      animation: fadeInUp 0.6s ease forwards;
+      position: relative;
+    }
+
+    .back-button {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      color: white;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      border-radius: 30px;
+    }
+
+    .account-card h2 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .account-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        /* object-fit: cover; <--- Remove this line, it's for images */
+        margin: 0 auto 1rem auto;
+        display: block;
+        border: 3px solid #fff;
+
+        /* Add these lines for centering the initial */
+        background-color: #2E0B40; /* Match your navbar's profile-icon background */
+        color: white;
+        display: flex; /* Make it a flex container */
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
+        font-size: 40px; /* Adjust font size for the initial */
+        font-weight: bold; /* Make the initial bold */
+        user-select: none; /* Prevent text selection */
+    }
+
+    .account-details p {
+      font-size: 1rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .account-details input {
+      background-color: #fff;
+      color: #000;
+      border-radius: 8px;
+      padding: 0.3rem;
+      width: 100%;
+      border: none;
+    }
+
+    .edit-fields {
+      display: none;
+    }
+
+    .activity-summary {
+      margin-top: 2rem;
+    }
+
+    .activity-summary p {
+      font-size: 1rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .account-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      flex: 1;
+      padding: 0.75rem;
+      background-color: #7E3FF2;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #9a5dff;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .account-card {
+        padding: 1rem;
+      }
+
+      .account-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body class="account-container">
+  <div class="account-card">
+    <button class="back-button" onclick="window.location.href='home.html'">
+      <span class="material-icons">arrow_back</span>
+    </button>
+
+    <div class="account-avatar" id="account-initial-avatar">
+  </div>
+    <h2>Account Info</h2>
+
+    <div class="account-details">
+      <p><strong>Username:</strong> <span id="account-username" contenteditable="false"></span></p>
+      <p><strong>Email:</strong> <span id="account-email"></span></p>
+      <p><strong>UID:</strong> <span id="account-uid"></span></p>
+      <p><strong>Joined:</strong> <span id="account-created"></span></p>
+    </div>
+
+    <div class="activity-summary">
+      <p><strong>Total Quizzes Taken:</strong> <span id="total-quizzes">Loading...</span></p>
+      <p><strong>Highest Score:</strong> <span id="high-score">Loading...</span></p>
+      <p><strong>Achievements:</strong> <span id="achievements">Loading...</span></p>
+    </div>
+
+    <div class="account-actions">
+      <button class="btn-primary" id="edit-btn">Edit Account</button>
+      <button class="btn-primary" id="delete-account">Delete Account</button>
+      <button class="btn-primary" id="logout-btn">Log Out</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut, updateProfile, deleteUser } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZLZPVAlZUJWLturWzJ3nqyceZbSIevl4",
+      authDomain: "mindblast-icons.firebaseapp.com",
+      projectId: "mindblast-icons",
+      storageBucket: "mindblast-icons.appspot.com",
+      messagingSenderId: "807795058423",
+      appId: "1:807795058423:web:2066a5d149852a43af55f2",
+      measurementId: "G-LSJ3SWQP6M"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const usernameEl = document.getElementById('account-username');
+    const emailEl = document.getElementById('account-email');
+    const uidEl = document.getElementById('account-uid');
+    const createdEl = document.getElementById('account-created');
+    const quizzesEl = document.getElementById('total-quizzes');
+    const highScoreEl = document.getElementById('high-score');
+    const achievementsEl = document.getElementById('achievements');
+
+    let isEditing = false;
+
+    onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        // Get the element for the initial avatar
+        const accountAvatarEl = document.getElementById('account-initial-avatar');
+
+        if (docSnap.exists()) {
+        const data = docSnap.data();
+        usernameEl.textContent = data.username || user.displayName || "Unknown";
+        emailEl.textContent = user.email;
+        uidEl.textContent = user.uid;
+        createdEl.textContent = new Date(data.createdAt.seconds * 1000).toLocaleDateString();
+        quizzesEl.textContent = data.totalQuizzes || 0;
+        highScoreEl.textContent = data.highScore || 0;
+        achievementsEl.textContent = (data.achievements || []).join(', ') || 'None';
+
+        // **Set the initial for the avatar**
+        const userInitial = (data.username || user.displayName ? (data.username || user.displayName)[0] : '?').toUpperCase();
+        accountAvatarEl.textContent = userInitial;
+
+        } else {
+        // If user data not found in Firestore, still try to get initial from Auth
+        const userInitial = (user.displayName ? user.displayName[0] : '?').toUpperCase();
+        accountAvatarEl.textContent = userInitial;
+        // You might also want to display a message or redirect if user data is missing
+        }
+    } else {
+        window.location.href = 'auth.html'; // Changed to auth.html for consistency with other files
+    }
+    });
+
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      await signOut(auth);
+      window.location.href = 'home.html';
+    });
+
+    document.getElementById('delete-account').addEventListener('click', async () => {
+      if (confirm("Are you sure you want to delete your account?")) {
+        const user = auth.currentUser;
+        if (user) {
+          await deleteUser(user);
+          alert("Account deleted");
+          window.location.href = 'home.html';
+        }
+      }
+    });
+
+    document.getElementById('edit-btn').addEventListener('click', async () => {
+    const user = auth.currentUser;
+    const userRef = doc(db, "users", user.uid);
+    const leaderboardRef = doc(db, "Leaderboard", user.uid);
+
+    if (!isEditing) {
+        usernameEl.contentEditable = true;
+        usernameEl.style.backgroundColor = "#fff";
+        usernameEl.style.color = "#000";
+        usernameEl.focus();
+        document.getElementById('edit-btn').textContent = "Save";
+        isEditing = true;
+    } else {
+        const newUsername = usernameEl.textContent.trim();
+        if (newUsername.length < 3) {
+        alert("Username must be at least 3 characters.");
+        return;
+        }
+
+        try {
+        // Update Firebase Auth display name
+        await updateProfile(user, { displayName: newUsername });
+
+        // Update Firestore user document
+        await updateDoc(userRef, { username: newUsername });
+
+        // Only update leaderboard if it exists
+        const leaderboardSnap = await getDoc(leaderboardRef);
+        if (leaderboardSnap.exists()) {
+            await updateDoc(leaderboardRef, { name: newUsername });
+        }
+
+        alert("Account updated!");
+        } catch (error) {
+        console.error("Failed to update account:", error);
+        alert("An error occurred while updating your account.");
+        }
+
+        usernameEl.contentEditable = false;
+        usernameEl.style.backgroundColor = "";
+        usernameEl.style.color = "";
+        document.getElementById('edit-btn').textContent = "Edit Account";
+        isEditing = false;
+    }
+    });
+
+
+  </script>
+</body>
+</html>

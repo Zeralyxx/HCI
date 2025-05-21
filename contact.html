@@ -142,49 +142,79 @@
   <script src="script.js"></script>
   <!-- Firebase Auth Display Logic -->
   <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAZLZPVAlZUJWLturWzJ3nqyceZbSIevl4",
-      authDomain: "mindblast-icons.firebaseapp.com",
-      projectId: "mindblast-icons",
-      storageBucket: "mindblast-icons.firebasestorage.app",
-      messagingSenderId: "807795058423",
-      appId: "1:807795058423:web:2066a5d149852a43af55f2",
-      measurementId: "G-LSJ3SWQP6M"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyAZLZPVAlZUJWLturWzJ3nqyceZbSIevl4",
+    authDomain: "mindblast-icons.firebaseapp.com",
+    projectId: "mindblast-icons",
+    storageBucket: "mindblast-icons.firebasestorage.app",
+    messagingSenderId: "807795058423",
+    appId: "1:807795058423:web:2066a5d149852a43af55f2",
+    measurementId: "G-LSJ3SWQP6M"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
-    const authSection = document.getElementById("auth-section");
+  const authSection = document.getElementById("auth-section");
 
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        authSection.innerHTML = `
-          <div class="profile-wrapper">
-            <img src="https://www.gravatar.com/avatar/${user.uid}?d=identicon" class="profile-icon" onclick="toggleProfileMenu()">
-            <div id="profileMenu" class="profile-menu" style="display: none;">
-              <button onclick="logoutUser()">Logout</button>
-            </div>
-          </div>
-        `;
-      } else {
-        authSection.innerHTML = `<button class="nav-btn" id="loginBtn" onclick="window.location.href='auth.html'">Login</button>`;
-      }
-    });
+  // Define functions globally first
+window.toggleProfileMenu = function () {
+  const menu = document.getElementById('profileMenu');
+  if (!menu) return;
 
-    window.toggleProfileMenu = function () {
-      const menu = document.getElementById('profileMenu');
-      if (menu) menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
-    }
+  if (!window.isProfileMenuOpen) {
+    menu.classList.add('show');
+    window.isProfileMenuOpen = true;
+    document.addEventListener('click', handleOutsideClick);
+  } else {
+    menu.classList.remove('show');
+    window.isProfileMenuOpen = false;
+    document.removeEventListener('click', handleOutsideClick);
+  }
+};
 
-    window.logoutUser = function () {
-      signOut(auth).then(() => {
-        window.location.reload();
-      });
-    }
-  </script>
+function handleOutsideClick(e) {
+  const menu = document.getElementById('profileMenu');
+  const profileIcon = document.querySelector('.profile-icon');
+  if (!menu.contains(e.target) && !profileIcon.contains(e.target)) {
+    menu.classList.remove('show');
+    window.isProfileMenuOpen = false;
+    document.removeEventListener('click', handleOutsideClick);
+  }
+}
+
+window.logoutUser = function () {
+  signOut(auth).then(() => {
+    window.location.reload();
+  });
+};
+
+// Then run this AFTER the functions are declared:
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // Get the first initial of the display name, or default to '?'
+    // Ensure user.displayName exists before trying to access its first character
+    const userInitial = (user.displayName ? user.displayName[0] : '?').toUpperCase();
+
+    authSection.innerHTML = `
+      <div class="profile-wrapper">
+        <div class="profile-icon" onclick="toggleProfileMenu()">
+          ${userInitial}
+        </div>
+        <div id="profileMenu" class="profile-menu">
+          <button onclick="window.location.href='account.html'">Manage Account</button>
+          <button onclick="logoutUser()">Logout</button>
+        </div>
+      </div>
+    `;
+  } else {
+    authSection.innerHTML = `<button class="nav-btn" id="loginBtn" onclick="window.location.href='auth.html'">Login</button>`;
+  }
+});
+
+</script>
 </body>
 </html>

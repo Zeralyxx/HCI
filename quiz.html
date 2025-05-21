@@ -179,6 +179,8 @@
   import {
     initializeApp
   } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
+  import { getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
+
   import {
     getFirestore,
     collection,
@@ -187,7 +189,8 @@
     serverTimestamp,
     query,
     where,
-    updateDoc
+    updateDoc,
+    doc
   } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
   import {
     getAuth,
@@ -363,31 +366,56 @@
   }
 
   async function uploadToLeaderboard(name, score, correct, difficulty) {
-    const leaderboardRef = collection(db, "Leaderboard");
-    const q = query(leaderboardRef, where("name", "==", name));
-    const snapshot = await getDocs(q);
+  const user = auth.currentUser;
+  if (!user) {
+    console.error("User not authenticated.");
+    return;
+  }
 
-    if (!snapshot.empty) {
-      const docRef = snapshot.docs[0].ref;
-      const data = snapshot.docs[0].data();
+  const leaderboardRef = doc(db, "Leaderboard", user.uid);
+  const userRef = doc(db, "users", user.uid); // This was missing the doc import, as per previous advice
 
-      await updateDoc(docRef, {
-        score: (data.score || 0) + score,
-        correct: (data.correct || 0) + correct,
-        quizzesCompleted: (data.quizzesCompleted || 0) + 1,
-        lastPlayed: serverTimestamp()
+  const docSnap = await getDoc(leaderboardRef);
+
+  if (docSnap.exists()) {
+    const data = docSnap.data();
+    await updateDoc(leaderboardRef, {
+      score: (data.score || 0) + score,
+      correct: (data.correct || 0) + correct,
+      quizzesCompleted: (data.quizzesCompleted || 0) + 1,
+      lastPlayed: serverTimestamp() // Consider if you want this for all updates or only initial
+    });
+  } else {
+    // This is the crucial part for a new user's first quiz
+    await setDoc(leaderboardRef, {
+      name: user.displayName || name || "Anonymous",
+      score: score, // This will be the score from their first quiz
+      correct: correct, // This will be the correct answers from their first quiz
+      difficulty: difficulty, // Store difficulty of their first quiz, or remove if not needed for leaderboard display
+      quizzesCompleted: 1, // Set to 1 for their first completed quiz
+      timestamp: serverTimestamp() // Use timestamp for initial entry
+    });
+  }
+
+  // ✅ Update activity summary in users collection (this part is good)
+  const userSnap = await getDoc(userRef);
+  const userData = userSnap.exists() ? userSnap.data() : {};
+
+  if (userSnap.exists()) {
+      await updateDoc(userRef, {
+        totalQuizzes: (userData.totalQuizzes || 0) + 1,
+        highScore: Math.max(score, userData.highScore || 0)
       });
     } else {
-      await addDoc(leaderboardRef, {
-        name,
-        score,
-        correct,
-        difficulty,
-        quizzesCompleted: 1,
-        timestamp: serverTimestamp()
+      // This 'else' block for userRef should ideally not be hit if user is authenticated
+      // and their data was created on signup. But good to have as a fallback.
+      await setDoc(userRef, {
+        totalQuizzes: 1,
+        highScore: score
       });
     }
   }
+
 
   window.onload = () => {
     document.getElementById("easy-btn-icon").addEventListener("click", () => startQuiz("Easy"));
