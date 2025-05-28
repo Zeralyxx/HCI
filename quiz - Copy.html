@@ -166,29 +166,6 @@
       background-color: #4caf50;
       width: 0%;
       transition: width 0.3s ease;
-
-    #score-display {
-      position: absolute;
-      top: 16px;
-      right: 100px;
-      text-align: right;
-      font-weight: bold;
-      color: white;
-      z-index: 10;
-    }
-    
-    #score-feedback {
-      color: #00ff88;
-      font-size: 18px;
-      opacity: 0;
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-    
-    #score-feedback.show {
-      opacity: 1;
-      transform: translateY(-10px);
-    }
-
     }
   </style>
 </head>
@@ -197,22 +174,6 @@
   <a href="home.html" class="close" aria-label="Close">
   <span class="material-symbols-outlined">close</span>
 </a>
-<!-- Background Music -->
-<audio id="bg-music" loop autoplay>
-  <source src="music/background.mp3" type="audio/mp3" />
-  Your browser does not support the audio element.
-</audio>
-
-<!-- Correct Answer Sound -->
-<audio id="correct-sound">
-  <source src="sounds/correct.mp3" type="audio/mp3" />
-</audio>
-
-<!-- Incorrect Answer Sound -->
-<audio id="incorrect-sound">
-  <source src="sounds/incorrect.mp3" type="audio/mp3" />
-</audio>
-
 
   <div id="start-screen">
     <h1>Start Quiz</h1>
@@ -224,10 +185,6 @@
 
   <div id="quiz-screen">
     <div id="timer">⏱️ 60s</div>
-    <div id="score-display">
-      <div id="total-score">Score: 0</div>
-      <div id="score-feedback"></div>
-    </div>
     <h2>What is this icon?</h2>
     <div id="icon-placeholder">🔲</div>
     <div id="options"></div>
@@ -283,30 +240,16 @@
   let correctAnswers = 0;
   let difficulty = '';
   let questionStartTime = 0;
-  let currentUser = null;
-  let timePerQuestion = 20;
-  let currentTimer = 0;
+  let timeRemaining = 60;
   let timerInterval;
+  let currentUser = null;
 
-  
-  const totalScoreDisplay = document.getElementById("total-score");
-  const scoreFeedback = document.getElementById("score-feedback");
   const startScreen = document.getElementById("start-screen");
   const quizScreen = document.getElementById("quiz-screen");
   const iconPlaceholder = document.getElementById("icon-placeholder");
   const optionsDiv = document.getElementById("options");
   const progressText = document.getElementById("progress");
   const timerDisplay = document.getElementById("timer");
-  const bgMusic = document.getElementById("bg-music");
-  const correctSound = document.getElementById("correct-sound");
-  const incorrectSound = document.getElementById("incorrect-sound");
-  
-  // Optional: Allow user interaction to resume music if browser blocks autoplay
-  document.body.addEventListener("click", () => {
-    if (bgMusic.paused) {
-      bgMusic.play().catch(() => {});
-    }
-  });
 
   // Check login state
   onAuthStateChanged(auth, user => {
@@ -321,10 +264,6 @@
   async function startQuiz(diff) {
     if (!currentUser) return;
     difficulty = diff;
-    if (difficulty === "Easy") timePerQuestion = 20;
-    else if (difficulty === "Medium") timePerQuestion = 15;
-    else if (difficulty === "Hard") timePerQuestion = 10;
-
     quizData = await loadQuestions(diff);
     currentQuestion = 0;
     score = 0;
@@ -358,21 +297,18 @@
   }
 
   function startTimer() {
-    currentTimer = timePerQuestion;
-    timerDisplay.textContent = `⏱️ ${currentTimer}s`;
-
-    clearInterval(timerInterval); // Clear previous timer if any
-
+    timeRemaining = 60;
+    timerDisplay.textContent = `⏱️ ${timeRemaining}s`;
     timerInterval = setInterval(() => {
-      currentTimer--;
-      timerDisplay.textContent = `⏱️ ${currentTimer}s`;
-      if (currentTimer <= 0) {
+      timeRemaining--;
+      timerDisplay.textContent = `⏱️ ${timeRemaining}s`;
+      if (timeRemaining <= 0) {
         clearInterval(timerInterval);
-        handleTimeUp();
+        alert("⏰ Time's up! You failed the quiz.");
+        location.reload();
       }
     }, 1000);
   }
-
 
   function showQuestion() {
     const q = quizData[currentQuestion];
@@ -388,9 +324,6 @@
       btn.textContent = option;
       btn.onclick = () => checkAnswer(btn, q.answer);
       optionsDiv.appendChild(btn);
-
-    startTimer();
-
     });
   }
 
@@ -409,26 +342,21 @@
 
     if (selectedBtn.textContent === correctAnswer) {
       correctAnswers++;
-      correctSound.play(); // ✅ play correct sound
       let multiplier = 0;
 
       if (difficulty === "Easy") {
-        multiplier = timeTaken <= 5 ? 2.0 : timeTaken <= 15 ? 1.0 : 0.5;
+        multiplier = timeTaken <= 15 ? 1.5 : timeTaken <= 40 ? 1.0 : 0.5;
       } else if (difficulty === "Medium") {
-        multiplier = timeTaken <= 5 ? 3.0 : timeTaken <= 10 ? 2.0 : 1.0;
+        multiplier = timeTaken <= 15 ? 2.5 : timeTaken <= 40 ? 2.0 : 1.5;
       } else if (difficulty === "Hard") {
-        multiplier = timeTaken <= 3 ? 4.0 : timeTaken <= 7 ? 3.0 : 1.5;
+        multiplier = timeTaken <= 15 ? 4 : timeTaken <= 40 ? 3 : 2;
       }
 
       if (multiplier > 0) {
-        const pointsEarned = Math.round(10 * multiplier);
-        score += pointsEarned;
-        updateScoreUI(pointsEarned);
+        score += Math.round(10 * multiplier);
+      } else {
+        alert("⏱️ Too slow! You failed the question.");
       }
-      updateScoreUI(0);
-    }
-    else {
-      incorrectSound.play(); // ✅ play incorrect sound
     }
 
     setTimeout(() => {
@@ -508,48 +436,6 @@
       });
     }
   }
-
-  function handleTimeUp() {
-    const q = quizData[currentQuestion];
-    
-    const buttons = document.querySelectorAll(".option");
-    buttons.forEach(btn => {
-      btn.disabled = true;
-      if (btn.textContent === q.answer) {
-        btn.classList.add("correct");
-      } else {
-        btn.classList.add("incorrect");
-      }
-    });
-  
-    setTimeout(() => {
-      currentQuestion++;
-      if (currentQuestion < quizData.length) {
-        showQuestion();
-      } else {
-        clearInterval(timerInterval);
-        showScore();
-      }
-    }, 1000);
-  }
-
-  function updateScoreUI(points) {
-    totalScoreDisplay.textContent = `Score: ${score}`;
-    if (points > 0) {
-      scoreFeedback.textContent = `+${points}`;
-      scoreFeedback.classList.add("show");
-    
-      setTimeout(() => {
-        scoreFeedback.classList.remove("show");
-        scoreFeedback.textContent = "";
-      }, 800);
-    }
-  }
-  bgMusic.volume = 0.1;
-  correctSound.volume = 1.0;
-  incorrectSound.volume = 1.0;
-
-
 
 
   window.onload = () => {
