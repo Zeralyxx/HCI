@@ -166,7 +166,7 @@
     color: #aaa;
     position: absolute;
     top: 10px;
-    right: 20px;
+    left: 20px;
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
@@ -568,7 +568,7 @@
 
             // Set the download link for the generated certificate
             downloadCertificateBtn.onclick = () => {
-                const dataURL = certificateCanvas.toDataURL('/images/certificate-template.png'); // Get image data as PNG
+                const dataURL = certificateCanvas.toDataURL('image/png'); // Get image data as PNG
                 const link = document.createElement('a');
                 link.href = dataURL;
                 link.download = `${userName}_MindBlast_Certificate.png`; // Dynamic download filename
