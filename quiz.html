@@ -134,6 +134,73 @@
       background-color: rgba(0, 0, 0, 0.4);
     }
 
+  /* Certificate Modal Styles */
+  .modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.7); /* Black w/ opacity */
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border-radius: var(--rounded);
+    box-shadow: var(--shadow);
+    width: 80%;
+    max-width: 600px; /* Adjust max-width as needed */
+    text-align: center;
+    position: relative;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .close-modal-btn {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .close-modal-btn:hover,
+  .close-modal-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .certificate-preview {
+    max-width: 100%;
+    height: auto;
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  #download-certificate-btn {
+    background-color: #4CAF50; /* Green download button */
+    color: white;
+  }
+
+  #download-certificate-btn:hover {
+    background-color: #45a049;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
 
     @media (max-width: 480px) {
       #start-screen, #quiz-screen {
@@ -165,6 +232,7 @@
     <button class="btn" id="easy-btn-icon">🟢 Easy</button>
     <button class="btn" id="medium-btn-icon">🟡 Medium</button>
     <button class="btn" id="hard-btn-icon">🔴 Hard</button>
+    <button class="btn" id="claim-btn-icon">Claim Certificate</button>
   </div>
 
   <div id="quiz-screen">
@@ -173,6 +241,16 @@
     <div id="icon-placeholder">🔲</div>
     <div id="options"></div>
     <div id="progress">1/10</div>
+  </div>
+
+ <div id="certificate-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal-btn">&times;</span>
+      <h2>🎉 Congratulations! 🎉</h2>
+      <p>You've mastered the icons! Here's your certificate:</p>
+      <canvas id="certificate-canvas" style="border: 1px solid #ddd; max-width: 100%; height: auto; display: block; margin: 20px auto;"></canvas>
+      <button id="download-certificate-btn" class="btn">Download Certificate</button>
+    </div>
   </div>
 
   <script type="module">
@@ -231,6 +309,13 @@
   const optionsDiv = document.getElementById("options");
   const progressText = document.getElementById("progress");
   const timerDisplay = document.getElementById("timer");
+  // Add these lines near your other document.getElementById calls
+  const claimCertificateBtn = document.getElementById("claim-btn-icon");
+  const certificateModal = document.getElementById("certificate-modal");
+  const closeModalBtn = document.querySelector(".close-modal-btn");
+  const downloadCertificateBtn = document.getElementById("download-certificate-btn");
+  const certificateCanvas = document.getElementById('certificate-canvas'); // Get the canvas element
+  const ctx = certificateCanvas.getContext('2d');
 
   // Check login state
   onAuthStateChanged(auth, user => {
@@ -421,6 +506,94 @@
     document.getElementById("easy-btn-icon").addEventListener("click", () => startQuiz("Easy"));
     document.getElementById("medium-btn-icon").addEventListener("click", () => startQuiz("Medium"));
     document.getElementById("hard-btn-icon").addEventListener("click", () => startQuiz("Hard"));
+   // Certificate functionality
+    claimCertificateBtn.addEventListener("click", async () => {
+        if (!currentUser) {
+            alert("Please log in to claim your certificate.");
+            return;
+        }
+
+        // Optional: Add logic here to check if the user has completed all levels
+        // For example, fetch user's data from Firestore and check 'totalQuizzes' or 'achievements'
+        // if (user.totalQuizzes < requiredQuizzesForCertificate) {
+        //     alert("Complete more quizzes to earn your certificate!");
+        //     return;
+        // }
+
+        const userName = currentUser.displayName || "Valued User"; // Get user's name
+        const today = new Date();
+        const completionDate = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        // Load the certificate template image
+        const certificateImage = new Image();
+        certificateImage.src = '/images/certificate-template.png'; // Make sure this path is correct
+
+        certificateImage.onload = () => {
+            // Set canvas dimensions to match the image
+            certificateCanvas.width = certificateImage.width;
+            certificateCanvas.height = certificateImage.height;
+
+            // Draw the background image
+            ctx.drawImage(certificateImage, 0, 0);
+
+            // Set text styles for the name
+            ctx.font = 'bold 100px Fredoka'; // Adjust font size and family as needed
+            ctx.fillStyle = '#2E0B40'; // Adjust color to match your design (dark purple from your CSS)
+            ctx.textAlign = 'center';
+
+            // Draw the user's name on the underline
+            // You'll need to adjust these coordinates (x, y) based on your image's layout
+            // x: horizontal center of the canvas
+            // y: estimated vertical position of the underline
+            const nameX = certificateCanvas.width / 2;
+            const nameY = certificateCanvas.height * 0.49; // Adjust this '0.53' multiplier as needed
+
+            ctx.fillText(userName.toUpperCase(), nameX, nameY); // Convert name to uppercase if preferred
+
+            // Set text styles for the date
+            ctx.font = '30px IBM Plex Sans'; // Adjust font size and family
+            ctx.fillStyle = '#2E0B40'; // Same color as name
+            ctx.textAlign = 'center';
+
+            // Draw the date below MindBlast
+            // x: horizontal center of the canvas
+            // y: estimated vertical position below MindBlast
+            const dateX = certificateCanvas.width / 2;
+            const dateY = certificateCanvas.height * 0.9; // Adjust this '0.86' multiplier as needed
+
+            ctx.fillText(completionDate, dateX, dateY);
+
+            // Show the modal
+            certificateModal.style.display = "flex";
+
+            // Set the download link for the generated certificate
+            downloadCertificateBtn.onclick = () => {
+                const dataURL = certificateCanvas.toDataURL('/images/certificate-template.png'); // Get image data as PNG
+                const link = document.createElement('a');
+                link.href = dataURL;
+                link.download = `${userName}_MindBlast_Certificate.png`; // Dynamic download filename
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+        };
+
+        certificateImage.onerror = () => {
+            console.error("Failed to load certificate template image.");
+            alert("Could not load certificate template. Please try again later.");
+        };
+    });
+
+    closeModalBtn.addEventListener("click", () => {
+        certificateModal.style.display = "none";
+    });
+
+    // Close modal if user clicks outside of it
+    window.addEventListener("click", (event) => {
+        if (event.target == certificateModal) {
+            certificateModal.style.display = "none";
+        }
+    });
   };
 </script>
 
