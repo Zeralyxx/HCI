@@ -134,6 +134,17 @@
       </ul>
     </div>
   </footer>
+
+  <div id="logout-confirm-modal" class="modal">
+  <div class="modal-content small-modal">
+    <h2>Log Out?</h2>
+    <p>Are you sure you want to log out?</p>
+    <div class="modal-actions">
+      <button id="logout-yes-btn" class="btn red-btn">Yes, Log Out</button>
+      <button id="logout-no-btn" class="btn green-btn">No, Stay Logged In</button>
+    </div>
+  </div>
+</div>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="script.js"></script>
   <!-- Firebase Auth Display Logic -->
@@ -155,6 +166,9 @@
   const auth = getAuth(app);
 
   const authSection = document.getElementById("auth-section");
+  const logoutConfirmModal = document.getElementById('logout-confirm-modal');
+  const logoutYesBtn = document.getElementById('logout-yes-btn');
+  const logoutNoBtn = document.getElementById('logout-no-btn');
 
   // Define functions globally first
 window.toggleProfileMenu = function () {
@@ -183,10 +197,29 @@ function handleOutsideClick(e) {
 }
 
 window.logoutUser = function () {
-  signOut(auth).then(() => {
-    window.location.reload();
-  });
+  logoutConfirmModal.style.display = 'flex'; // Show the logout confirmation modal
 };
+
+logoutYesBtn.addEventListener('click', () => {
+  signOut(auth).then(() => {
+    window.location.reload(); // Proceed with logout and refresh
+  }).catch((error) => {
+    console.error("Error signing out:", error);
+    alert("Failed to log out. Please try again.");
+  });
+  logoutConfirmModal.style.display = 'none'; // Hide modal after action
+});
+
+logoutNoBtn.addEventListener('click', () => {
+  logoutConfirmModal.style.display = 'none'; // Hide modal, user cancelled
+});
+
+// Optional: Allow clicking outside the modal to cancel logout
+window.addEventListener('click', (event) => {
+  if (event.target === logoutConfirmModal) {
+    logoutConfirmModal.style.display = 'none';
+  }
+});
 
 // Then run this AFTER the functions are declared:
 onAuthStateChanged(auth, (user) => {

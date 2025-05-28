@@ -123,6 +123,116 @@
       background-color: #9a5dff;
     }
 
+/* Common Modal Styles */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 9999; /* Sit on top, ensure it's above other content */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.7); /* Black w/ opacity */
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border-radius: 20px; /* Using var(--rounded) if defined globally */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Using var(--shadow) */
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  position: relative;
+  animation: fadeIn 0.3s ease-out;
+  color: #333; /* Ensure text color is visible on white background */
+}
+
+/* Specific Styles for Small Confirmation Modal */
+.small-modal {
+  max-width: 400px; /* Make this modal a bit smaller */
+  padding: 30px;
+}
+
+.small-modal h2 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.small-modal p {
+  margin-bottom: 25px;
+  line-height: 1.5;
+  color: #555;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-around;
+  gap: 15px; /* Space between buttons */
+}
+
+/* Base button styles (ensure these are compatible or defined in your styles.css) */
+.btn {
+  display: block; /* Or inline-block if needed */
+  width: 100%;
+  padding: 12px;
+  /* margin: 8px 0; Adjust as needed with gap */
+  border: none;
+  border-radius: 12px; /* Using your .btn-primary's border-radius */
+  font-size: 1rem; /* Matching your .btn-primary's font-size */
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+/* Override default .btn margins for modal actions */
+.modal-actions .btn {
+  flex-grow: 1; /* Make buttons fill available space */
+  margin: 0; /* Override default btn margin */
+}
+
+/* Specific button colors */
+.red-btn {
+  background-color: #dc3545; /* Red for destructive actions */
+  color: white;
+}
+
+.red-btn:hover:not(:disabled) { /* Added :not(:disabled) for hover effect */
+  background-color: #c82333;
+}
+
+.red-btn:disabled { /* Style for disabled button */
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.green-btn {
+  background-color: #28a745; /* Green for positive/continue actions */
+  color: white;
+}
+
+.green-btn:hover {
+  background-color: #218838;
+}
+
+/* Countdown Timer Styling */
+.countdown-timer {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #dc3545; /* Red to indicate urgency */
+  margin-bottom: 15px;
+}
+
+/* Keyframe for fade-in animation (if not already defined) */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
     @keyframes fadeInUp {
       from {
         transform: translateY(20px);
@@ -175,6 +285,30 @@
     </div>
   </div>
 
+  <!-- Modals for confirmation --> 
+  <div id="logout-confirm-modal" class="modal">
+  <div class="modal-content small-modal">
+    <h2>Log Out?</h2>
+    <p>Are you sure you want to log out?</p>
+    <div class="modal-actions">
+      <button id="logout-yes-btn" class="btn red-btn">Yes, Log Out</button>
+      <button id="logout-no-btn" class="btn green-btn">No, Stay Logged In</button>
+    </div>
+  </div>
+</div>
+
+<div id="delete-confirm-modal" class="modal">
+  <div class="modal-content small-modal">
+    <h2>Delete Account?</h2>
+    <p>Are you absolutely sure you want to delete your account? This action cannot be undone and all your data will be lost.</p>
+    <div class="countdown-timer" id="delete-countdown"></div>
+    <div class="modal-actions">
+      <button id="delete-yes-btn" class="btn red-btn" disabled>Confirm Delete</button>
+      <button id="delete-no-btn" class="btn green-btn">Cancel</button>
+    </div>
+  </div>
+</div>
+
   <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut, updateProfile, deleteUser } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -201,7 +335,23 @@
   const quizzesEl = document.getElementById('total-quizzes');
   const highScoreEl = document.getElementById('high-score');
   const achievementsEl = document.getElementById('achievements');
-  const accountAvatarEl = document.getElementById('account-initial-avatar'); // Added this line to get the avatar element
+  const accountAvatarEl = document.getElementById('account-initial-avatar');
+
+  const logoutBtn = document.getElementById('logout-btn'); // Get the logout button
+  const deleteAccountBtn = document.getElementById('delete-account'); // Get the delete button
+
+  // Logout Confirmation Modal elements
+  const logoutConfirmModal = document.getElementById('logout-confirm-modal');
+  const logoutYesBtn = document.getElementById('logout-yes-btn');
+  const logoutNoBtn = document.getElementById('logout-no-btn');
+
+  // Delete Account Confirmation Modal elements
+  const deleteConfirmModal = document.getElementById('delete-confirm-modal');
+  const deleteYesBtn = document.getElementById('delete-yes-btn');
+  const deleteNoBtn = document.getElementById('delete-no-btn');
+  const deleteCountdownEl = document.getElementById('delete-countdown');
+
+  let countdownInterval; // To store the interval for countdown
 
   let isEditing = false;
 
@@ -235,19 +385,77 @@
   });
 
   document.getElementById('logout-btn').addEventListener('click', async () => {
-    await signOut(auth);
-    window.location.href = 'home.html';
+     // Instead of directly logging out, show the confirmation modal
+    logoutBtn.addEventListener('click', () => {
+      logoutConfirmModal.style.display = 'flex'; // Show the logout modal
+    });
+
+    // Handle 'Yes, Log Out' click
+    logoutYesBtn.addEventListener('click', async () => {
+      await signOut(auth);
+      window.location.href = 'home.html';
+      logoutConfirmModal.style.display = 'none'; // Hide modal
+    });
+
+    // Handle 'No, Stay Logged In' click
+    logoutNoBtn.addEventListener('click', () => {
+      logoutConfirmModal.style.display = 'none'; // Hide modal
+    });
+
+    window.addEventListener('click', (event) => {
+      if (event.target === logoutConfirmModal) {
+        logoutConfirmModal.style.display = 'none';
+      }
+
+    });
   });
 
   document.getElementById('delete-account').addEventListener('click', async () => {
-    if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+    // Instead of direct alert, show the custom delete confirmation modal
+    deleteAccountBtn.addEventListener('click', () => {
+      deleteConfirmModal.style.display = 'flex'; // Show delete modal
+      startDeleteCountdown(5); // Start 5-second countdown
+    });
+
+    // Function to start the countdown
+    function startDeleteCountdown(seconds) {
+      let timeLeft = seconds;
+      deleteYesBtn.disabled = true; // Disable button initially
+      deleteCountdownEl.textContent = `You can confirm in ${timeLeft} seconds.`;
+
+      countdownInterval = setInterval(() => {
+        timeLeft--;
+        if (timeLeft > 0) {
+          deleteCountdownEl.textContent = `You can confirm in ${timeLeft} seconds.`;
+        } else {
+          clearInterval(countdownInterval);
+          deleteCountdownEl.textContent = "Click 'Confirm Delete' to proceed.";
+          deleteYesBtn.disabled = false; // Enable button
+        }
+      }, 1000);
+    }
+
+    // Function to reset the delete modal state (for cancellation or re-opening)
+    function resetDeleteModal() {
+      clearInterval(countdownInterval);
+      deleteYesBtn.disabled = true;
+      deleteCountdownEl.textContent = '';
+      deleteConfirmModal.style.display = 'none';
+    }
+
+    // Handle 'Confirm Delete' click for delete account
+    deleteYesBtn.addEventListener('click', async () => {
       const user = auth.currentUser;
       if (user) {
         try {
+          // Hide modal immediately to give feedback
+          deleteConfirmModal.style.display = 'none';
+          resetDeleteModal(); // Reset state
+
           // 1. Delete user's entry from the Leaderboard collection
           const leaderboardDocRef = doc(db, "Leaderboard", user.uid);
           await deleteDoc(leaderboardDocRef);
-          
+
           // 2. Delete user's data from the users collection
           const userDocRef = doc(db, "users", user.uid);
           await deleteDoc(userDocRef);
@@ -260,7 +468,6 @@
         } catch (error) {
           console.error("Error deleting account or associated data:", error);
           alert("Failed to delete account. Please try again. If you've recently signed in, try logging out and logging back in, then attempting the deletion again. This is often required for security reasons.");
-          // Handle specific errors, e.g., 'auth/requires-recent-login'
           if (error.code === 'auth/requires-recent-login') {
             alert("For security reasons, you must re-authenticate before deleting your account. Please log out and log back in, then try again.");
             signOut(auth); // Log out the user for re-authentication
@@ -268,7 +475,22 @@
           }
         }
       }
-    }
+    });
+
+    // Handle 'Cancel' click for delete account
+    deleteNoBtn.addEventListener('click', () => {
+      resetDeleteModal(); // Reset state and hide modal
+    });
+
+    // >>> OPTIONAL: Close modals if user clicks outside of them <<<
+    window.addEventListener('click', (event) => {
+      if (event.target === logoutConfirmModal) {
+        logoutConfirmModal.style.display = 'none';
+      }
+      if (event.target === deleteConfirmModal) {
+        resetDeleteModal(); // Reset state and hide delete modal
+      }
+    });
   });
 
   document.getElementById('edit-btn').addEventListener('click', async () => {

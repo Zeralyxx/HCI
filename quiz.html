@@ -397,6 +397,50 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
+        /* Small Modal Specific Styles (for quit confirmation) */
+        .small-modal {
+          max-width: 400px; /* Make this modal a bit smaller */
+          padding: 30px;
+        }
+
+        .small-modal h2 {
+          color: #333;
+          margin-bottom: 15px;
+        }
+
+        .small-modal p {
+          margin-bottom: 25px;
+          line-height: 1.5;
+          color: #555;
+        }
+
+        .modal-actions {
+          display: flex;
+          justify-content: space-around;
+          gap: 15px; /* Space between buttons */
+        }
+
+        .modal-actions .btn {
+          flex-grow: 1; /* Make buttons fill available space */
+          margin: 0; /* Override default btn margin */
+        }
+
+        .red-btn {
+          background-color: #dc3545; /* Bootstrap-like red for danger */
+        }
+
+        .red-btn:hover {
+          background-color: #c82333;
+        }
+
+        .green-btn {
+          background-color: #28a745; /* Bootstrap-like green for success/continue */
+        }
+
+        .green-btn:hover {
+          background-color: #218838;
+        }
+
 
         @media (max-width: 480px) {
             #start-screen, #quiz-screen {
@@ -520,6 +564,18 @@
         </div>
     </div>
 
+    <!-- Quit Confirmation Modal -->
+    <div id="quit-confirm-modal" class="modal">
+    <div class="modal-content small-modal">
+      <h2>Quit Quiz?</h2>
+      <p>Are you sure you want to quit? You will lose all progress for this quiz.</p>
+      <div class="modal-actions">
+        <button id="quit-yes-btn" class="btn red-btn">Yes, Quit</button>
+        <button id="quit-no-btn" class="btn green-btn">No, Continue</button>
+      </div>
+    </div>
+  </div>
+
     <div id="certificate-modal" class="modal">
         <div class="modal-content">
             <span class="close-modal-btn material-symbols-outlined">close</span> <h2>🎉 Congratulations! 🎉</h2>
@@ -603,6 +659,11 @@
         const optionsDiv = document.getElementById("options");
         const progressText = document.getElementById("progress");
         const timerDisplay = document.getElementById("timer");
+
+        const closeQuizBtn = document.querySelector('.close'); // This is the 'a' tag
+        const quitConfirmModal = document.getElementById('quit-confirm-modal');
+        const quitYesBtn = document.getElementById('quit-yes-btn');
+        const quitNoBtn = document.getElementById('quit-no-btn');
 
         const easyBtn = document.getElementById("easy-btn");
         const mediumBtn = document.getElementById("medium-btn");
@@ -1093,6 +1154,27 @@
             window.addEventListener("click", (event) => {
                 if (event.target == certificateModal) {
                     certificateModal.style.display = "none";
+                }
+            });
+
+            // Quit Confirmation Logic
+            closeQuizBtn.addEventListener('click', (event) => {
+              event.preventDefault(); // Prevent default link navigation
+              quitConfirmModal.style.display = 'flex'; // Show the modal
+            });
+
+            quitYesBtn.addEventListener('click', () => {
+              window.location.href = 'home.html'; // User confirmed, navigate away
+            });
+
+            quitNoBtn.addEventListener('click', () => {
+              quitConfirmModal.style.display = 'none'; // User cancelled, hide modal
+            });
+
+            // Also allow clicking outside to close (optional, but good UX)
+            window.addEventListener('click', (event) => {
+                if (event.target === quitConfirmModal) {
+                    quitConfirmModal.style.display = 'none';
                 }
             });
         };
