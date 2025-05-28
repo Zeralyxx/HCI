@@ -12,7 +12,6 @@
   <section class="auth-container">
     <div class="auth-card">
 
-      <!-- Login Form -->
       <div id="login-form-container">
         <h2>Log In</h2>
         <form id="login-form">
@@ -27,7 +26,6 @@
         </p>
       </div>
 
-      <!-- Signup Form -->
       <div id="signup-form-container" style="display: none;">
         <h2>Sign Up</h2>
         <form id="signup-form">
@@ -55,11 +53,11 @@
     updateProfile
   } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import {
-  getFirestore,
-  doc,
-  setDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    getFirestore,
+    doc,
+    setDoc,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 
   const firebaseConfig = {
@@ -151,19 +149,22 @@
       // Set the display name
       await updateProfile(user, { displayName: username });
 
-      // Store user data in Firestore
+      // Store user data in Firestore, including initial difficulty completion status
       const userData = {
-      uid: user.uid,
-      username: username,
-      email: user.email,
-      createdAt: new Date(),
-      totalQuizzes: 0,
-      highScore: 0,
-      achievements: []
-    };
+        uid: user.uid,
+        username: username,
+        email: user.email,
+        createdAt: new Date(),
+        totalQuizzes: 0,
+        highScore: 0,
+        achievements: [],
+        // Add these fields to initialize difficulty completion status
+        completedEasy: false,
+        completedMedium: false,
+        completedHard: false
+      };
 
-    await setDoc(doc(db, "users", user.uid), userData);
-
+      await setDoc(doc(db, "users", user.uid), userData);
 
       showMessage(messageBox, `Signed up as ${username}`, 'success');
       setTimeout(() => {
@@ -176,7 +177,7 @@
       submitBtn.disabled = false;
     }
   });
-</script>
+  </script>
 
 </body>
 </html>

@@ -1,736 +1,1102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-  <title>MindBlast | Quiz</title>
-  <style>
-    :root {
-      --bg-light: #f0f2f5;
-      --white: #ffffff;
-      --gray: #e0e0e0;
-      --green: #d2f6d2;
-      --red: #f8d2d2;
-      --rounded: 20px;
-      --shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      --primary-font: 'Segoe UI', sans-serif;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&family=IBM+Plex+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <title>MindBlast | Quiz</title>
+    <style>
+        :root {
+            --bg-light: #f0f2f5;
+            --white: #ffffff;
+            --gray: #e0e0e0;
+            --light-gray: #f0f0f0; /* Added for locked buttons */
+            --green: #4CAF50; /* Changed to a stronger green for correct */
+            --red: #F44336; /* Changed to a stronger red for incorrect */
+            --correct-bg: #d2f6d2; /* Light green background */
+            --incorrect-bg: #f8d2d2; /* Light red background */
+            --rounded: 20px;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow */
+            --primary-gradient: linear-gradient(135deg, #2E0B40, #3E1A58, #4E2A70);
+            --primary-dark: #2E0B40;
+            --primary-medium: #4E2A70;
 
-    * {
-      box-sizing: border-box;
-    }
+            /* Font variables */
+            --font-heading: 'Fredoka', sans-serif;
+            --font-body: 'IBM Plex Sans', sans-serif;
+            --text-dark: #333333;
+            --text-light-gray: #555555;
+        }
 
-    body {
-      font-family: var(--primary-font);
-      margin: 0;
-      background: linear-gradient(135deg, #2E0B40, #3E1A58, #4E2A70);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      padding: 16px;
-    }
+        * {
+            box-sizing: border-box;
+        }
 
-    #start-screen, #quiz-screen {
-      background: var(--white);
-      padding: 24px;
-      border-radius: var(--rounded);
-      box-shadow: var(--shadow);
-      width: 100%;
-      max-width: 420px;
-      text-align: center;
-      transition: all 0.3s ease;
-      position: relative;
-    }
+        body {
+            font-family: var(--font-body); /* Using IBM Plex Sans for body */
+            margin: 0;
+            background: var(--primary-gradient);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 16px;
+            color: var(--text-dark); /* Default text color */
+        }
 
-    #quiz-screen {
-      display: none;
-      flex-direction: column;
-      gap: 16px;
-    }
+        #start-screen, #quiz-screen {
+            background: var(--white);
+            padding: 24px;
+            border-radius: var(--rounded);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex; /* Ensure flex for internal layout */
+            flex-direction: column; /* Stack children vertically */
+            gap: 16px; /* Consistent spacing between elements */
+        }
 
-    h1, h2 {
-      margin-bottom: 16px;
-    }
+        #quiz-screen {
+            display: none; /* Hidden by default, shown by JS */
+        }
 
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      border: none;
-      border-radius: var(--rounded);
-      font-size: 16px;
-      cursor: pointer;
-      background-color: var(--gray);
-      transition: background 0.3s ease;
-    }
+        h1, h2, h3 {
+            font-family: var(--font-heading); /* Fredoka for headings */
+            margin-bottom: 8px; /* Reduced margin for tighter look */
+            color: var(--primary-dark);
+        }
 
-    .btn span {
-      font-size: 20px;
-      vertical-align: middle;
-      margin-right: 8px;
-    }
+        p {
+            font-family: var(--font-body);
+            margin-bottom: 16px;
+            color: var(--text-light-gray);
+        }
 
-    .btn:hover {
-      background-color: #d0d0d0;
-    }
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 12px 15px; /* Added horizontal padding */
+            margin: 8px 0;
+            border: none;
+            border-radius: var(--rounded);
+            font-size: 17px; /* Slightly larger font */
+            font-weight: bold; /* Make buttons bolder */
+            cursor: pointer;
+            background-color: var(--gray);
+            color: var(--text-dark);
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+        }
 
-    .option {
-      background: var(--gray);
-      transition: background 0.3s ease;
-    }
+        .btn .icon-left {
+            font-size: 22px; /* Slightly larger emoji */
+            margin-right: 10px;
+        }
 
-    .correct {
-      background-color: var(--green) !important;
-    }
+        .btn .lock-icon {
+            font-size: 20px;
+            position: absolute;
+            right: 15px;
+            color: var(--text-light-gray);
+        }
 
-    .incorrect {
-      background-color: var(--red) !important;
-    }
+        /* Style for locked buttons */
+        .btn.locked {
+            background-color: var(--light-gray); /* Lighter gray for locked buttons */
+            cursor: not-allowed;
+            color: #888; /* Dim text for locked state */
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); /* Subtle inner shadow */
+        }
 
-    #icon-placeholder {
-      font-size: 60px;
-      background: #ccc;
-      border-radius: var(--rounded);
-      padding: 20px;
-      width: 100px;
-      height: 100px;
-      color: #333;
-      margin: 0 auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+        .btn.locked:hover {
+            background-color: var(--light-gray); /* Prevent hover effect on locked buttons */
+            transform: none;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
 
-    #progress {
-      font-weight: bold;
-      margin-top: 12px;
-    }
+        .btn:not(.locked):hover {
+            background-color: #c0c0c0; /* Darker gray on hover */
+            transform: translateY(-2px); /* Slight lift effect */
+            box-shadow: var(--shadow); /* Apply shadow on hover */
+        }
 
-    #timer {
-      position: absolute;
-      top: 16px;
-      right: 24px;
-      font-weight: bold;
-      color: #333;
-    }
+        /* Specific style for Claim Certificate Button */
+        #claim-btn-icon {
+            background: linear-gradient(45deg, #8A2BE2, #A020F0); /* Purple gradient */
+            color: var(--white);
+            margin-top: 20px; /* More space above it */
+            box-shadow: 0 4px 10px rgba(138, 43, 226, 0.3); /* Shadow matching gradient */
+        }
 
-    .close {
-      position: absolute;
-      top: 16px;
-      left: 16px;
-      z-index: 999;
-      color: white;
-      text-decoration: none;
-      font-size: 28px;
-      padding: 4px;
-      border-radius: 50%;
-      transition: background 0.3s ease;
-    }
+        #claim-btn-icon:hover {
+            background: linear-gradient(45deg, #9933FF, #B366FF); /* Lighter gradient on hover */
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(138, 43, 226, 0.4);
+        }
 
-    .close:hover {
-      background-color: rgba(0, 0, 0, 0.4);
-    }
+        .option {
+            background: var(--gray);
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
 
-  /* Certificate Modal Styles */
-  .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0, 0, 0, 0.7); /* Black w/ opacity */
-    justify-content: center;
-    align-items: center;
-  }
+        .option:hover:not(.correct):not(.incorrect) {
+             background-color: #c0c0c0;
+             transform: translateY(-2px);
+        }
 
-  .modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border-radius: var(--rounded);
-    box-shadow: var(--shadow);
-    width: 80%;
-    max-width: 600px; /* Adjust max-width as needed */
-    text-align: center;
-    position: relative;
-    animation: fadeIn 0.3s ease-out;
-  }
+        .correct {
+            background-color: var(--correct-bg) !important;
+            color: var(--green);
+            border: 1px solid var(--green);
+            animation: pulseCorrect 0.5s ease-out; /* Add animation */
+        }
 
-  .close-modal-btn {
-    color: #aaa;
-    position: absolute;
-    top: 10px;
-    left: 20px;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-  }
+        .incorrect {
+            background-color: var(--incorrect-bg) !important;
+            color: var(--red);
+            border: 1px solid var(--red);
+            animation: shakeIncorrect 0.5s ease-out; /* Add animation */
+        }
 
-  .close-modal-btn:hover,
-  .close-modal-btn:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
+        @keyframes pulseCorrect {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
 
-  .certificate-preview {
-    max-width: 100%;
-    height: auto;
-    margin: 20px 0;
-    border: 1px solid #ddd;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-
-  #download-certificate-btn {
-    background-color: #4CAF50; /* Green download button */
-    color: white;
-  }
-
-  #download-certificate-btn:hover {
-    background-color: #45a049;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+        @keyframes shakeIncorrect {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
 
 
-    @media (max-width: 480px) {
-      #start-screen, #quiz-screen {
-        padding: 16px;
-      }
+        #icon-placeholder {
+            font-size: 80px; /* Larger icon */
+            background: var(--light-gray); /* Lighter background */
+            border-radius: var(--rounded);
+            padding: 20px;
+            width: 120px; /* Larger box */
+            height: 120px;
+            color: var(--primary-dark); /* Darker icon color */
+            margin: 20px auto; /* More margin around it */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle inner shadow */
+        }
 
-      .btn {
-        font-size: 14px;
-        padding: 10px;
-      }
+        #progress {
+            font-weight: bold;
+            margin-top: 12px;
+            font-size: 15px;
+            color: var(--text-light-gray);
+        }
 
-      #timer {
-        top: 12px;
-        right: 16px;
-        font-size: 14px;
-      }
-    }
-    .progress-container {
-      width: 100%;
-      background-color: var(--gray);
-      border-radius: var(--rounded);
-      overflow: hidden;
-      height: 16px;
-      margin: 8px 0;
-      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
-    }
-    
-    .progress-bar {
-      height: 100%;
-      background-color: #4caf50;
-      width: 0%;
-      transition: width 0.3s ease;
+        .progress-container {
+            width: 100%;
+            background-color: var(--gray);
+            border-radius: var(--rounded);
+            overflow: hidden;
+            height: 16px;
+            margin: 8px 0;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
 
-    #score-display {
-      position: absolute;
-      top: 16px;
-      right: 100px;
-      text-align: right;
-      font-weight: bold;
-      color: white;
-      z-index: 10;
-    }
-    
-    #score-feedback {
-      color: #00ff88;
-      font-size: 18px;
-      opacity: 0;
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-    
-    #score-feedback.show {
-      opacity: 1;
-      transform: translateY(-10px);
-    }
+        .progress-bar {
+            height: 100%;
+            background-color: var(--green); /* Using the defined green */
+            width: 0%;
+            transition: width 0.3s ease;
+        }
 
-    }
-  </style>
+        #timer {
+            position: absolute;
+            top: 20px; /* Adjusted for better spacing */
+            right: 24px;
+            font-weight: bold;
+            color: var(--primary-dark); /* Darker color for timer */
+            font-size: 18px; /* Slightly larger timer */
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #score-display {
+            position: absolute;
+            top: 20px; /* Aligned with timer */
+            left: 24px; /* Changed to left for clarity */
+            text-align: left;
+            font-weight: bold;
+            color: var(--primary-dark);
+            font-size: 18px;
+            z-index: 10;
+        }
+        #score-feedback {
+            color: var(--green); /* Green for positive feedback */
+            font-size: 18px;
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            position: absolute; /* Position relative to score-display */
+            right: 0; /* Align to the right of its parent (score-display) */
+            top: 25px; /* Adjust vertical position */
+            transform: translateY(0);
+        }
+
+        #score-feedback.show {
+            opacity: 1;
+            transform: translateY(-10px); /* Move up */
+        }
+
+        .close {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            z-index: 999;
+            color: var(--white); /* White for visibility on gradient */
+            text-decoration: none;
+            font-size: 28px;
+            padding: 4px;
+            border-radius: 50%;
+            transition: background 0.3s ease;
+            display: flex; /* For perfect centering of the icon */
+            align-items: center;
+            justify-content: center;
+            width: 40px; /* Make it a clickable circle */
+            height: 40px;
+        }
+
+        .close:hover {
+            background-color: rgba(255, 255, 255, 0.2); /* Lighter hover for visibility */
+        }
+
+        /* Modal Styles (Consistent with existing and added recommendations) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease-out; /* Added fade in to modal display */
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            margin: auto;
+            padding: 30px; /* More padding */
+            border-radius: var(--rounded);
+            box-shadow: var(--shadow);
+            width: 90%; /* Increased width for responsiveness */
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+            animation: modalPop 0.3s ease-out; /* Pop animation */
+            display: flex; /* Use flexbox for content arrangement */
+            flex-direction: column;
+            align-items: center;
+            gap: 15px; /* Spacing between elements inside modal */
+        }
+
+        .close-modal-btn {
+            color: #aaa;
+            position: absolute;
+            top: 15px; /* Adjusted position */
+            left: 20px; /* Adjusted position */
+            font-size: 30px; /* Larger close icon */
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1; /* Better alignment */
+        }
+
+        .close-modal-btn:hover,
+        .close-modal-btn:focus {
+            color: var(--text-dark);
+        }
+
+        .certificate-preview {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        #download-certificate-btn {
+            background-color: var(--primary-medium); /* Use a primary color */
+            color: var(--white);
+            margin-top: 15px; /* Adjust margin */
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 10px; /* Slightly less rounded than global buttons */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #download-certificate-btn:hover {
+            background-color: #6a0dad; /* Darker primary on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes modalPop {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+
+        /* New styles for general message modal */
+        #message-modal .modal-content {
+            max-width: 450px; /* Smaller max-width for alerts */
+            padding: 25px;
+            gap: 10px;
+        }
+
+        #message-modal .modal-content h3 {
+            margin-top: 0;
+            color: var(--primary-dark);
+            font-size: 24px;
+        }
+
+        #message-modal .modal-content p {
+            margin-bottom: 15px;
+            color: var(--text-light-gray);
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        #message-modal .modal-content button {
+            background-color: var(--primary-medium); /* A primary color, e.g., purple */
+            color: white;
+            border: none;
+            padding: 12px 25px; /* Larger padding */
+            border-radius: var(--rounded); /* Use general rounded style */
+            cursor: pointer;
+            font-size: 17px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        #message-modal .modal-content button:hover {
+            background-color: #6a0dad;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+
+        @media (max-width: 480px) {
+            #start-screen, #quiz-screen {
+                padding: 16px;
+                gap: 12px;
+            }
+
+            .btn {
+                font-size: 15px;
+                padding: 10px;
+            }
+
+            .btn .icon-left {
+                font-size: 18px;
+            }
+
+            .btn .lock-icon {
+                font-size: 18px;
+            }
+
+            #timer, #score-display {
+                top: 15px;
+                font-size: 16px;
+            }
+
+            #score-display {
+                left: 16px;
+            }
+
+            #timer {
+                right: 16px;
+            }
+
+            #icon-placeholder {
+                font-size: 70px;
+                width: 100px;
+                height: 100px;
+                margin: 15px auto;
+            }
+
+            .modal-content {
+                padding: 20px;
+                gap: 10px;
+            }
+
+            .close-modal-btn {
+                font-size: 26px;
+                top: 10px;
+                left: 15px;
+            }
+
+            h1, h2 {
+                font-size: 26px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+            #message-modal .modal-content h3 {
+                font-size: 20px;
+            }
+            #message-modal .modal-content p {
+                font-size: 14px;
+            }
+            #message-modal .modal-content button {
+                font-size: 15px;
+                padding: 10px 20px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-  <a href="home.html" class="close" aria-label="Close">
-  <span class="material-symbols-outlined">close</span>
-</a>
-<!-- Background Music -->
-<audio id="bg-music" loop autoplay>
-  <source src="music/background.mp3" type="audio/mp3" />
-  Your browser does not support the audio element.
-</audio>
+    <a href="home.html" class="close" aria-label="Close">
+        <span class="material-symbols-outlined">close</span>
+    </a>
+    <audio id="bg-music" loop autoplay>
+        <source src="music/background.mp3" type="audio/mp3" />
+        Your browser does not support the audio element.
+    </audio>
 
-<!-- Correct Answer Sound -->
-<audio id="correct-sound">
-  <source src="sounds/correct.mp3" type="audio/mp3" />
-</audio>
+    <audio id="correct-sound">
+        <source src="sounds/correct.mp3" type="audio/mp3" />
+    </audio>
 
-<!-- Incorrect Answer Sound -->
-<audio id="incorrect-sound">
-  <source src="sounds/incorrect.mp3" type="audio/mp3" />
-</audio>
+    <audio id="incorrect-sound">
+        <source src="sounds/incorrect.mp3" type="audio/mp3" />
+    </audio>
 
 
-  <div id="start-screen">
-    <h1>Start Quiz</h1>
-    <p>Select difficulty:</p>
-    <button class="btn" id="easy-btn-icon">🟢 Easy</button>
-    <button class="btn" id="medium-btn-icon">🟡 Medium</button>
-    <button class="btn" id="hard-btn-icon">🔴 Hard</button>
-    <button class="btn" id="claim-btn-icon">Claim Certificate</button>
-  </div>
-
-  <div id="quiz-screen">
-    <div id="timer">⏱️ 60s</div>
-    <div id="score-display">
-      <div id="total-score">Score: 0</div>
-      <div id="score-feedback"></div>
+    <div id="start-screen">
+        <h1>Start Quiz</h1>
+        <p>Select difficulty:</p>
+        <button class="btn difficulty-btn" id="easy-btn" data-difficulty="Easy">
+            <span class="icon-left">🟢</span> Easy
+            <span class="material-symbols-outlined lock-icon" id="easy-lock-icon">lock_open</span>
+        </button>
+        <button class="btn difficulty-btn" id="medium-btn" data-difficulty="Medium">
+            <span class="icon-left">🟡</span> Medium
+            <span class="material-symbols-outlined lock-icon" id="medium-lock-icon">lock</span>
+        </button>
+        <button class="btn difficulty-btn" id="hard-btn" data-difficulty="Hard">
+            <span class="icon-left">🔴</span> Hard
+            <span class="material-symbols-outlined lock-icon" id="hard-lock-icon">lock</span>
+        </button>
+        <button class="btn" id="claim-btn-icon">Claim Certificate</button>
     </div>
-    <h2>What is this icon?</h2>
-    <div id="icon-placeholder">🔲</div>
-    <div id="options"></div>
-    <div id="progress">1/10</div>
-    <div class="progress-container">
-      <div class="progress-bar" id="progress-bar"></div>
+
+    <div id="quiz-screen">
+        <div id="timer">⏱️ 60s</div>
+        <div id="score-display">
+            <div id="total-score">Score: 0</div>
+            <div id="score-feedback"></div>
+        </div>
+        <h2>What is this icon?</h2>
+        <div id="icon-placeholder">🔲</div>
+        <div id="options"></div>
+        <div id="progress">1/10</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
     </div>
-  </div>
 
- <div id="certificate-modal" class="modal">
-    <div class="modal-content">
-      <span class="close-modal-btn">&times;</span>
-      <h2>🎉 Congratulations! 🎉</h2>
-      <p>You've mastered the icons! Here's your certificate:</p>
-      <canvas id="certificate-canvas" style="border: 1px solid #ddd; max-width: 100%; height: auto; display: block; margin: 20px auto;"></canvas>
-      <button id="download-certificate-btn" class="btn">Download Certificate</button>
+    <div id="certificate-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal-btn material-symbols-outlined">close</span> <h2>🎉 Congratulations! 🎉</h2>
+            <p>You've mastered the icons! Here's your certificate:</p>
+            <canvas id="certificate-canvas" style="border: 1px solid #ddd; max-width: 100%; height: auto; display: block; margin: 20px auto;"></canvas>
+            <button id="download-certificate-btn" class="btn">Download Certificate</button>
+        </div>
     </div>
-  </div>
 
-  <script type="module">
-  import {
-    initializeApp
-  } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
-  import { getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
+    <div id="message-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="message-modal-title"></h3>
+            <p id="message-modal-text"></p>
+            <button id="message-modal-ok-btn">OK</button>
+        </div>
+    </div>
 
-  import {
-    getFirestore,
-    collection,
-    getDocs,
-    addDoc,
-    serverTimestamp,
-    query,
-    where,
-    updateDoc,
-    doc
-  } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
-  import {
-    getAuth,
-    onAuthStateChanged
-  } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
-  import {
-    getAnalytics
-  } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-analytics.js";
+    <script type="module">
+        import {
+            initializeApp
+        } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
+        import { getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyAZLZPVAlZUJWLturWzJ3nqyceZbSIevl4",
-    authDomain: "mindblast-icons.firebaseapp.com",
-    projectId: "mindblast-icons",
-    storageBucket: "mindblast-icons.firebasestorage.app",
-    messagingSenderId: "807795058423",
-    appId: "1:807795058423:web:2066a5d149852a43af55f2",
-    measurementId: "G-LSJ3SWQP6M"
-  };
+        import {
+            getFirestore,
+            collection,
+            getDocs,
+            addDoc,
+            serverTimestamp,
+            query,
+            where,
+            updateDoc,
+            doc
+        } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
+        import {
+            getAuth,
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
+        import {
+            getAnalytics
+        } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-analytics.js";
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const auth = getAuth(app);
-  const analytics = getAnalytics(app);
+        const firebaseConfig = {
+            apiKey: "AIzaSyAZLZPVAlZUJWLturWzJ3nqyceZbSIevl4",
+            authDomain: "mindblast-icons.firebaseapp.com",
+            projectId: "mindblast-icons",
+            storageBucket: "mindblast-icons.firebasestorage.app",
+            messagingSenderId: "807795058423",
+            appId: "1:807795058423:web:2066a5d149852a43af55f2",
+            measurementId: "G-LSJ3SWQP6M"
+        };
 
-  let quizData = [];
-  let currentQuestion = 0;
-  let score = 0;
-  let correctAnswers = 0;
-  let difficulty = '';
-  let questionStartTime = 0;
-  let currentUser = null;
-  let timePerQuestion = 20;
-  let currentTimer = 0;
-  let timerInterval;
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const analytics = getAnalytics(app);
 
-  
-  const totalScoreDisplay = document.getElementById("total-score");
-  const scoreFeedback = document.getElementById("score-feedback");
-  const startScreen = document.getElementById("start-screen");
-  const quizScreen = document.getElementById("quiz-screen");
-  const iconPlaceholder = document.getElementById("icon-placeholder");
-  const optionsDiv = document.getElementById("options");
-  const progressText = document.getElementById("progress");
-  const timerDisplay = document.getElementById("timer");
-  // Add these lines near your other document.getElementById calls
-  const claimCertificateBtn = document.getElementById("claim-btn-icon");
-  const certificateModal = document.getElementById("certificate-modal");
-  const closeModalBtn = document.querySelector(".close-modal-btn");
-  const downloadCertificateBtn = document.getElementById("download-certificate-btn");
-  const certificateCanvas = document.getElementById('certificate-canvas'); // Get the canvas element
-  const ctx = certificateCanvas.getContext('2d');
-  const bgMusic = document.getElementById("bg-music");
-  const correctSound = document.getElementById("correct-sound");
-  const incorrectSound = document.getElementById("incorrect-sound");
-  
-  // Optional: Allow user interaction to resume music if browser blocks autoplay
-  document.body.addEventListener("click", () => {
-    if (bgMusic.paused) {
-      bgMusic.play().catch(() => {});
-    }
-  });
+        let quizData = [];
+        let currentQuestion = 0;
+        let score = 0;
+        let correctAnswers = 0;
+        let difficulty = '';
+        let questionStartTime = 0;
+        let currentUser = null;
+        let timePerQuestion = 20;
+        let currentTimer = 0;
+        let timerInterval;
 
-  // Check login state
-  onAuthStateChanged(auth, user => {
-    if (user) {
-      currentUser = user;
-    } else {
-      alert("You must be logged in to play the quiz.");
-      window.location.href = "auth.html"; // redirect to login
-    }
-  });
+        // Track completed difficulties for the current user
+        let completedDifficulties = {
+            Easy: false,
+            Medium: false,
+            Hard: false
+        };
 
-  async function startQuiz(diff) {
-    if (!currentUser) return;
-    difficulty = diff;
-    if (difficulty === "Easy") timePerQuestion = 20;
-    else if (difficulty === "Medium") timePerQuestion = 15;
-    else if (difficulty === "Hard") timePerQuestion = 10;
+        const totalScoreDisplay = document.getElementById("total-score");
+        const scoreFeedback = document.getElementById("score-feedback");
+        const startScreen = document.getElementById("start-screen");
+        const quizScreen = document.getElementById("quiz-screen");
+        const iconPlaceholder = document.getElementById("icon-placeholder");
+        const optionsDiv = document.getElementById("options");
+        const progressText = document.getElementById("progress");
+        const timerDisplay = document.getElementById("timer");
 
-    quizData = await loadQuestions(diff);
-    currentQuestion = 0;
-    score = 0;
-    correctAnswers = 0;
-    startScreen.style.display = "none";
-    quizScreen.style.display = "flex";
-    startTimer();
-    document.getElementById("progress-bar").style.width = `0%`;
-    showQuestion();
-  }
+        const easyBtn = document.getElementById("easy-btn");
+        const mediumBtn = document.getElementById("medium-btn");
+        const hardBtn = document.getElementById("hard-btn");
 
-  async function loadQuestions(difficulty) {
-    const colRef = collection(db, difficulty.charAt(0).toUpperCase() + difficulty.slice(1));
-    const snapshot = await getDocs(colRef);
-    let questions = [];
+        const easyLockIcon = document.getElementById("easy-lock-icon");
+        const mediumLockIcon = document.getElementById("medium-lock-icon");
+        const hardLockIcon = document.getElementById("hard-lock-icon");
 
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      questions.push({
-        icon: `<span class="material-symbols-outlined">${data.icon}</span>`,
-        options: shuffleArray([...data.options]),
-        answer: data.answer
-      });
-    });
+        const claimCertificateBtn = document.getElementById("claim-btn-icon");
+        const certificateModal = document.getElementById("certificate-modal");
+        const closeModalBtn = document.querySelector(".close-modal-btn");
+        const downloadCertificateBtn = document.getElementById("download-certificate-btn");
+        const certificateCanvas = document.getElementById('certificate-canvas');
+        const ctx = certificateCanvas.getContext('2d');
+        const bgMusic = document.getElementById("bg-music");
+        const correctSound = document.getElementById("correct-sound");
+        const incorrectSound = document.getElementById("incorrect-sound");
 
-    return shuffleArray(questions).slice(0, 10);
-  }
+        // New message modal elements
+        const messageModal = document.getElementById('message-modal');
+        const messageModalTitle = document.getElementById('message-modal-title');
+        const messageModalText = document.getElementById('message-modal-text');
+        const messageModalOkBtn = document.getElementById('message-modal-ok-btn');
 
-  function shuffleArray(array) {
-    return array.sort(() => Math.random() - 0.5);
-  }
+        // Optional: Allow user interaction to resume music if browser blocks autoplay
+        document.body.addEventListener("click", () => {
+            if (bgMusic.paused) {
+                bgMusic.play().catch(() => {});
+            }
+        });
 
-  function startTimer() {
-    currentTimer = timePerQuestion;
-    timerDisplay.textContent = `⏱️ ${currentTimer}s`;
+        /**
+         * Displays a general-purpose modal message.
+         * @param {string} title The title of the message.
+         * @param {string} message The message content.
+         * @param {function} [onCloseCallback] Optional callback function to execute when the OK button is clicked.
+         */
+        function showMessageModal(title, message, onCloseCallback) {
+            messageModalTitle.textContent = title;
+            messageModalText.textContent = message;
+            messageModal.style.display = 'flex'; // Use flex to center content
 
-    clearInterval(timerInterval); // Clear previous timer if any
-
-    timerInterval = setInterval(() => {
-      currentTimer--;
-      timerDisplay.textContent = `⏱️ ${currentTimer}s`;
-      if (currentTimer <= 0) {
-        clearInterval(timerInterval);
-        handleTimeUp();
-      }
-    }, 1000);
-  }
-
-
-  function showQuestion() {
-    const q = quizData[currentQuestion];
-    iconPlaceholder.innerHTML = q.icon;
-    optionsDiv.innerHTML = "";
-    progressText.textContent = `${currentQuestion + 1}/10`;
-    document.getElementById("progress-bar").style.width = `${((currentQuestion + 1) / quizData.length) * 100}%`;
-    questionStartTime = Date.now();
-
-    q.options.forEach(option => {
-      const btn = document.createElement("button");
-      btn.classList.add("btn", "option");
-      btn.textContent = option;
-      btn.onclick = () => checkAnswer(btn, q.answer);
-      optionsDiv.appendChild(btn);
-
-    startTimer();
-
-    });
-  }
-
-  function checkAnswer(selectedBtn, correctAnswer) {
-    const timeTaken = (Date.now() - questionStartTime) / 1000;
-
-    const buttons = document.querySelectorAll(".option");
-    buttons.forEach(btn => {
-      btn.disabled = true;
-      if (btn.textContent === correctAnswer) {
-        btn.classList.add("correct");
-      } else {
-        btn.classList.add("incorrect");
-      }
-    });
-
-    if (selectedBtn.textContent === correctAnswer) {
-      correctAnswers++;
-      correctSound.play(); // ✅ play correct sound
-      let multiplier = 0;
-
-      if (difficulty === "Easy") {
-        multiplier = timeTaken <= 5 ? 2.0 : timeTaken <= 15 ? 1.0 : 0.5;
-      } else if (difficulty === "Medium") {
-        multiplier = timeTaken <= 5 ? 3.0 : timeTaken <= 10 ? 2.0 : 1.0;
-      } else if (difficulty === "Hard") {
-        multiplier = timeTaken <= 3 ? 4.0 : timeTaken <= 7 ? 3.0 : 1.5;
-      }
-
-      if (multiplier > 0) {
-        const pointsEarned = Math.round(10 * multiplier);
-        score += pointsEarned;
-        updateScoreUI(pointsEarned);
-      }
-      updateScoreUI(0);
-    }
-    else {
-      incorrectSound.play(); // ✅ play incorrect sound
-    }
-
-    setTimeout(() => {
-      currentQuestion++;
-      if (currentQuestion < quizData.length) {
-        showQuestion();
-      } else {
-        clearInterval(timerInterval);
-        showScore();
-      }
-    }, 1000);
-  }
-
-  async function showScore() {
-    setTimeout(async () => {
-      const displayName = currentUser.displayName || currentUser.email;
-
-      await uploadToLeaderboard(displayName, score, correctAnswers, difficulty);
-      alert(`🎉 Quiz Complete!\nScore: ${score}\nCorrect Answers: ${correctAnswers}\n✅ Score uploaded!`);
-
-      if (confirm("Try again?")) {
-        location.reload();
-      } else {
-        startScreen.style.display = "block";
-        quizScreen.style.display = "none";
-      }
-    }, 200);
-  }
-
-  async function uploadToLeaderboard(name, score, correct, difficulty) {
-  const user = auth.currentUser;
-  if (!user) {
-    console.error("User not authenticated.");
-    return;
-  }
-
-  const leaderboardRef = doc(db, "Leaderboard", user.uid);
-  const userRef = doc(db, "users", user.uid); // This was missing the doc import, as per previous advice
-
-  const docSnap = await getDoc(leaderboardRef);
-
-  if (docSnap.exists()) {
-    const data = docSnap.data();
-    await updateDoc(leaderboardRef, {
-      score: (data.score || 0) + score,
-      correct: (data.correct || 0) + correct,
-      quizzesCompleted: (data.quizzesCompleted || 0) + 1,
-      lastPlayed: serverTimestamp() // Consider if you want this for all updates or only initial
-    });
-  } else {
-    // This is the crucial part for a new user's first quiz
-    await setDoc(leaderboardRef, {
-      name: user.displayName || name || "Anonymous",
-      score: score, // This will be the score from their first quiz
-      correct: correct, // This will be the correct answers from their first quiz
-      difficulty: difficulty, // Store difficulty of their first quiz, or remove if not needed for leaderboard display
-      quizzesCompleted: 1, // Set to 1 for their first completed quiz
-      timestamp: serverTimestamp() // Use timestamp for initial entry
-    });
-  }
-
-  // ✅ Update activity summary in users collection (this part is good)
-  const userSnap = await getDoc(userRef);
-  const userData = userSnap.exists() ? userSnap.data() : {};
-
-  if (userSnap.exists()) {
-      await updateDoc(userRef, {
-        totalQuizzes: (userData.totalQuizzes || 0) + 1,
-        highScore: Math.max(score, userData.highScore || 0)
-      });
-    } else {
-      // This 'else' block for userRef should ideally not be hit if user is authenticated
-      // and their data was created on signup. But good to have as a fallback.
-      await setDoc(userRef, {
-        totalQuizzes: 1,
-        highScore: score
-      });
-    }
-  }
-
-  function handleTimeUp() {
-    const q = quizData[currentQuestion];
-    
-    const buttons = document.querySelectorAll(".option");
-    buttons.forEach(btn => {
-      btn.disabled = true;
-      if (btn.textContent === q.answer) {
-        btn.classList.add("correct");
-      } else {
-        btn.classList.add("incorrect");
-      }
-    });
-  
-    setTimeout(() => {
-      currentQuestion++;
-      if (currentQuestion < quizData.length) {
-        showQuestion();
-      } else {
-        clearInterval(timerInterval);
-        showScore();
-      }
-    }, 1000);
-  }
-
-  function updateScoreUI(points) {
-    totalScoreDisplay.textContent = `Score: ${score}`;
-    if (points > 0) {
-      scoreFeedback.textContent = `+${points}`;
-      scoreFeedback.classList.add("show");
-    
-      setTimeout(() => {
-        scoreFeedback.classList.remove("show");
-        scoreFeedback.textContent = "";
-      }, 800);
-    }
-  }
-  bgMusic.volume = 0.1;
-  correctSound.volume = 1.0;
-  incorrectSound.volume = 1.0;
-
-
-
-
-  window.onload = () => {
-    document.getElementById("easy-btn-icon").addEventListener("click", () => startQuiz("Easy"));
-    document.getElementById("medium-btn-icon").addEventListener("click", () => startQuiz("Medium"));
-    document.getElementById("hard-btn-icon").addEventListener("click", () => startQuiz("Hard"));
-   // Certificate functionality
-    claimCertificateBtn.addEventListener("click", async () => {
-        if (!currentUser) {
-            alert("Please log in to claim your certificate.");
-            return;
-        }
-
-        // Optional: Add logic here to check if the user has completed all levels
-        // For example, fetch user's data from Firestore and check 'totalQuizzes' or 'achievements'
-        // if (user.totalQuizzes < requiredQuizzesForCertificate) {
-        //     alert("Complete more quizzes to earn your certificate!");
-        //     return;
-        // }
-
-        const userName = currentUser.displayName || "Valued User"; // Get user's name
-        const today = new Date();
-        const completionDate = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-
-        // Load the certificate template image
-        const certificateImage = new Image();
-        certificateImage.src = '/images/certificate-template.png'; // Make sure this path is correct
-
-        certificateImage.onload = () => {
-            // Set canvas dimensions to match the image
-            certificateCanvas.width = certificateImage.width;
-            certificateCanvas.height = certificateImage.height;
-
-            // Draw the background image
-            ctx.drawImage(certificateImage, 0, 0);
-
-            // Set text styles for the name
-            ctx.font = 'bold 100px Fredoka'; // Adjust font size and family as needed
-            ctx.fillStyle = '#2E0B40'; // Adjust color to match your design (dark purple from your CSS)
-            ctx.textAlign = 'center';
-
-            // Draw the user's name on the underline
-            // You'll need to adjust these coordinates (x, y) based on your image's layout
-            // x: horizontal center of the canvas
-            // y: estimated vertical position of the underline
-            const nameX = certificateCanvas.width / 2;
-            const nameY = certificateCanvas.height * 0.49; // Adjust this '0.53' multiplier as needed
-
-            ctx.fillText(userName.toUpperCase(), nameX, nameY); // Convert name to uppercase if preferred
-
-            // Set text styles for the date
-            ctx.font = '30px IBM Plex Sans'; // Adjust font size and family
-            ctx.fillStyle = '#2E0B40'; // Same color as name
-            ctx.textAlign = 'center';
-
-            // Draw the date below MindBlast
-            // x: horizontal center of the canvas
-            // y: estimated vertical position below MindBlast
-            const dateX = certificateCanvas.width / 2;
-            const dateY = certificateCanvas.height * 0.9; // Adjust this '0.86' multiplier as needed
-
-            ctx.fillText(completionDate, dateX, dateY);
-
-            // Show the modal
-            certificateModal.style.display = "flex";
-
-            // Set the download link for the generated certificate
-            downloadCertificateBtn.onclick = () => {
-                const dataURL = certificateCanvas.toDataURL('image/png'); // Get image data as PNG
-                const link = document.createElement('a');
-                link.href = dataURL;
-                link.download = `${userName}_MindBlast_Certificate.png`; // Dynamic download filename
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+            // Clear previous event listener
+            messageModalOkBtn.onclick = null;
+            // Attach new event listener
+            messageModalOkBtn.onclick = () => {
+                messageModal.style.display = 'none';
+                if (onCloseCallback) {
+                    onCloseCallback();
+                }
             };
-        };
 
-        certificateImage.onerror = () => {
-            console.error("Failed to load certificate template image.");
-            alert("Could not load certificate template. Please try again later.");
-        };
-    });
-
-    closeModalBtn.addEventListener("click", () => {
-        certificateModal.style.display = "none";
-    });
-
-    // Close modal if user clicks outside of it
-    window.addEventListener("click", (event) => {
-        if (event.target == certificateModal) {
-            certificateModal.style.display = "none";
+            // Also allow closing by clicking outside the modal
+            messageModal.addEventListener('click', function handler(event) {
+                if (event.target === messageModal) {
+                    messageModal.style.display = 'none';
+                    messageModal.removeEventListener('click', handler); // Remove listener after use
+                    if (onCloseCallback) {
+                        onCloseCallback();
+                    }
+                }
+            });
         }
-    });
-  };
-</script>
+
+
+        // Check login state and load user progress
+        onAuthStateChanged(auth, async user => {
+            if (user) {
+                currentUser = user;
+                await loadUserProgress(); // Load user's completed difficulties
+                updateDifficultyLocks();  // Update the UI based on loaded progress
+            } else {
+                showMessageModal("Login Required", "You must be logged in to play the quiz.", () => {
+                    window.location.href = "auth.html"; // redirect to login
+                });
+            }
+        });
+
+        async function loadUserProgress() {
+            if (!currentUser) return;
+            const userRef = doc(db, "users", currentUser.uid);
+            const userSnap = await getDoc(userRef);
+            if (userSnap.exists()) {
+                const userData = userSnap.data();
+                completedDifficulties.Easy = userData.completedEasy || false;
+                completedDifficulties.Medium = userData.completedMedium || false;
+                completedDifficulties.Hard = userData.completedHard || false;
+            }
+        }
+
+        function updateDifficultyLocks() {
+            // Easy is always unlocked
+            easyLockIcon.textContent = 'lock_open';
+            easyBtn.classList.remove('locked');
+            easyBtn.onclick = () => startQuiz("Easy");
+
+            // Medium
+            if (completedDifficulties.Easy) {
+                mediumLockIcon.textContent = 'lock_open';
+                mediumBtn.classList.remove('locked');
+                mediumBtn.onclick = () => startQuiz("Medium");
+            } else {
+                mediumLockIcon.textContent = 'lock';
+                mediumBtn.classList.add('locked');
+                mediumBtn.onclick = null; // Disable click
+            }
+
+            // Hard
+            if (completedDifficulties.Medium) { // Hard unlocks after Medium
+                hardLockIcon.textContent = 'lock_open';
+                hardBtn.classList.remove('locked');
+                hardBtn.onclick = () => startQuiz("Hard");
+            } else {
+                hardLockIcon.textContent = 'lock';
+                hardBtn.classList.add('locked');
+                hardBtn.onclick = null; // Disable click
+            }
+        }
+
+
+        async function startQuiz(diff) {
+            if (!currentUser) return;
+
+            // Prevent starting locked difficulties
+            if (diff === "Medium" && !completedDifficulties.Easy) {
+                showMessageModal("Locked Difficulty", "Please complete the Easy difficulty first!");
+                return;
+            }
+            if (diff === "Hard" && !completedDifficulties.Medium) {
+                showMessageModal("Locked Difficulty", "Please complete the Medium difficulty first!");
+                return;
+            }
+
+            difficulty = diff;
+            if (difficulty === "Easy") timePerQuestion = 20;
+            else if (difficulty === "Medium") timePerQuestion = 15;
+            else if (difficulty === "Hard") timePerQuestion = 10;
+
+            quizData = await loadQuestions(diff);
+            currentQuestion = 0;
+            score = 0;
+            correctAnswers = 0;
+            startScreen.style.display = "none";
+            quizScreen.style.display = "flex"; // Changed to flex for proper layout
+            startTimer();
+            document.getElementById("progress-bar").style.width = `0%`;
+            showQuestion();
+        }
+
+        async function loadQuestions(difficulty) {
+            const colRef = collection(db, difficulty.charAt(0).toUpperCase() + difficulty.slice(1));
+            const snapshot = await getDocs(colRef);
+            let questions = [];
+
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                questions.push({
+                    icon: `<span class="material-symbols-outlined">${data.icon}</span>`,
+                    options: shuffleArray([...data.options]),
+                    answer: data.answer
+                });
+            });
+
+            return shuffleArray(questions).slice(0, 10);
+        }
+
+        function shuffleArray(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        function startTimer() {
+            currentTimer = timePerQuestion;
+            timerDisplay.textContent = `⏱️ ${currentTimer}s`;
+
+            clearInterval(timerInterval); // Clear previous timer if any
+
+            timerInterval = setInterval(() => {
+                currentTimer--;
+                timerDisplay.textContent = `⏱️ ${currentTimer}s`;
+                if (currentTimer <= 0) {
+                    clearInterval(timerInterval);
+                    handleTimeUp();
+                }
+            }, 1000);
+        }
+
+
+        function showQuestion() {
+            const q = quizData[currentQuestion];
+            iconPlaceholder.innerHTML = q.icon;
+            optionsDiv.innerHTML = "";
+            progressText.textContent = `${currentQuestion + 1}/${quizData.length}`; // Fixed progress text
+            document.getElementById("progress-bar").style.width = `${((currentQuestion + 1) / quizData.length) * 100}%`;
+            questionStartTime = Date.now();
+
+            q.options.forEach(option => {
+                const btn = document.createElement("button");
+                btn.classList.add("btn", "option");
+                btn.textContent = option;
+                btn.onclick = () => checkAnswer(btn, q.answer);
+                optionsDiv.appendChild(btn);
+            });
+
+            startTimer(); // Ensure timer starts for each new question
+
+        }
+
+        function checkAnswer(selectedBtn, correctAnswer) {
+            clearInterval(timerInterval); // Stop the timer when an answer is selected
+            const timeTaken = (Date.now() - questionStartTime) / 1000;
+
+            const buttons = document.querySelectorAll(".option");
+            buttons.forEach(btn => {
+                btn.disabled = true; // Disable all buttons
+                if (btn.textContent === correctAnswer) {
+                    btn.classList.add("correct");
+                } else {
+                    btn.classList.add("incorrect");
+                }
+            });
+
+            if (selectedBtn.textContent === correctAnswer) {
+                correctAnswers++;
+                correctSound.play(); // ✅ play correct sound
+                let multiplier = 0;
+
+                if (difficulty === "Easy") {
+                    multiplier = timeTaken <= 5 ? 2.0 : timeTaken <= 15 ? 1.0 : 0.5;
+                } else if (difficulty === "Medium") {
+                    multiplier = timeTaken <= 5 ? 3.0 : timeTaken <= 10 ? 2.0 : 1.0;
+                } else if (difficulty === "Hard") {
+                    multiplier = timeTaken <= 3 ? 4.0 : timeTaken <= 7 ? 3.0 : 1.5;
+                }
+
+                if (multiplier > 0) {
+                    const pointsEarned = Math.round(10 * multiplier);
+                    score += pointsEarned;
+                    updateScoreUI(pointsEarned);
+                }
+                updateScoreUI(0); // Call with 0 to just update total score if no points earned, or remove if only points should trigger
+            }
+            else {
+                incorrectSound.play(); // ✅ play incorrect sound
+            }
+
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < quizData.length) {
+                    showQuestion();
+                } else {
+                    clearInterval(timerInterval);
+                    showScore();
+                }
+            }, 1000);
+        }
+
+        async function showScore() {
+            setTimeout(async () => {
+                const displayName = currentUser.displayName || currentUser.email;
+
+                await uploadToLeaderboard(displayName, score, correctAnswers, difficulty);
+
+                // After quiz completion, update user's completed difficulties
+                await updateCompletedDifficulty(difficulty); // New function call
+
+                showMessageModal(
+                    "Quiz Complete!",
+                    `Score: ${score}\nCorrect Answers: ${correctAnswers}\nScore uploaded!`,
+                    () => {
+                        showMessageModal(
+                            "Play Again?",
+                            "Would you like to try another quiz?",
+                            () => { // The 'response' here will be the event object or undefined, simplified callback
+                                location.reload(); // Reloads the page for a fresh start
+                            }
+                        );
+                    }
+                );
+
+            }, 200);
+        }
+
+        async function updateCompletedDifficulty(completedDiff) {
+            if (!currentUser) return;
+            const userRef = doc(db, "users", currentUser.uid);
+
+            // Set the corresponding completed difficulty flag to true
+            const updateData = {};
+            if (completedDiff === "Easy") updateData.completedEasy = true;
+            else if (completedDiff === "Medium") updateData.completedMedium = true;
+            else if (completedDiff === "Hard") updateData.completedHard = true;
+
+            if (Object.keys(updateData).length > 0) {
+                try {
+                    await updateDoc(userRef, updateData);
+                    console.log(`User ${currentUser.uid} completed ${completedDiff} difficulty.`);
+                    // Update the local state for completed difficulties
+                    completedDifficulties[completedDiff] = true;
+                    // Re-evaluate locks immediately
+                    updateDifficultyLocks();
+                } catch (error) {
+                    console.error("Error updating user's completed difficulty:", error);
+                }
+            }
+        }
+
+
+        async function uploadToLeaderboard(name, score, correct, difficulty) {
+            const user = auth.currentUser;
+            if (!user) {
+                console.error("User not authenticated.");
+                return;
+            }
+
+            const leaderboardRef = doc(db, "Leaderboard", user.uid);
+            const userRef = doc(db, "users", user.uid);
+
+            const docSnap = await getDoc(leaderboardRef);
+
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                await updateDoc(leaderboardRef, {
+                    score: (data.score || 0) + score,
+                    correct: (data.correct || 0) + correct,
+                    quizzesCompleted: (data.quizzesCompleted || 0) + 1,
+                    lastPlayed: serverTimestamp()
+                });
+            } else {
+                await setDoc(leaderboardRef, {
+                    name: user.displayName || name || "Anonymous",
+                    score: score,
+                    correct: correct,
+                    difficulty: difficulty,
+                    quizzesCompleted: 1,
+                    timestamp: serverTimestamp()
+                });
+            }
+
+            const userSnap = await getDoc(userRef);
+            const userData = userSnap.exists() ? userSnap.data() : {};
+
+            if (userSnap.exists()) {
+                await updateDoc(userRef, {
+                    totalQuizzes: (userData.totalQuizzes || 0) + 1,
+                    highScore: Math.max(score, userData.highScore || 0)
+                });
+            } else {
+                await setDoc(userRef, {
+                    totalQuizzes: 1,
+                    highScore: score
+                });
+            }
+        }
+
+        function handleTimeUp() {
+            const q = quizData[currentQuestion];
+
+            const buttons = document.querySelectorAll(".option");
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent === q.answer) {
+                    btn.classList.add("correct");
+                } else {
+                    btn.classList.add("incorrect");
+                }
+            });
+             incorrectSound.play(); // Play incorrect sound if time runs out (considered an incorrect answer)
+
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < quizData.length) {
+                    showQuestion();
+                } else {
+                    clearInterval(timerInterval);
+                    showScore();
+                }
+            }, 1000);
+        }
+
+        function updateScoreUI(points) {
+            totalScoreDisplay.textContent = `Score: ${score}`;
+            if (points > 0) {
+                scoreFeedback.textContent = `+${points}`;
+                scoreFeedback.classList.add("show");
+
+                setTimeout(() => {
+                    scoreFeedback.classList.remove("show");
+                    scoreFeedback.textContent = "";
+                }, 800);
+            }
+        }
+        bgMusic.volume = 0.1;
+        correctSound.volume = 1.0;
+        incorrectSound.volume = 1.0;
+
+
+
+
+        window.onload = () => {
+            // Event listeners for difficulty buttons are now managed by updateDifficultyLocks
+            // which is called after user login and quiz completion.
+            // Initial call to updateDifficultyLocks will set them up correctly.
+
+            // Certificate functionality
+            claimCertificateBtn.addEventListener("click", async () => {
+                if (!currentUser) {
+                    showMessageModal("Login Required", "Please log in to claim your certificate.");
+                    return;
+                }
+
+                // For certificate, let's make it available only if all difficulties are completed.
+                if (!completedDifficulties.Easy || !completedDifficulties.Medium || !completedDifficulties.Hard) {
+                    showMessageModal("Certificate Locked", "Complete all difficulties (Easy, Medium, and Hard) to earn your certificate!");
+                    return;
+                }
+
+
+                const userName = currentUser.displayName || "Valued User"; // Get user's name
+                const today = new Date();
+                const completionDate = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+                // Load the certificate template image
+                const certificateImage = new Image();
+                certificateImage.src = 'certificate-template.png'; // Make sure this path is correct
+
+                certificateImage.onload = () => {
+                    // Set canvas dimensions to match the image
+                    certificateCanvas.width = certificateImage.width;
+                    certificateCanvas.height = certificateImage.height;
+
+                    // Draw the background image
+                    ctx.drawImage(certificateImage, 0, 0);
+
+                    // Set text styles for the name
+                    ctx.font = 'bold 100px Fredoka'; // Adjust font size and family as needed
+                    ctx.fillStyle = '#2E0B40'; // Adjust color to match your design (dark purple from your CSS)
+                    ctx.textAlign = 'center';
+
+                    // Draw the user's name on the underline
+                    // You'll need to adjust these coordinates (x, y) based on your image's layout
+                    // x: horizontal center of the canvas
+                    // y: estimated vertical position of the underline
+                    const nameX = certificateCanvas.width / 2;
+                    const nameY = certificateCanvas.height * 0.49; // Adjust this '0.53' multiplier as needed
+
+                    ctx.fillText(userName.toUpperCase(), nameX, nameY); // Convert name to uppercase if preferred
+
+                    // Set text styles for the date
+                    ctx.font = '30px IBM Plex Sans'; // Adjust font size and family
+                    ctx.fillStyle = '#2E0B40'; // Same color as name
+                    ctx.textAlign = 'center';
+
+                    // Draw the date below MindBlast
+                    // x: horizontal center of the canvas
+                    // y: estimated vertical position below MindBlast
+                    const dateX = certificateCanvas.width / 2;
+                    const dateY = certificateCanvas.height * 0.9; // Adjust this '0.86' multiplier as needed
+
+                    ctx.fillText(completionDate, dateX, dateY);
+
+                    // Show the modal
+                    certificateModal.style.display = "flex";
+
+                    // Set the download link for the generated certificate
+                    downloadCertificateBtn.onclick = () => {
+                        const dataURL = certificateCanvas.toDataURL('image/png'); // Get image data as PNG
+                        const link = document.createElement('a');
+                        link.href = dataURL;
+                        link.download = `${userName}_MindBlast_Certificate.png`; // Dynamic download filename
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    };
+                };
+
+                certificateImage.onerror = () => {
+                    console.error("Failed to load certificate template image.");
+                    showMessageModal("Error", "Could not load certificate template. Please try again later.");
+                };
+            });
+
+            closeModalBtn.addEventListener("click", () => {
+                certificateModal.style.display = "none";
+            });
+
+            // Close modal if user clicks outside of it
+            window.addEventListener("click", (event) => {
+                if (event.target == certificateModal) {
+                    certificateModal.style.display = "none";
+                }
+            });
+        };
+    </script>
 
 </body>
 </html>
