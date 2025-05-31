@@ -7,8 +7,154 @@
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+  <link rel="icon" href="/images/favicon.png" type="image/png">
   <link rel="stylesheet" href="styles.css" />
-</head>
+
+  <style>
+    html, body {
+        height: 100%;       /* Ensure html and body take full height */
+        margin: 0;          /* Remove any default browser margins */
+        padding: 0;         /* Remove any default browser padding */
+    }
+
+    body {
+        /* Keep existing body styles here if they are not height-related */
+        min-height: 100vh; /* Ensure body takes at least full viewport height */
+        display: flex;     /* Make body a flex container to allow children to control layout */
+        flex-direction: column; /* Stack children vertically */
+    }
+
+    /* Ensure your main content area can flex-grow if you have one */
+    /* Example if you have a <main> tag or a specific wrapper for your page content: */
+    /* main { flex-grow: 1; } */
+
+
+    /* Basic Modal Structure (Ensures it covers the whole screen) */
+    .modal {
+      display: none; /* Hidden by default; JS sets display:flex */
+      position: fixed; /* Stay in place */
+      z-index: 9999; /* Sit on top, ensure it's above other content */
+      left: 0;
+      top: 0;
+      width: 100vw;   /* Explicitly use viewport width */
+      height: 100vh;  /* Explicitly use viewport height */
+      background-color: rgba(0, 0, 0, 0.7); /* Black w/ opacity */
+
+      /* CRUCIAL FLEX PROPERTIES FOR CENTERING CONTENT */
+      justify-content: center; /* Center horizontally */
+      align-items: center;   /* Center vertically */
+
+      box-sizing: border-box; /* Include padding in element's total width and height */
+    }
+
+    /* Modal Content Box */
+    .modal-content {
+      background-color: #fefefe;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+      /* CRUCIAL FOR CENTERING WITHIN FLEX CONTAINER */
+      margin: auto;
+
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+      position: relative;
+      animation: fadeIn 0.3s ease-out;
+      color: #333;
+
+      /* Internal flex for stacking content elements */
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      max-height: 90vh; /* Add a max-height to the content */
+      overflow-y: auto; /* Allow content to scroll if it exceeds max-height */
+    }
+
+    /* Specific Styles for Small Confirmation Modal (like logout confirmation) */
+    .modal-content.small-modal {
+      max-width: 350px;
+      padding: 30px;
+      gap: 15px;
+    }
+
+    .modal-content h2 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .modal-content p {
+      color: #555;
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+
+    /* Modal action buttons container */
+    .modal-actions {
+      display: flex;
+      justify-content: space-around;
+      gap: 15px;
+      width: 100%;
+    }
+
+    /* Adjust button styles within the modal */
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .modal-actions .btn {
+      flex-grow: 1;
+      margin: 0;
+    }
+
+    /* Specific button colors for confirmation */
+    .red-btn {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .red-btn:hover:not(:disabled) {
+      background-color: #c82333;
+    }
+
+    .green-btn {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .green-btn:hover {
+      background-color: #218838;
+    }
+
+    /* Media query for larger screens */
+    @media (min-width: 500px) {
+        .modal-actions {
+            flex-direction: row;
+            justify-content: space-around;
+        }
+        .modal-actions .btn {
+            flex-grow: 1;
+            max-width: 48%;
+        }
+    }
+
+    /* Keyframe for fade-in animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+  </head>
 <body>
 
   <!-- Navbar -->
@@ -41,7 +187,7 @@
       <p>Welcome to our platform, where learning icons becomes fun and interactive. Our flashcard quizzes are designed to enhance your knowledge and retention effortlessly.</p>
       <div class="hero-buttons">
         <button class="primary" onclick="window.location.href='quiz.html'">Start</button>
-        <button class="secondary" onclick="window.location.href='auth.html'">Sign Up</button>
+        <button class="secondary" onclick="window.location.href='auth.html?form=signup'">Sign Up</button>
       </div>
     </div>
     <div class="hero-image">
@@ -197,6 +343,7 @@ function handleOutsideClick(e) {
 }
 
 window.logoutUser = function () {
+  console.log('logoutUser() function was called!'); // Add this line
   logoutConfirmModal.style.display = 'flex'; // Show the logout confirmation modal
 };
 

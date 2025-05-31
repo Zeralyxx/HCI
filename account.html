@@ -6,8 +6,10 @@
   <title>MindBlast | Account</title>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=IBM+Plex+Sans&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="icon" href="/images/favicon.png" type="image/png">
   <link rel="stylesheet" href="styles.css">
   <style>
+    /* Your existing CSS (copy everything from your provided HTML's <style> block) */
     .account-container {
       display: flex;
       flex-direction: column;
@@ -54,29 +56,51 @@
         width: 100px;
         height: 100px;
         border-radius: 50%;
-        /* object-fit: cover; <--- Remove this line, it's for images */
         margin: 0 auto 1rem auto;
         display: block;
         border: 3px solid #fff;
-
-        /* Add these lines for centering the initial */
-        background-color: #2E0B40; /* Match your navbar's profile-icon background */
+        background-color: #2E0B40;
         color: white;
-        display: flex; /* Make it a flex container */
-        justify-content: center; /* Center horizontally */
-        align-items: center; /* Center vertically */
-        font-size: 40px; /* Adjust font size for the initial */
-        font-weight: bold; /* Make the initial bold */
-        user-select: none; /* Prevent text selection */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 40px;
+        font-weight: bold;
+        user-select: none;
     }
 
     .account-details p {
       font-size: 1rem;
       padding: 0.5rem 0;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      /* NEW: Flexbox for icon alignment */
+      display: flex;
+      align-items: center;
+      gap: 8px; /* Space between text and icon */
     }
 
-    .account-details input {
+    /* Prevent the strong tag from shrinking */
+    .account-details p strong {
+        flex-shrink: 0;
+    }
+
+    /* Allow the username span to grow and take available space */
+    .account-details p span[contenteditable="true"] {
+      background-color: #fff;
+      color: #000;
+      border-radius: 8px;
+      padding: 0.3rem 0.5rem; /* Add padding for better look when editable */
+      width: 100%; /* Take full width when editable */
+      outline: none; /* Remove default focus outline */
+      flex-grow: 1;
+    }
+    .account-details p span[contenteditable="false"] {
+        flex-grow: 1; /* Allow username span to take available space even when not editable */
+    }
+
+
+    /* Existing input styles (if any) */
+    .account-details input { /* This rule targets inputs *inside* account-details */
       background-color: #fff;
       color: #000;
       border-radius: 8px;
@@ -85,7 +109,7 @@
       border: none;
     }
 
-    .edit-fields {
+    .edit-fields { /* This might be unused now, but keep for safety if needed */
       display: none;
     }
 
@@ -119,8 +143,14 @@
       transition: background-color 0.3s ease;
     }
 
-    .btn-primary:hover {
+    .btn-primary:hover:not(:disabled) { /* Added :not(:disabled) for hover effect */
       background-color: #9a5dff;
+    }
+
+    .btn-primary:disabled { /* Style for disabled button */
+      background-color: #5e2b76; /* Darker purple for disabled */
+      cursor: not-allowed;
+      opacity: 0.7;
     }
 
 /* Common Modal Styles */
@@ -253,6 +283,159 @@
         flex-direction: column;
       }
     }
+
+    /* Styles for the Change Password section */
+    .password-section {
+      margin-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 1.5rem;
+      display: none; /* NEW: Hidden by default, shown by JS */
+    }
+
+    .password-section h3 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .password-section label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .password-section input[type="password"] {
+      background-color: #fff;
+      color: #000;
+      border-radius: 8px;
+      padding: 0.75rem;
+      width: 100%; /* Adjust for padding */
+      border: none;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .password-section .btn-primary {
+      width: 100%; /* Make button full width */
+      margin-top: 0.5rem;
+    }
+
+    /* Styles for the re-authentication modal */
+    .reauth-modal .modal-content {
+      background-color: #2E0B40; /* Darker background for consistency */
+      color: white;
+    }
+
+    .reauth-modal h2 {
+      color: white; /* Ensure heading is white */
+    }
+
+    .reauth-modal label {
+      color: white; /* Ensure label is white */
+    }
+
+    .reauth-modal input {
+      background-color: #fff;
+      color: #000;
+      border-radius: 8px;
+      padding: 0.75rem;
+      width: 100%;
+      border: none;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .reauth-modal .modal-actions {
+      margin-top: 1rem;
+    }
+
+    /* NEW: Styles for the edit/save icons */
+    .edit-icon-btn, .save-icon-btn {
+        background: none;
+        border: none;
+        color: #7E3FF2; /* Purple color for icons */
+        font-size: 1.2rem; /* Size of the icon */
+        cursor: pointer;
+        padding: 0;
+        margin-left: auto; /* Push icon to the right within flex container */
+        transition: color 0.3s ease;
+        display: flex; /* To center the material icon */
+        align-items: center;
+        justify-content: center;
+    }
+
+    .edit-icon-btn:hover:not(:disabled), .save-icon-btn:hover:not(:disabled) {
+        color: #9a5dff;
+    }
+
+    .edit-icon-btn:disabled, .save-icon-btn:disabled {
+        color: #5e2b76; /* Darker purple for disabled */
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
+
+    /* Toast Notification Styles - Copied here for completeness */
+    .toast-notification {
+        position: fixed;
+        bottom: 20px; /* Distance from bottom */
+        right: 20px; /* Distance from right */
+        background-color: #4CAF50; /* Default green for success */
+        color: white;
+        padding: 15px 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 10000; /* Ensure it's on top of everything */
+        opacity: 0;
+        visibility: hidden; /* Hidden from screen readers when not visible */
+        transform: translateY(100px); /* Start off-screen below */
+        transition: opacity 0.5s ease-out, transform 0.5s ease-out, visibility 0.5s;
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 1rem;
+        max-width: 300px; /* Limit width */
+        text-align: center;
+    }
+
+    .toast-notification.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0); /* Slide in */
+    }
+
+    .toast-notification.error {
+        background-color: #f44336; /* Red for errors */
+    }
+
+    /* NEW: Email Verification Warning Bar */
+    .email-verification-warning {
+        background-color: #ffc107; /* Warning yellow */
+        color: #333;
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        font-weight: bold;
+        display: none; /* Hidden by default, shown by JS */
+        flex-direction: column; /* Allow stacking of text and buttons */
+        gap: 10px; /* Space between elements */
+    }
+
+    .email-verification-warning .btn-primary {
+        background-color: #f0ad4e; /* Darker yellow for buttons */
+        color: #333;
+        border: 1px solid #e09b2e;
+        flex: none; /* Prevent button from stretching unnecessarily */
+        width: fit-content; /* Fit content size */
+        margin: 0 auto; /* Center buttons */
+        padding: 0.5rem 1rem;
+    }
+
+    .email-verification-warning .btn-primary:hover {
+        background-color: #e09b2e;
+    }
+
   </style>
 </head>
 <body class="account-container">
@@ -261,12 +444,33 @@
       <span class="material-icons">arrow_back</span>
     </button>
 
+    <div id="email-verification-warning" class="email-verification-warning">
+      <p>Your email address is not verified. Please check your inbox (and spam folder) for a verification email.</p>
+      <button class="btn-primary" id="resend-verification-email">Resend Verification Email</button>
+      <button class="btn-primary" id="reload-email-status">I've Verified My Email</button>
+    </div>
+
     <div class="account-avatar" id="account-initial-avatar">
-  </div>
+    </div>
     <h2>Account Info</h2>
 
     <div class="account-details">
-      <p><strong>Username:</strong> <span id="account-username" contenteditable="false"></span></p>
+      <p>
+        <strong>Username:</strong>
+        <span id="account-username" contenteditable="false"></span>
+        <button class="edit-icon-btn" id="edit-username-icon" title="Edit Username">
+            <span class="material-icons">edit</span>
+        </button>
+        <button class="save-icon-btn" id="save-username-icon" title="Save Username" style="display:none;">
+            <span class="material-icons">check</span>
+        </button>
+      </p>
+      <p>
+        <strong>Password:</strong> ********
+        <button class="edit-icon-btn" id="change-password-icon" title="Change Password">
+            <span class="material-icons">edit</span>
+        </button>
+      </p>
       <p><strong>Email:</strong> <span id="account-email"></span></p>
       <p><strong>UID:</strong> <span id="account-uid"></span></p>
       <p><strong>Joined:</strong> <span id="account-created"></span></p>
@@ -279,40 +483,79 @@
     </div>
 
     <div class="account-actions">
-      <button class="btn-primary" id="edit-btn">Edit Account</button>
       <button class="btn-primary" id="delete-account">Delete Account</button>
       <button class="btn-primary" id="logout-btn">Log Out</button>
     </div>
+
+    <div class="password-section" id="password-section">
+      <h3>Change Password</h3>
+      <label for="current-password">Current Password:</label>
+      <input type="password" id="current-password" placeholder="Enter current password">
+
+      <label for="new-password">New Password:</label>
+      <input type="password" id="new-password" placeholder="Enter new password (min 6 chars)">
+
+      <label for="confirm-new-password">Confirm New Password:</label>
+      <input type="password" id="confirm-new-password" placeholder="Confirm new password">
+
+      <button class="btn-primary" id="change-password-btn">Update Password</button>
+    </div>
   </div>
 
-  <!-- Modals for confirmation --> 
   <div id="logout-confirm-modal" class="modal">
-  <div class="modal-content small-modal">
-    <h2>Log Out?</h2>
-    <p>Are you sure you want to log out?</p>
-    <div class="modal-actions">
-      <button id="logout-yes-btn" class="btn red-btn">Yes, Log Out</button>
-      <button id="logout-no-btn" class="btn green-btn">No, Stay Logged In</button>
+    <div class="modal-content small-modal">
+      <h2>Log Out?</h2>
+      <p>Are you sure you want to log out?</p>
+      <div class="modal-actions">
+        <button id="logout-yes-btn" class="btn red-btn">Yes, Log Out</button>
+        <button id="logout-no-btn" class="btn green-btn">No, Stay Logged In</button>
+      </div>
     </div>
   </div>
-</div>
 
-<div id="delete-confirm-modal" class="modal">
-  <div class="modal-content small-modal">
-    <h2>Delete Account?</h2>
-    <p>Are you absolutely sure you want to delete your account? This action cannot be undone and all your data will be lost.</p>
-    <div class="countdown-timer" id="delete-countdown"></div>
-    <div class="modal-actions">
-      <button id="delete-yes-btn" class="btn red-btn" disabled>Confirm Delete</button>
-      <button id="delete-no-btn" class="btn green-btn">Cancel</button>
+  <div id="delete-confirm-modal" class="modal">
+    <div class="modal-content small-modal">
+      <h2>Delete Account?</h2>
+      <p>Are you absolutely sure you want to delete your account? This action cannot be undone and all your data will be lost.</p>
+      <div class="countdown-timer" id="delete-countdown"></div>
+      <div class="modal-actions">
+        <button id="delete-yes-btn" class="btn red-btn" disabled>Confirm Delete</button>
+        <button id="delete-no-btn" class="btn green-btn">Cancel</button>
+      </div>
     </div>
   </div>
-</div>
+
+  <div id="reauth-modal" class="modal reauth-modal">
+    <div class="modal-content small-modal">
+      <h2>Re-authenticate</h2>
+      <p>For your security, please re-enter your password to proceed with this sensitive action.</p>
+      <label for="reauth-email">Email:</label>
+      <input type="email" id="reauth-email" disabled>
+      <label for="reauth-password">Password:</label>
+      <input type="password" id="reauth-password" placeholder="Enter your password">
+      <div class="modal-actions">
+        <button id="reauth-confirm-btn" class="btn green-btn">Confirm</button>
+        <button id="reauth-cancel-btn" class="btn red-btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-notification" class="toast-notification"></div>
 
   <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut, updateProfile, deleteUser } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"; // <-- Add deleteDoc here
+  import {
+    getAuth,
+    onAuthStateChanged,
+    signOut,
+    updateProfile,
+    deleteUser,
+    updatePassword,
+    EmailAuthProvider,
+    reauthenticateWithCredential,
+    sendEmailVerification // NEW: Added sendEmailVerification
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAZLZPVAlZUJWLturWzJ3nqyceZbSIevl4",
@@ -337,8 +580,8 @@
   const achievementsEl = document.getElementById('achievements');
   const accountAvatarEl = document.getElementById('account-initial-avatar');
 
-  const logoutBtn = document.getElementById('logout-btn'); // Get the logout button
-  const deleteAccountBtn = document.getElementById('delete-account'); // Get the delete button
+  const logoutBtn = document.getElementById('logout-btn');
+  const deleteAccountBtn = document.getElementById('delete-account');
 
   // Logout Confirmation Modal elements
   const logoutConfirmModal = document.getElementById('logout-confirm-modal');
@@ -351,12 +594,116 @@
   const deleteNoBtn = document.getElementById('delete-no-btn');
   const deleteCountdownEl = document.getElementById('delete-countdown');
 
-  let countdownInterval; // To store the interval for countdown
+  let countdownInterval;
 
-  let isEditing = false;
+  // Password Change elements
+  const passwordSection = document.getElementById('password-section'); // Reference to the password section div
+  const currentPasswordInput = document.getElementById('current-password');
+  const newPasswordInput = document.getElementById('new-password');
+  const confirmNewPasswordInput = document.getElementById('confirm-new-password');
+  const changePasswordBtn = document.getElementById('change-password-btn');
+
+  // Individual Edit/Save icons
+  const editUsernameIcon = document.getElementById('edit-username-icon');
+  const saveUsernameIcon = document.getElementById('save-username-icon');
+  const changePasswordIcon = document.getElementById('change-password-icon');
+
+  // Re-authentication Modal elements
+  const reauthModal = document.getElementById('reauth-modal');
+  const reauthEmailInput = document.getElementById('reauth-email');
+  const reauthPasswordInput = document.getElementById('reauth-password');
+  const reauthConfirmBtn = document.getElementById('reauth-confirm-btn');
+  const reauthCancelBtn = document.getElementById('reauth-cancel-btn');
+
+  // NEW: Email Verification Warning elements
+  const emailVerificationWarning = document.getElementById('email-verification-warning');
+  const resendVerificationEmailBtn = document.getElementById('resend-verification-email');
+  const reloadEmailStatusBtn = document.getElementById('reload-email-status');
+
+
+  let sensitiveActionCallback = null; // Stores the function to run after re-auth
+
+  // Function to show toast notification
+  const showToast = (message, type = 'success', duration = 3000) => {
+      const toast = document.getElementById('toast-notification');
+      toast.textContent = message;
+      toast.className = 'toast-notification'; // Reset classes
+      toast.classList.add('show');
+      toast.classList.add(type); // 'success' or 'error'
+
+      // Clear any existing timeout to prevent quick disappearance
+      if (toast.timeoutId) {
+          clearTimeout(toast.timeoutId);
+      }
+
+      toast.timeoutId = setTimeout(() => {
+          toast.classList.remove('show');
+          // Wait for transition to finish before hiding completely
+          setTimeout(() => {
+              toast.classList.remove(type); // Remove type class
+              toast.textContent = ''; // Clear text
+              toast.timeoutId = null;
+          }, 500); // Match CSS transition duration for opacity
+      }, duration);
+  };
+
+  // Function to translate Firebase error codes to user-friendly messages
+  const getFirebaseErrorMessage = (error) => {
+    switch (error.code) {
+      case 'auth/email-already-in-use':
+        return 'This email address is already registered.';
+      case 'auth/invalid-email':
+        return 'The email address is not valid.';
+      case 'auth/operation-not-allowed':
+        return 'Account type not enabled. Please contact support.';
+      case 'auth/weak-password':
+        return 'The password is too weak. Please choose a stronger one (at least 6 characters).';
+      case 'auth/user-disabled':
+        return 'This account has been disabled.';
+      case 'auth/user-not-found': // For re-auth, implies incorrect email/password
+      case 'auth/wrong-password':
+        return 'Incorrect email or password.';
+      case 'auth/requires-recent-login':
+        return 'This action requires you to log in again for security.';
+      case 'auth/too-many-requests':
+        return 'Too many attempts. Please try again later.';
+      case 'auth/network-request-failed':
+        return 'Network error. Please check your internet connection.';
+      default:
+        // For unhandled errors, return a generic message or the Firebase message if it's not too technical
+        return `An unexpected error occurred: ${error.message.replace('Firebase: ', '')}`;
+    }
+  };
+
+  // NEW: Function to update UI based on email verification status
+  const updateUIForEmailVerification = (user) => {
+    if (user && !user.emailVerified) {
+        emailVerificationWarning.style.display = 'flex'; // Show warning
+        // Disable sensitive action buttons
+        editUsernameIcon.disabled = true;
+        saveUsernameIcon.disabled = true; // Also disable the save button initially
+        changePasswordIcon.disabled = true;
+        deleteAccountBtn.disabled = true;
+        changePasswordBtn.disabled = true; // The button inside password section
+        usernameEl.contentEditable = false; // Ensure username isn't editable
+    } else {
+        emailVerificationWarning.style.display = 'none'; // Hide warning
+        // Enable sensitive action buttons
+        editUsernameIcon.disabled = false;
+        // saveUsernameIcon will be handled by editUsernameIcon click
+        changePasswordIcon.disabled = false;
+        deleteAccountBtn.disabled = false;
+        changePasswordBtn.disabled = false;
+    }
+  };
+
 
   onAuthStateChanged(auth, async (user) => {
     if (user) {
+      // NEW: Reload user to get latest email verification status
+      await user.reload(); // This is crucial!
+      updateUIForEmailVerification(user); // Update UI based on reloaded status
+
       const docRef = doc(db, "users", user.uid);
       const docSnap = await getDoc(docRef);
 
@@ -370,174 +717,370 @@
         highScoreEl.textContent = data.highScore || 0;
         achievementsEl.textContent = (data.achievements || []).join(', ') || 'None';
 
-        // Set the initial for the avatar
         const userInitial = (data.username || user.displayName ? (data.username || user.displayName)[0] : '?').toUpperCase();
         accountAvatarEl.textContent = userInitial;
-
       } else {
-        // If user data not found in Firestore, still try to get initial from Auth
         const userInitial = (user.displayName ? user.displayName[0] : '?').toUpperCase();
         accountAvatarEl.textContent = userInitial;
       }
+
+      // Pre-fill email for re-auth modal
+      reauthEmailInput.value = user.email;
+
     } else {
       window.location.href = 'auth.html';
     }
   });
 
-  document.getElementById('logout-btn').addEventListener('click', async () => {
-     // Instead of directly logging out, show the confirmation modal
-    logoutBtn.addEventListener('click', () => {
-      logoutConfirmModal.style.display = 'flex'; // Show the logout modal
-    });
-
-    // Handle 'Yes, Log Out' click
-    logoutYesBtn.addEventListener('click', async () => {
-      await signOut(auth);
-      window.location.href = 'home.html';
-      logoutConfirmModal.style.display = 'none'; // Hide modal
-    });
-
-    // Handle 'No, Stay Logged In' click
-    logoutNoBtn.addEventListener('click', () => {
-      logoutConfirmModal.style.display = 'none'; // Hide modal
-    });
-
-    window.addEventListener('click', (event) => {
-      if (event.target === logoutConfirmModal) {
-        logoutConfirmModal.style.display = 'none';
-      }
-
-    });
+  // Logout Logic
+  logoutBtn.addEventListener('click', () => {
+    logoutConfirmModal.style.display = 'flex';
   });
 
-  document.getElementById('delete-account').addEventListener('click', async () => {
-    // Instead of direct alert, show the custom delete confirmation modal
-    deleteAccountBtn.addEventListener('click', () => {
-      deleteConfirmModal.style.display = 'flex'; // Show delete modal
-      startDeleteCountdown(5); // Start 5-second countdown
-    });
-
-    // Function to start the countdown
-    function startDeleteCountdown(seconds) {
-      let timeLeft = seconds;
-      deleteYesBtn.disabled = true; // Disable button initially
-      deleteCountdownEl.textContent = `You can confirm in ${timeLeft} seconds.`;
-
-      countdownInterval = setInterval(() => {
-        timeLeft--;
-        if (timeLeft > 0) {
-          deleteCountdownEl.textContent = `You can confirm in ${timeLeft} seconds.`;
-        } else {
-          clearInterval(countdownInterval);
-          deleteCountdownEl.textContent = "Click 'Confirm Delete' to proceed.";
-          deleteYesBtn.disabled = false; // Enable button
-        }
-      }, 1000);
-    }
-
-    // Function to reset the delete modal state (for cancellation or re-opening)
-    function resetDeleteModal() {
-      clearInterval(countdownInterval);
-      deleteYesBtn.disabled = true;
-      deleteCountdownEl.textContent = '';
-      deleteConfirmModal.style.display = 'none';
-    }
-
-    // Handle 'Confirm Delete' click for delete account
-    deleteYesBtn.addEventListener('click', async () => {
-      const user = auth.currentUser;
-      if (user) {
-        try {
-          // Hide modal immediately to give feedback
-          deleteConfirmModal.style.display = 'none';
-          resetDeleteModal(); // Reset state
-
-          // 1. Delete user's entry from the Leaderboard collection
-          const leaderboardDocRef = doc(db, "Leaderboard", user.uid);
-          await deleteDoc(leaderboardDocRef);
-
-          // 2. Delete user's data from the users collection
-          const userDocRef = doc(db, "users", user.uid);
-          await deleteDoc(userDocRef);
-
-          // 3. Delete the user's authentication record
-          await deleteUser(user);
-
-          alert("Account and associated data deleted successfully.");
-          window.location.href = 'home.html';
-        } catch (error) {
-          console.error("Error deleting account or associated data:", error);
-          alert("Failed to delete account. Please try again. If you've recently signed in, try logging out and logging back in, then attempting the deletion again. This is often required for security reasons.");
-          if (error.code === 'auth/requires-recent-login') {
-            alert("For security reasons, you must re-authenticate before deleting your account. Please log out and log back in, then try again.");
-            signOut(auth); // Log out the user for re-authentication
-            window.location.href = 'auth.html';
-          }
-        }
-      }
-    });
-
-    // Handle 'Cancel' click for delete account
-    deleteNoBtn.addEventListener('click', () => {
-      resetDeleteModal(); // Reset state and hide modal
-    });
-
-    // >>> OPTIONAL: Close modals if user clicks outside of them <<<
-    window.addEventListener('click', (event) => {
-      if (event.target === logoutConfirmModal) {
-        logoutConfirmModal.style.display = 'none';
-      }
-      if (event.target === deleteConfirmModal) {
-        resetDeleteModal(); // Reset state and hide delete modal
-      }
-    });
+  logoutYesBtn.addEventListener('click', async () => {
+    await signOut(auth);
+    window.location.href = 'home.html';
+    logoutConfirmModal.style.display = 'none';
   });
 
-  document.getElementById('edit-btn').addEventListener('click', async () => {
-    const user = auth.currentUser;
-    const userRef = doc(db, "users", user.uid);
-    const leaderboardRef = doc(db, "Leaderboard", user.uid);
+  logoutNoBtn.addEventListener('click', () => {
+    logoutConfirmModal.style.display = 'none';
+  });
 
-    if (!isEditing) {
-      usernameEl.contentEditable = true;
-      usernameEl.style.backgroundColor = "#fff";
-      usernameEl.style.color = "#000";
-      usernameEl.focus();
-      document.getElementById('edit-btn').textContent = "Save";
-      isEditing = true;
-    } else {
-      const newUsername = usernameEl.textContent.trim();
-      if (newUsername.length < 3) {
-        alert("Username must be at least 3 characters.");
+  // Delete Account Logic
+  deleteAccountBtn.addEventListener('click', () => {
+    if (!auth.currentUser || !auth.currentUser.emailVerified) {
+        showToast("Please verify your email to delete your account.", "error");
         return;
+    }
+    deleteConfirmModal.style.display = 'flex';
+    startDeleteCountdown(5);
+  });
+
+  function startDeleteCountdown(seconds) {
+    let timeLeft = seconds;
+    deleteYesBtn.disabled = true;
+    deleteCountdownEl.textContent = `You can confirm in ${timeLeft} seconds.`;
+
+    countdownInterval = setInterval(() => {
+      timeLeft--;
+      if (timeLeft > 0) {
+        deleteCountdownEl.textContent = `You can confirm in ${timeLeft} seconds.`;
+      } else {
+        clearInterval(countdownInterval);
+        deleteCountdownEl.textContent = "Click 'Confirm Delete' to proceed.";
+        deleteYesBtn.disabled = false;
       }
+    }, 1000);
+  }
 
-      try {
-        // Update Firebase Auth display name
-        await updateProfile(user, { displayName: newUsername });
+  function resetDeleteModal() {
+    clearInterval(countdownInterval);
+    deleteYesBtn.disabled = true;
+    deleteCountdownEl.textContent = '';
+    deleteConfirmModal.style.display = 'none';
+  }
 
-        // Update Firestore user document
-        await updateDoc(userRef, { username: newUsername });
+  deleteYesBtn.addEventListener('click', async () => {
+    const user = auth.currentUser;
+    if (user) {
+        sensitiveActionCallback = async () => { // Define what to do after re-auth
+            try {
+                // 1. Delete user's entry from the Leaderboard collection
+                const leaderboardDocRef = doc(db, "Leaderboard", user.uid);
+                await deleteDoc(leaderboardDocRef);
 
-        // Only update leaderboard if it exists
-        const leaderboardSnap = await getDoc(leaderboardRef);
-        if (leaderboardSnap.exists()) {
-          await updateDoc(leaderboardRef, { name: newUsername });
-        }
+                // 2. Delete user's data from the users collection
+                const userDocRef = doc(db, "users", user.uid);
+                await deleteDoc(userDocRef);
 
-        alert("Account updated!");
-      } catch (error) {
-        console.error("Failed to update account:", error);
-        alert("An error occurred while updating your account.");
-      }
+                // 3. Delete the user's authentication record
+                await deleteUser(user);
 
-      usernameEl.contentEditable = false;
-      usernameEl.style.backgroundColor = "";
-      usernameEl.style.color = "";
-      document.getElementById('edit-btn').textContent = "Edit Account";
-      isEditing = false;
+                showToast("Account and associated data deleted successfully.", "success");
+                setTimeout(() => { // Give time for toast to be seen before redirect
+                    window.location.href = 'home.html';
+                }, 2000);
+            } catch (error) {
+                console.error("Error deleting account or associated data:", error);
+                showToast(getFirebaseErrorMessage(error), "error");
+            } finally {
+                resetDeleteModal();
+                reauthModal.style.display = 'none'; // Ensure reauth modal is hidden
+            }
+        };
+        // Show re-authentication modal
+        reauthModal.style.display = 'flex';
+        reauthPasswordInput.focus();
+        reauthPasswordInput.value = ''; // Clear previous input
+
     }
   });
-</script>
+
+
+  deleteNoBtn.addEventListener('click', () => {
+    resetDeleteModal();
+  });
+
+  // Username Edit/Save Logic
+  editUsernameIcon.addEventListener('click', () => {
+    if (!auth.currentUser || !auth.currentUser.emailVerified) {
+        showToast("Please verify your email to update your username.", "error");
+        return;
+    }
+    usernameEl.contentEditable = true;
+    usernameEl.focus();
+    // Use setTimeout to ensure the cursor is at the end of the text
+    setTimeout(() => {
+        const range = document.createRange();
+        const selection = window.getSelection();
+        range.selectNodeContents(usernameEl);
+        range.collapse(false); // false for end of content
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }, 0);
+
+    editUsernameIcon.style.display = 'none';
+    saveUsernameIcon.style.display = 'flex'; // Use flex for material icon alignment
+  });
+
+  saveUsernameIcon.addEventListener('click', async () => {
+    const user = auth.currentUser;
+    if (!user || !user.emailVerified) { // Double-check just in case
+        showToast("Please verify your email to update your username.", "error");
+        usernameEl.contentEditable = false; // Revert if somehow editable
+        editUsernameIcon.style.display = 'flex';
+        saveUsernameIcon.style.display = 'none';
+        return;
+    }
+
+    const newUsername = usernameEl.textContent.trim();
+    if (newUsername.length < 3) {
+      showToast("Username must be at least 3 characters.", "error");
+      return;
+    }
+
+    // If username hasn't changed, just switch back to non-editing mode
+    if (newUsername === user.displayName || newUsername === (await getDoc(doc(db, "users", user.uid))).data().username) {
+        usernameEl.contentEditable = false;
+        editUsernameIcon.style.display = 'flex';
+        saveUsernameIcon.style.display = 'none';
+        return;
+    }
+
+    sensitiveActionCallback = async () => { // Define what to do after re-auth
+        try {
+            const userRef = doc(db, "users", user.uid);
+            const leaderboardRef = doc(db, "Leaderboard", user.uid);
+
+            // Update Firebase Auth display name
+            await updateProfile(user, { displayName: newUsername });
+
+            // Update Firestore user document
+            await updateDoc(userRef, { username: newUsername });
+
+            // Only update leaderboard if it exists
+            const leaderboardSnap = await getDoc(leaderboardRef);
+            if (leaderboardSnap.exists()) {
+                await updateDoc(leaderboardRef, { name: newUsername });
+            }
+
+            showToast("Username updated!", "success");
+            // Update the avatar initial as well
+            accountAvatarEl.textContent = newUsername[0].toUpperCase();
+
+        } catch (error) {
+            console.error("Failed to update username:", error);
+            showToast(getFirebaseErrorMessage(error), "error"); // USING FRIENDLY MESSAGE
+        } finally {
+            usernameEl.contentEditable = false;
+            editUsernameIcon.style.display = 'flex';
+            saveUsernameIcon.style.display = 'none';
+            reauthModal.style.display = 'none'; // Ensure reauth modal is hidden
+        }
+    };
+    // Show re-authentication modal
+    reauthModal.style.display = 'flex';
+    reauthPasswordInput.focus();
+    reauthPasswordInput.value = ''; // Clear previous input
+  });
+
+  // Change Password Icon Logic (to show/hide the password section)
+  changePasswordIcon.addEventListener('click', () => {
+    if (!auth.currentUser || !auth.currentUser.emailVerified) {
+        showToast("Please verify your email to change your password.", "error");
+        return;
+    }
+    // Toggle visibility of the password section
+    if (passwordSection.style.display === 'none' || passwordSection.style.display === '') {
+      passwordSection.style.display = 'block'; // Or 'flex' if you change its internal display
+      currentPasswordInput.focus();
+    } else {
+      passwordSection.style.display = 'none';
+      // Clear password fields when hiding
+      currentPasswordInput.value = '';
+      newPasswordInput.value = '';
+      confirmNewPasswordInput.value = '';
+    }
+  });
+
+
+  // Change Password Button Logic (within the password section)
+  changePasswordBtn.addEventListener('click', async () => {
+    const user = auth.currentUser;
+    if (!user || !user.emailVerified) { // Double-check just in case
+      showToast("Please verify your email to update your password.", "error");
+      return;
+    }
+
+    const currentPassword = currentPasswordInput.value;
+    const newPassword = newPasswordInput.value;
+    const confirmNewPassword = confirmNewPasswordInput.value;
+
+    if (!currentPassword || !newPassword || !confirmNewPassword) {
+      showToast("Please fill in all password fields.", "error");
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      showToast("New password must be at least 6 characters long.", "error");
+      return;
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      showToast("New password and confirm password do not match.", "error");
+      return;
+    }
+
+    sensitiveActionCallback = async () => { // Define what to do after re-auth
+        try {
+            await updatePassword(user, newPassword);
+            showToast("Password updated successfully!", "success");
+            // Clear fields after success and hide section
+            currentPasswordInput.value = '';
+            newPasswordInput.value = '';
+            confirmNewPasswordInput.value = '';
+            passwordSection.style.display = 'none'; // Hide the section
+        } catch (error) {
+            console.error("Error updating password:", error);
+            showToast(getFirebaseErrorMessage(error), "error"); // USING FRIENDLY MESSAGE
+        } finally {
+            reauthModal.style.display = 'none'; // Hide reauth modal
+        }
+    };
+    // Show re-authentication modal
+    reauthModal.style.display = 'flex';
+    reauthPasswordInput.focus();
+    reauthPasswordInput.value = ''; // Clear previous input
+  });
+
+  // Re-authentication Modal Logic
+  reauthConfirmBtn.addEventListener('click', async () => {
+    const user = auth.currentUser;
+    const email = reauthEmailInput.value;
+    const password = reauthPasswordInput.value;
+
+    if (!email || !password) {
+      showToast("Please enter both email and password.", "error");
+      return;
+    }
+
+    try {
+      const credential = EmailAuthProvider.credential(email, password);
+      await reauthenticateWithCredential(user, credential);
+      reauthModal.style.display = 'none'; // Hide re-auth modal on success
+      reauthPasswordInput.value = ''; // Clear password
+      if (sensitiveActionCallback) {
+        sensitiveActionCallback(); // Execute the stored sensitive action
+        sensitiveActionCallback = null; // Clear the callback
+      }
+    } catch (error) {
+      console.error("Re-authentication failed:", error);
+      showToast(getFirebaseErrorMessage(error), "error"); // USING FRIENDLY MESSAGE
+    }
+  });
+
+  reauthCancelBtn.addEventListener('click', () => {
+    reauthModal.style.display = 'none';
+    reauthPasswordInput.value = ''; // Clear password
+    sensitiveActionCallback = null; // Clear the callback if canceled
+    // Reset any pending actions if needed
+    resetDeleteModal(); // If delete was pending
+    // Reset username editing state
+    usernameEl.contentEditable = false;
+    editUsernameIcon.style.display = 'flex';
+    saveUsernameIcon.style.display = 'none';
+    // Hide password section and clear fields if it was opened
+    passwordSection.style.display = 'none';
+    currentPasswordInput.value = '';
+    newPasswordInput.value = '';
+    confirmNewPasswordInput.value = '';
+  });
+
+  // NEW: Resend Verification Email Button Listener
+  resendVerificationEmailBtn.addEventListener('click', async () => {
+    const user = auth.currentUser;
+    if (user) {
+      try {
+        await sendEmailVerification(user);
+        showToast("Verification email sent! Check your inbox (and spam).", "success");
+      } catch (error) {
+        console.error("Error resending verification email:", error);
+        showToast(getFirebaseErrorMessage(error), "error");
+      }
+    }
+  });
+
+  // NEW: Reload Email Status Button Listener
+  reloadEmailStatusBtn.addEventListener('click', async () => {
+    const user = auth.currentUser;
+    if (user) {
+      try {
+        await user.reload(); // Reload user's profile to get latest status
+        updateUIForEmailVerification(user); // Update UI
+        if (user.emailVerified) {
+          showToast("Email successfully verified!", "success");
+        } else {
+          showToast("Email still not verified. Please check your email or try again.", "error");
+        }
+      } catch (error) {
+        console.error("Error reloading user status:", error);
+        showToast(getFirebaseErrorMessage(error), "error");
+      }
+    }
+  });
+
+
+  // Close modals if user clicks outside of them
+  window.addEventListener('click', (event) => {
+    if (event.target === logoutConfirmModal) {
+      logoutConfirmModal.style.display = 'none';
+    }
+    if (event.target === deleteConfirmModal) {
+      resetDeleteModal();
+    }
+    if (event.target === reauthModal) { // Close re-auth modal too
+        reauthModal.style.display = 'none';
+        reauthPasswordInput.value = ''; // Clear password
+        sensitiveActionCallback = null; // Clear the callback if canceled
+        // Reset any pending actions if needed
+        resetDeleteModal(); // If delete was pending
+        // Reset username editing state
+        usernameEl.contentEditable = false;
+        editUsernameIcon.style.display = 'flex';
+        saveUsernameIcon.style.display = 'none';
+        // Hide password section and clear fields if it was opened
+        passwordSection.style.display = 'none';
+        currentPasswordInput.value = '';
+        newPasswordInput.value = '';
+        confirmNewPasswordInput.value = '';
+    }
+  });
+  </script>
 </body>
 </html>
+
+
+
+
+

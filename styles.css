@@ -1319,123 +1319,6 @@ textarea {
 }
 
 
-/* Auth Page Styling */
-.auth-body {
-  background: var(--dark-gray);
-  font-family: var(--body-font);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-}
-
-.auth-container {
-  width: 100%;
-  max-width: 400px;
-  padding: 2rem;
-}
-
-.auth-card {
-  background-color: #2E0B40;
-  border-radius: 2xl;
-  padding: 2rem;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
-  color: white;
-  text-align: center;
-}
-
-.auth-card h2 {
-  font-family: var(--heading-font);
-  margin-bottom: 1.5rem;
-}
-
-.auth-card input {
-  width: 100%;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  border-radius: 0.5rem;
-  border: none;
-  background: #191919;
-  color: white;
-}
-
-.auth-card input::placeholder {
-  color: #aaa;
-}
-
-.auth-card button {
-  width: 100%;
-  padding: 0.75rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 0.5rem;
-  background-color: #8e44ad;
-  color: white;
-  transition: background 0.3s;
-}
-
-.auth-card button:hover {
-  background-color: #732d91;
-}
-
-.auth-switch {
-  margin-top: 1rem;
-}
-
-.auth-switch a {
-  color: #8e44ad;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.auth-message {
-  margin: 8px 0;
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 14px;
-  display: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.auth-message.error {
-  background-color: #f8d2d2;
-  color: #a60000;
-  border: 1px solid #a60000;
-}
-
-.auth-message.success {
-  background-color: #d2f6d2;
-  color: #006400;
-  border: 1px solid #006400;
-}
-
-.spinner {
-  display: none;
-  text-align: center;
-  margin-top: 0.5rem;
-  color: #aaa;
-  font-size: 0.9rem;
-}
-
-
-
-.checkbox-container {
-  margin-top: 10px;
-  margin-bottom: 20px;
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 0.95rem;
-  color: white;
-  display: flex;
-  align-items: center;
-}
-
-
-.auth-card button:disabled {
-  background-color: #5e2b76;
-  cursor: not-allowed;
-}
-
 .profile-wrapper {
   display: flex;  /* make this a flex container too, for alignment of image and menu */
   align-items: center;
@@ -1497,95 +1380,135 @@ textarea {
   background-color: #45125c;
 }
 
-/* Shared Modal Styles (if not already in styles.css) */
+/* --- START: Modal Styles - REVISED FOR PRECISE CENTERING (Attempt 5 - Flex + Margin Auto) --- */
+
+/* Basic Modal Structure (Ensures it covers the whole screen) */
 .modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 9999; /* Sit on top, ensure it's above other content */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgba(0, 0, 0, 0.7); /* Black w/ opacity */
-  justify-content: center;
-  align-items: center;
+    position: fixed; /* Stay in place */
+    z-index: 9999; /* Sit on top, ensure it's above other content */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow-y: auto; /* Enable vertical scroll if needed */
+    background-color: rgba(0, 0, 0, 0.6); /* Black w/ opacity */
+    
+    /* These are CRUCIAL for centering the .modal-content within the modal overlay */
+    display: flex; /* Make it a flex container */
+    justify-content: center; /* Center horizontally (main axis) */
+    align-items: center;   /* Center vertically (cross axis) */
+    
+    /* Removed padding from here. Internal padding handled by .modal-content */
+    box-sizing: border-box; /* Include padding in element's total width and height */
+    
+    /* Hidden by default; JavaScript will set 'display: flex' to make it visible */
+    display: none; /* Keep this as initial hidden state, JS will toggle to 'flex' */
 }
 
+/* Modal Content Box */
 .modal-content {
-  background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
-  border-radius: 20px; /* Using var(--rounded) if defined globally */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Using var(--shadow) */
-  width: 100%;
-  max-width: 600px;
-  text-align: center;
-  position: relative;
-  animation: fadeIn 0.3s ease-out;
+    background-color: #fefefe;
+    padding: 30px; /* Internal padding for the content itself */
+    border-radius: 10px; /* Consistent with your other elements' border-radius */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+    position: relative; /* Needed for absolute positioning of close button if you add one */
+    
+    /* Responsive width, but with a maximum */
+    width: 90%; 
+    max-width: 500px; 
+    
+    /* Crucial for centering within flex: automatically distribute horizontal space */
+    margin: auto; /* This can sometimes fix subtle off-centering issues with flex */
+
+    text-align: center; /* Center text inside the modal */
+    color: #333; /* Ensure text color is visible on white background */
+    
+    /* Use flex for internal stacking of content elements */
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Spacing between elements within the modal */
+
+    /* Animation for smooth appearance */
+    animation: fadeIn 0.3s ease-out;
 }
 
-/* Specific Styles for Small Confirmation Modal */
-.small-modal {
-  max-width: 400px; /* Make this modal a bit smaller */
-  padding: 30px;
+/* Specific Styles for Small Confirmation Modal (like logout confirmation) */
+.modal-content.small-modal {
+    max-width: 350px; /* Make this modal a bit narrower */
+    padding: 25px; /* Slightly less padding for smaller modal */
+    gap: 15px; /* Slightly less gap */
 }
 
-.small-modal h2 {
-  color: #333;
-  margin-bottom: 15px;
+.modal-content h2 {
+    font-family: var(--heading-font); /* Consistent with your headings */
+    color: #333; /* Darker text */
+    margin-bottom: 5px; /* Less margin */
 }
 
-.small-modal p {
-  margin-bottom: 25px;
-  line-height: 1.5;
-  color: #555;
+.modal-content p {
+    font-family: var(--body-font); /* Consistent with your body text */
+    color: #555; /* Slightly lighter text */
+    margin-bottom: 15px; /* Space before buttons */
+    line-height: 1.5;
 }
 
+/* Modal action buttons container */
 .modal-actions {
-  display: flex;
-  justify-content: space-around;
-  gap: 15px; /* Space between buttons */
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically on small screens */
+    gap: 10px; /* Space between buttons */
+    width: 100%; /* Make action container full width */
 }
 
-/* Ensure .btn styles are accessible or defined */
-.btn {
-  display: block; /* Or inline-block if needed */
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0; /* Adjust as needed with gap */
-  border: none;
-  border-radius: 20px; /* Using var(--rounded) */
-  font-size: 16px;
-  cursor: pointer;
-  background-color: #e0e0e0; /* var(--gray) */
-  transition: background 0.3s ease;
-}
-
+/* Adjust button styles within the modal (using your global .btn styles as base) */
 .modal-actions .btn {
-  flex-grow: 1; /* Make buttons fill available space */
-  margin: 0; /* Override default btn margin */
+    width: 100%; /* Buttons take full width of their container */
+    padding: 12px 20px; /* Comfortable button padding */
+    border-radius: 8px; /* Slightly less rounded than main site buttons if you want */
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin: 0; /* Override any default .btn margin */
+    color: white; /* Ensure text color is white for these specific buttons */
 }
 
-/* Specific button colors */
+/* Specific button colors for confirmation */
 .red-btn {
-  background-color: #dc3545; /* Red for destructive actions */
+    background-color: #dc3545; /* Red for "Yes, Log Out" */
+    border: none;
 }
 
 .red-btn:hover {
-  background-color: #c82333;
+    background-color: #c82333;
+    transform: translateY(-1px);
 }
 
 .green-btn {
-  background-color: #28a745; /* Green for positive/continue actions */
+    background-color: #28a745; /* Green for positive/continue actions */
+    border: none;
 }
 
 .green-btn:hover {
   background-color: #218838;
 }
 
-/* Keyframe for fade-in animation (if not already defined) */
+/* Media query for larger screens to make buttons horizontal */
+@media (min-width: 500px) {
+    .modal-actions {
+        flex-direction: row; /* Buttons side-by-side on larger screens */
+        justify-content: space-around; /* Distribute space */
+    }
+    .modal-actions .btn {
+        flex-grow: 1; /* Allow buttons to grow to fill space */
+        max-width: 48%; /* Adjust to ensure two buttons fit with gap */
+    }
+}
+
+/* Keyframe for fade-in animation (assuming this is consistent across your modals) */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* --- END: Modal Styles --- */

@@ -8,7 +8,153 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+    <link rel="icon" href="/images/favicon.png" type="image/png">
     <link rel="stylesheet" href="styles.css" />
+
+    <style>
+    html, body {
+        height: 100%;       /* Ensure html and body take full height */
+        margin: 0;          /* Remove any default browser margins */
+        padding: 0;         /* Remove any default browser padding */
+    }
+
+    body {
+        /* Keep existing body styles here if they are not height-related */
+        min-height: 100vh; /* Ensure body takes at least full viewport height */
+        display: flex;     /* Make body a flex container to allow children to control layout */
+        flex-direction: column; /* Stack children vertically */
+    }
+
+    /* Ensure your main content area can flex-grow if you have one */
+    /* Example if you have a <main> tag or a specific wrapper for your page content: */
+    /* main { flex-grow: 1; } */
+
+
+    /* Basic Modal Structure (Ensures it covers the whole screen) */
+    .modal {
+      display: none; /* Hidden by default; JS sets display:flex */
+      position: fixed; /* Stay in place */
+      z-index: 9999; /* Sit on top, ensure it's above other content */
+      left: 0;
+      top: 0;
+      width: 100vw;   /* Explicitly use viewport width */
+      height: 100vh;  /* Explicitly use viewport height */
+      background-color: rgba(0, 0, 0, 0.7); /* Black w/ opacity */
+
+      /* CRUCIAL FLEX PROPERTIES FOR CENTERING CONTENT */
+      justify-content: center; /* Center horizontally */
+      align-items: center;   /* Center vertically */
+
+      box-sizing: border-box; /* Include padding in element's total width and height */
+    }
+
+    /* Modal Content Box */
+    .modal-content {
+      background-color: #fefefe;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+      /* CRUCIAL FOR CENTERING WITHIN FLEX CONTAINER */
+      margin: auto;
+
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+      position: relative;
+      animation: fadeIn 0.3s ease-out;
+      color: #333;
+
+      /* Internal flex for stacking content elements */
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      max-height: 90vh; /* Add a max-height to the content */
+      overflow-y: auto; /* Allow content to scroll if it exceeds max-height */
+    }
+
+    /* Specific Styles for Small Confirmation Modal (like logout confirmation) */
+    .modal-content.small-modal {
+      max-width: 350px;
+      padding: 30px;
+      gap: 15px;
+    }
+
+    .modal-content h2 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .modal-content p {
+      color: #555;
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+
+    /* Modal action buttons container */
+    .modal-actions {
+      display: flex;
+      justify-content: space-around;
+      gap: 15px;
+      width: 100%;
+    }
+
+    /* Adjust button styles within the modal */
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .modal-actions .btn {
+      flex-grow: 1;
+      margin: 0;
+    }
+
+    /* Specific button colors for confirmation */
+    .red-btn {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .red-btn:hover:not(:disabled) {
+      background-color: #c82333;
+    }
+
+    .green-btn {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .green-btn:hover {
+      background-color: #218838;
+    }
+
+    /* Media query for larger screens */
+    @media (min-width: 500px) {
+        .modal-actions {
+            flex-direction: row;
+            justify-content: space-around;
+        }
+        .modal-actions .btn {
+            flex-grow: 1;
+            max-width: 48%;
+        }
+    }
+
+    /* Keyframe for fade-in animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
 <!-- Navbar -->
@@ -60,459 +206,147 @@
           <button class="tab-button" data-tab="essentials">Essentials</button>
           <button class="tab-button" data-tab="advanced">Advanced</button>
         </div>
-  
-        <!-- Basics Tab -->
+
+        <!-- Basics Tab-->
         <div class="tab-content active" id="basics">
-            <div class="icon-grid">
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">home</span>
-                <p>Home</p>
+              <div class="icon-grid">
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">home</span><p>Home</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">menu</span><p>Menu</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">search</span><p>Search</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">add</span><p>Add</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">check</span><p>Check</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">close</span><p>Close</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">cancel</span><p>Cancel</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">refresh</span><p>Refresh</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">logout</span><p>Logout</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">sort</span><p>Sort</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">redo</span><p>Redo</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">fullscreen</span><p>Fullscreen</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">settings</span><p>Settings</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">share</span><p>Share</p></div>
+
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">info</span><p>Info</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">help</span><p>Help</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">favorite</span><p>Favorite</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">bookmark</span><p>Bookmark</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">visibility</span><p>Visibility</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">lock</span><p>Lock</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">check_circle</span><p>Check circle</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">bolt</span><p>Bolt</p></div>
+
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">phone</span><p>Phone</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">email</span><p>Email</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">wifi</span><p>Wifi</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">bluetooth</span><p>Bluetooth</p></div>
+
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">edit</span><p>Edit</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">delete</span><p>Delete</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">upload</span><p>Upload</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">download</span><p>Download</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">print</span><p>Print</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">camera</span><p>Camera</p></div>
+
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">map</span><p>Map</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">alarm</span><p>Alarm</p></div>
+
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">thumb_up</span><p>Thumbs up</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">zoom_in</span><p>Zoom In</p></div>
               </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">search</span>
-                <p>Search</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">menu</span>
-                <p>Menu</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">close</span>
-                <p>Close</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">favorite</span>
-                <p>Favorite</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">info</span>
-                <p>Info</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">help</span>
-                <p>Help</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">visibility</span>
-                <p>Visibility</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">lock</span>
-                <p>Lock</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">phone</span>
-                <p>Phone</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">email</span>
-                <p>Email</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">refresh</span>
-                <p>Refresh</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">delete</span>
-                <p>Delete</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">edit</span>
-                <p>Edit</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">alarm</span>
-                <p>Alarm</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">map</span>
-                <p>Map</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">print</span>
-                <p>Print</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">upload</span>
-                <p>Upload</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">download</span>
-                <p>Download</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">wifi</span>
-                <p>Wifi</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">bluetooth</span>
-                <p>Bluetooth</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">share</span>
-                <p>Share</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">sort</span>
-                <p>Sort</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">settings</span>
-                <p>Settings</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">logout</span>
-                <p>Logout</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">add</span>
-                <p>Add</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">check</span>
-                <p>Check</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">fullscreen</span>
-                <p>Fullscreen</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">bookmark</span>
-                <p>Bookmark</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">camera</span>
-                <p>Camera</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">cancel</span>
-                <p>Cancel</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">bolt</span>
-                <p>Bolt</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">redo</span>
-                <p>Redo</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">thumb_up</span>
-                <p>Thumbs up</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">check_circle</span>
-                <p>Check circle</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">zoom_in</span>
-                <p>Zoom In</p>
-              </div>
-            </div>
-          </div>              
+          </div>
   
           <!-- Essentials Tab -->
           <div class="tab-content" id="essentials">
             <div class="icon-grid">
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">security</span>
-                <p>Security</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">cloud</span>
-                <p>Cloud</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">sync</span>
-                <p>Sync</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">update</span>
-                <p>Update</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">dashboard</span>
-                <p>Dashboard</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">apps</span>
-                <p>Apps</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">notifications</span>
-                <p>Notifications</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">send</span>
-                <p>Send</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">receipt</span>
-                <p>Receipt</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">event</span>
-                <p>Event</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">link</span>
-                <p>Link</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">folder</span>
-                <p>Folder</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">group</span>
-                <p>Group</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">person</span>
-                <p>Person</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">chat</span>
-                <p>Chat</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">forum</span>
-                <p>Forum</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">assessment</span>
-                <p>Assessment</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">analytics</span>
-                <p>Analytics</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">build</span>
-                <p>Build</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">language</span>
-                <p>Language</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">feedback</span>
-                <p>Feedback</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                  <span class="material-symbols-outlined">wallet</span>
-                  <p>Wallet</p>
-              </div>
-               <div class="icon-card" data-aos="zoom-in">
-                  <span class="material-symbols-outlined">tune</span>
-                  <p>Tune</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">tab</span>
-                <p>Tab</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">stacks</span>
-                <p>Stacks</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">cycle</span>
-                <p>Cycle</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">emergency</span>
-                <p>Emergency</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">visibility_off</span>
-                <p>Visibility off</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">location_on</span>
-                <p>Location on</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">credit_card</span>
-                <p>Credit card</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">bar_chart</span>
-                <p>Bar chart</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">cloud_upload</span>
-                <p>Cloud upload</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                  <span class="material-symbols-outlined">account_box</span>
-                  <p>Account box</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                  <span class="material-symbols-outlined">pie_chart</span>
-                  <p>Pie chart</p>
-              </div>
-              
-              <div class="icon-card" data-aos="zoom-in">
-                  <span class="material-symbols-outlined">drag_pan</span>
-                  <p>Drag pan</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                  <span class="material-symbols-outlined">new_window</span>
-                  <p>New window</p>
-              </div>
-          
-              </div>
-          </div>
-                    
-          
-          <div class="tab-content" id="advanced">
-            <div class="icon-grid">
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">psychology</span>
-                <p>Psychology</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">schema</span>
-                <p>Schema</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">dns</span>
-                <p>Dns</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">memory</span>
-                <p>Memory</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">storage</span>
-                <p>Storage</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">public</span>
-                <p>Public</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">tornado</span>
-                <p>Tornado</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">cast</span>
-                <p>Cast</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">api</span>
-                <p>API</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">hub</span>
-                <p>Hub</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">terminal</span>
-                <p>Terminal</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">pageless</span>
-                <p>Pageless</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">power</span>
-                <p>Power</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">storm</span>
-                <p>Storm</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">satellite</span>
-                <p>Satellite</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">privacy</span>
-                <p>Privacy</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">variables</span>
-                <p>Variables</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">wifi_proxy</span>
-                <p>Wifi proxy</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">inbox_text</span>
-                <p>Inbox text</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">dirty_lens</span>
-                <p>Dirty lens</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">menu_book</span>
-                <p>Menu book</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">build_circle</span>
-                <p>Build circle</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">code_blocks</span>
-                <p>Code blocks</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">data_object</span>
-                <p>Data object</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">account_tree</span>
-                <p>Account tree</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">cloud_queue</span>
-                <p>Cloud queue</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">vpn_key</span>
-                <p>Vpn key</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">cell_tower</span>
-                <p>Cell tower</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">wifi_channel</span>
-                <p>Wifi channel</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">adb</span>
-                <p>ADB</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">pin_drop</span>
-                <p>Pin drop</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">spatial_audio</span>
-                <p>Spatial audio</p>
-              </div>
-             
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">settings_cell</span>
-                <p>Settings cell</p>
-              </div>
-              
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">swap_vert</span>
-                <p>Swap vert</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">swap_horiz</span>
-                <p>Swap horiz</p>
-              </div>
-              <div class="icon-card" data-aos="zoom-in">
-                <span class="material-symbols-outlined">open_jam</span>
-                <p>Open jam</p>
-              </div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">security</span><p>Security</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">update</span><p>Update</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">sync</span><p>Sync</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">build</span><p>Build</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">tune</span><p>Tune</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">emergency</span><p>Emergency</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">visibility_off</span><p>Visibility off</p></div>
+
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">cloud</span><p>Cloud</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">cloud_upload</span><p>Cloud upload</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">folder</span><p>Folder</p></div>
+
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">dashboard</span><p>Dashboard</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">apps</span><p>Apps</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">tab</span><p>Tab</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">stacks</span><p>Stacks</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">new_window</span><p>New window</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">drag_pan</span><p>Drag pan</p></div>
+
+
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">notifications</span><p>Notifications</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">send</span><p>Send</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">group</span><p>Group</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">person</span><p>Person</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">account_box</span><p>Account box</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">chat</span><p>Chat</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">forum</span><p>Forum</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">feedback</span><p>Feedback</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">language</span><p>Language</p></div>
+
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">receipt</span><p>Receipt</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">wallet</span><p>Wallet</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">credit_card</span><p>Credit card</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">assessment</span><p>Assessment</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">analytics</span><p>Analytics</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">bar_chart</span><p>Bar chart</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">pie_chart</span><p>Pie chart</p></div>
+
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">event</span><p>Event</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">link</span><p>Link</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">location_on</span><p>Location on</p></div>
+                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">cycle</span><p>Cycle</p></div>
+
             </div>
+          </div>
+                  
+          <!-- Advanced Tab -->
+          <div class="tab-content" id="advanced">
+              <div class="icon-grid">
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">terminal</span><p>Terminal</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">code_blocks</span><p>Code blocks</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">data_object</span><p>Data object</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">schema</span><p>Schema</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">variables</span><p>Variables</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">api</span><p>API</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">account_tree</span><p>Account tree</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">adb</span><p>ADB</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">build_circle</span><p>Build circle</p></div>
+
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">public</span><p>Public</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">dns</span><p>Dns</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">hub</span><p>Hub</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">cast</span><p>Cast</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">satellite</span><p>Satellite</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">wifi_proxy</span><p>Wifi proxy</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">cell_tower</span><p>Cell tower</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">wifi_channel</span><p>Wifi channel</p></div>
+
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">power</span><p>Power</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">memory</span><p>Memory</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">storage</span><p>Storage</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">settings_cell</span><p>Settings cell</p></div>
+
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">privacy</span><p>Privacy</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">vpn_key</span><p>Vpn key</p></div>
+
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">psychology</span><p>Psychology</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">tornado</span><p>Tornado</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">storm</span><p>Storm</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">pageless</span><p>Pageless</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">dirty_lens</span><p>Dirty lens</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">inbox_text</span><p>Inbox text</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">menu_book</span><p>Menu book</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">cloud_queue</span><p>Cloud queue</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">pin_drop</span><p>Pin drop</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">spatial_audio</span><p>Spatial audio</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">swap_vert</span><p>Swap vert</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">swap_horiz</span><p>Swap horiz</p></div>
+                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">open_jam</span><p>Open jam</p></div>
+              </div>
           </div>
         </div>          
       </section>
@@ -595,6 +429,18 @@
       </ul>
     </div>
   </footer>
+
+  <div id="logout-confirm-modal" class="modal">
+  <div class="modal-content small-modal">
+    <h2>Log Out?</h2>
+    <p>Are you sure you want to log out?</p>
+    <div class="modal-actions">
+      <button id="logout-yes-btn" class="btn red-btn">Yes, Log Out</button>
+      <button id="logout-no-btn" class="btn green-btn">No, Stay Logged In</button>
+    </div>
+  </div>
+</div>
+
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="script.js"></script>
   <!-- Firebase Auth Display Logic -->
@@ -616,61 +462,82 @@
   const auth = getAuth(app);
 
   const authSection = document.getElementById("auth-section");
+  const logoutConfirmModal = document.getElementById('logout-confirm-modal');
+  const logoutYesBtn = document.getElementById('logout-yes-btn');
+  const logoutNoBtn = document.getElementById('logout-no-btn');
 
-  // Define functions globally first
-window.toggleProfileMenu = function () {
-  const menu = document.getElementById('profileMenu');
-  if (!menu) return;
+  // Define functions globally first (including the single, correct logoutUser)
+  window.toggleProfileMenu = function () {
+    const menu = document.getElementById('profileMenu');
+    if (!menu) return;
 
-  if (!window.isProfileMenuOpen) {
-    menu.classList.add('show');
-    window.isProfileMenuOpen = true;
-    document.addEventListener('click', handleOutsideClick);
-  } else {
-    menu.classList.remove('show');
-    window.isProfileMenuOpen = false;
-    document.removeEventListener('click', handleOutsideClick);
+    if (!window.isProfileMenuOpen) {
+      menu.classList.add('show');
+      window.isProfileMenuOpen = true;
+      document.addEventListener('click', handleOutsideClick);
+    } else {
+      menu.classList.remove('show');
+      window.isProfileMenuOpen = false;
+      document.removeEventListener('click', handleOutsideClick);
+    }
+  };
+
+  function handleOutsideClick(e) {
+    const menu = document.getElementById('profileMenu');
+    const profileIcon = document.querySelector('.profile-icon');
+    if (!menu.contains(e.target) && !profileIcon.contains(e.target)) {
+      menu.classList.remove('show');
+      window.isProfileMenuOpen = false;
+      document.removeEventListener('click', handleOutsideClick);
+    }
   }
-};
 
-function handleOutsideClick(e) {
-  const menu = document.getElementById('profileMenu');
-  const profileIcon = document.querySelector('.profile-icon');
-  if (!menu.contains(e.target) && !profileIcon.contains(e.target)) {
-    menu.classList.remove('show');
-    window.isProfileMenuOpen = false;
-    document.removeEventListener('click', handleOutsideClick);
-  }
-}
+  // THIS IS THE CORRECT, MERGED logoutUser FUNCTION:
+  window.logoutUser = function () {
+    logoutConfirmModal.style.display = 'flex'; // Show the logout confirmation modal
+  };
 
-window.logoutUser = function () {
-  signOut(auth).then(() => {
-    window.location.reload();
+  // Event Listeners for the modal buttons (these are correct as they are)
+  logoutYesBtn.addEventListener('click', () => {
+    signOut(auth).then(() => {
+      window.location.reload(); // Proceed with logout and refresh
+    }).catch((error) => {
+      console.error("Error signing out:", error);
+      alert("Failed to log out. Please try again.");
+    });
+    logoutConfirmModal.style.display = 'none'; // Hide modal after action
   });
-};
 
-// Then run this AFTER the functions are declared:
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // Get the first initial of the display name, or default to '?'
-    // Ensure user.displayName exists before trying to access its first character
-    const userInitial = (user.displayName ? user.displayName[0] : '?').toUpperCase();
+  logoutNoBtn.addEventListener('click', () => {
+    logoutConfirmModal.style.display = 'none'; // Hide modal, user cancelled
+  });
 
-    authSection.innerHTML = `
-      <div class="profile-wrapper">
-        <div class="profile-icon" onclick="toggleProfileMenu()">
-          ${userInitial}
+  // Optional: Allow clicking outside the modal to cancel logout
+  window.addEventListener('click', (event) => {
+    if (event.target === logoutConfirmModal) {
+      logoutConfirmModal.style.display = 'none';
+    }
+  });
+
+  // Then run this AFTER the functions are declared:
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const userInitial = (user.displayName ? user.displayName[0] : '?').toUpperCase();
+      authSection.innerHTML = `
+        <div class="profile-wrapper">
+          <div class="profile-icon" onclick="toggleProfileMenu()">
+            ${userInitial}
+          </div>
+          <div id="profileMenu" class="profile-menu">
+            <button onclick="window.location.href='account.html'">Manage Account</button>
+            <button onclick="logoutUser()">Logout</button>
+          </div>
         </div>
-        <div id="profileMenu" class="profile-menu">
-          <button onclick="window.location.href='account.html'">Manage Account</button>
-          <button onclick="logoutUser()">Logout</button>
-        </div>
-      </div>
-    `;
-  } else {
-    authSection.innerHTML = `<button class="nav-btn" id="loginBtn" onclick="window.location.href='auth.html'">Login</button>`;
-  }
-});
+      `;
+    } else {
+      authSection.innerHTML = `<button class="nav-btn" id="loginBtn" onclick="window.location.href='auth.html'">Login</button>`;
+    }
+  });
 
 </script>
 </body>

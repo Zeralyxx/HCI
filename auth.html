@@ -5,18 +5,316 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MindBlast | Login & Signup</title>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="icon" href="/images/favicon.png" type="image/png">
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Your existing CSS for auth.html is copied here for completeness */
+    /* Auth Page Styling */
+    .auth-body {
+      background: var(--dark-gray); /* Consider changing this to a more dynamic background */
+      font-family: var(--body-font);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden; /* NEW: Prevent scrollbars due to background animation */
+      position: relative; /* NEW: For positioning background elements */
+      z-index: 1; /* NEW: Ensure content is above background */
+    }
+
+    /* NEW: Animated background - you can play with colors and shapes */
+    .auth-body::before,
+    .auth-body::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, #1A0526, #2E0B40, #1A0526); /* Darker purple gradient */
+        animation: gradient-shift 15s ease infinite alternate; /* Slower, smoother animation */
+        opacity: 0.8; /* Subtle opacity */
+        z-index: -1; /* Behind the content */
+    }
+
+    .auth-body::after {
+        background: linear-gradient(-45deg, #2E0B40, #1A0526, #2E0B40); /* Different gradient direction */
+        animation-delay: 7.5s; /* Stagger the animation */
+        filter: blur(100px); /* Add a strong blur for a nebulae effect */
+        opacity: 0.5;
+    }
+
+    @keyframes gradient-shift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .auth-container {
+      width: 100%;
+      max-width: 400px;
+      padding: 2rem;
+      z-index: 2; /* Ensure container is above background */
+    }
+
+    .auth-card {
+      background-color: rgba(46, 11, 64, 0.9); /* Slightly more transparent background */
+      border-radius: 20px; /* Changed from '2xl' assuming it means a pixel value */
+      padding: 0; /* Remove padding from card, apply to containers */
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.1); /* Enhanced shadow */
+      color: white;
+      text-align: center;
+
+      /* NEW: Initial state for card animation */
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInSlideUp 0.8s ease-out forwards; /* Card entry animation */
+      animation-delay: 0.5s; /* Delay start slightly after background */
+      overflow: hidden; /* Hide overflowing content during transition */
+      position: relative; /* Needed for absolute positioning of forms */
+    }
+
+    @keyframes fadeInSlideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+
+    .auth-card h2 {
+      font-family: 'Fredoka', sans-serif; /* Using static font-family for clarity */
+      margin-bottom: 1.5rem;
+      color: #FFF; /* Ensure heading is bright */
+      text-shadow: 0 0 5px rgba(255,255,255,0.2);
+    }
+
+    .auth-card input {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
+      background: rgba(25, 25, 25, 0.7); /* Slightly transparent background */
+      color: white;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease; /* NEW: Transition for focus */
+      box-sizing: border-box; /* Include padding in width */
+    }
+
+    .auth-card input::placeholder {
+      color: #aaa;
+    }
+
+    /* NEW: Input focus effect */
+    .auth-card input:focus {
+        outline: none; /* Remove default outline */
+        border-color: #8e44ad; /* Highlight border */
+        box-shadow: 0 0 10px rgba(142, 68, 173, 0.6); /* Glow effect */
+    }
+
+
+    .auth-card button {
+      width: 100%;
+      padding: 0.75rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 0.5rem;
+      background-color: #7E3FF2; /* Your primary button color */
+      color: white;
+      transition: background-color 0.3s ease, transform 0.2s ease; /* NEW: Add transform for subtle click effect */
+      cursor: pointer;
+    }
+
+    .auth-card button:hover {
+      background-color: #9a5dff; /* Lighter shade on hover */
+      transform: translateY(-2px); /* Slight lift on hover */
+    }
+
+    .auth-card button:active {
+        transform: translateY(0); /* Return to original position on click */
+    }
+
+    .auth-switch {
+      margin-top: 1rem;
+      color: rgba(255, 255, 255, 0.8); /* Softer color */
+    }
+
+    .auth-switch a {
+      color: #7E3FF2; /* Match primary button color */
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    .auth-switch a:hover {
+      color: #9a5dff; /* Lighter shade on hover */
+      text-decoration: underline;
+    }
+
+    .auth-message {
+      margin: 8px 0;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .auth-message.error {
+      background-color: #f8d2d2;
+      color: #a60000;
+      border: 1px solid #a60000;
+    }
+
+    .auth-message.success {
+      background-color: #d2f6d2;
+      color: #006400;
+      border: 1px solid #006400;
+    }
+
+    .spinner {
+      display: none;
+      text-align: center;
+      margin-top: 0.5rem;
+      color: #aaa;
+      font-size: 0.9rem;
+      animation: pulse 1.5s infinite ease-in-out; /* NEW: Pulse animation for spinner */
+    }
+
+    @keyframes pulse {
+        0% { opacity: 0.7; }
+        50% { opacity: 1; }
+        100% { opacity: 0.7; }
+    }
+
+    .checkbox-container {
+      margin-top: 10px;
+      margin-bottom: 20px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.95rem;
+      color: white;
+      display: flex;
+      align-items: center;
+    }
+
+    .auth-card button:disabled {
+      background-color: #5e2b76;
+      cursor: not-allowed;
+      transform: none; /* Prevent hover/active effects when disabled */
+    }
+
+    /* NEW: Form Transition Styles */
+    #login-form-container,
+    #signup-form-container {
+        position: absolute; /* Position absolutely to allow smooth transitions */
+        width: 100%;
+        top: 0;
+        left: 0;
+        transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth transition */
+        padding: 2rem; /* Apply padding here to fill the card */
+        box-sizing: border-box; /* Include padding in width */
+    }
+
+    #login-form-container.hidden,
+    #signup-form-container.hidden {
+        opacity: 0;
+        transform: translateX(-100%); /* Slide out to the left */
+        pointer-events: none; /* Disable interaction when hidden */
+    }
+
+    #login-form-container.visible,
+    #signup-form-container.visible {
+        opacity: 1;
+        transform: translateX(0); /* Slide in */
+        pointer-events: auto; /* Enable interaction when visible */
+        position: relative; /* Reset position for the active form */
+    }
+
+    /* NEW: Password Toggle Styles */
+    .password-input-container {
+        position: relative;
+        margin-bottom: 1rem; /* Adjust margin to fit with input */
+        width: 100%;
+    }
+
+    .password-input-container input {
+        margin-bottom: 0; /* Remove default input margin-bottom as container handles it */
+        padding-right: 3rem; /* Make space for the eye icon */
+    }
+
+    .password-toggle-icon {
+        position: absolute;
+        right: 0.75rem; /* Position from the right edge of the input */
+        top: 50%;
+        transform: translateY(-50%); /* Vertically center the icon */
+        cursor: pointer;
+        color: #aaa; /* Default eye color */
+        transition: color 0.3s ease;
+        font-size: 1.5rem; /* Size of the Material Icon */
+    }
+
+    .password-toggle-icon:hover {
+        color: #fff; /* Lighter on hover */
+    }
+
+    /* --- NEW: Back to Home Button Styles --- */
+    .back-home-btn {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        color: white; /* Icon color */
+        font-size: 2.5rem; /* Size of the Material Icon */
+        text-decoration: none;
+        transition: color 0.3s ease, transform 0.2s ease, background-color 0.3s ease;
+        z-index: 10; /* Ensure it's above everything else */
+        display: flex; /* For proper icon centering */
+        align-items: center;
+        justify-content: center;
+        width: 50px; /* Make it a square click target */
+        height: 50px;
+        border-radius: 50%; /* Make it circular */
+        background-color: rgba(46, 11, 64, 0.7); /* Subtle background matching card */
+        box-shadow: 0 2px 10px rgba(0,0,0,0.3); /* Soft shadow */
+    }
+
+    .back-home-btn:hover {
+        color: #9a5dff; /* Lighter shade on hover */
+        transform: scale(1.1); /* Slight zoom effect */
+        background-color: rgba(46, 11, 64, 0.9); /* Slightly more opaque */
+    }
+
+    .back-home-btn:active {
+        transform: scale(1.0); /* Snap back on click */
+    }
+
+    .back-home-btn .material-icons {
+        font-size: 2.5rem; /* Ensure the icon itself respects the size */
+    }
+  </style>
 </head>
 <body class="auth-body">
+
+  <a href="home.html" class="back-home-btn" aria-label="Back to Home">
+      <span class="material-icons">arrow_back</span> </a>
 
   <section class="auth-container">
     <div class="auth-card">
 
-      <div id="login-form-container">
+      <div id="login-form-container" class="visible">
         <h2>Log In</h2>
         <form id="login-form">
           <input type="email" id="login-email" placeholder="Email" required />
-          <input type="password" id="login-password" placeholder="Password" required />
+          <div class="password-input-container">
+              <input type="password" id="login-password" placeholder="Password" required />
+              <span class="password-toggle-icon material-icons" data-target="login-password">visibility_off</span>
+          </div>
+
           <div id="login-message" class="auth-message"></div>
           <div id="login-spinner" class="spinner">⏳ Processing...</div>
           <button type="submit" class="primary">Log In</button>
@@ -26,12 +324,19 @@
         </p>
       </div>
 
-      <div id="signup-form-container" style="display: none;">
+      <div id="signup-form-container" class="hidden">
         <h2>Sign Up</h2>
         <form id="signup-form">
           <input type="text" id="signup-username" placeholder="Username" required />
           <input type="email" id="signup-email" placeholder="Email" required />
-          <input type="password" id="signup-password" placeholder="Password" required />
+          <div class="password-input-container">
+              <input type="password" id="signup-password" placeholder="Password" required />
+              <span class="password-toggle-icon material-icons" data-target="signup-password">visibility_off</span>
+          </div>
+          <div class="password-input-container">
+              <input type="password" id="signup-confirm-password" placeholder="Confirm Password" required />
+              <span class="password-toggle-icon material-icons" data-target="signup-confirm-password">visibility_off</span>
+          </div>
           <div id="signup-message" class="auth-message"></div>
           <div id="signup-spinner" class="spinner">⏳ Processing...</div>
           <button type="submit" class="primary">Sign Up</button>
@@ -50,7 +355,9 @@
     getAuth,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
-    updateProfile
+    updateProfile,
+    sendEmailVerification,
+    signOut // NEW: Import signOut
   } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import {
     getFirestore,
@@ -74,18 +381,110 @@
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  // Switch UI views
+  // Get form containers
+  const loginFormContainer = document.getElementById('login-form-container');
+  const signupFormContainer = document.getElementById('signup-form-container');
+
+  // Function to translate Firebase error codes to user-friendly messages
+  const getFirebaseErrorMessage = (error) => {
+    switch (error.code) {
+      case 'auth/email-already-in-use':
+        return 'This email address is already registered.';
+      case 'auth/invalid-email':
+        return 'The email address is not valid.';
+      case 'auth/operation-not-allowed':
+        return 'Account type not enabled. Please contact support.';
+      case 'auth/weak-password':
+        return 'The password is too weak. Please choose a stronger one (at least 6 characters).';
+      case 'auth/user-disabled':
+        return 'This account has been disabled.';
+      case 'auth/user-not-found':
+      case 'auth/wrong-password':
+        return 'Incorrect email or password.';
+      case 'auth/requires-recent-login':
+        return 'This action requires you to log in again for security.';
+      case 'auth/too-many-requests':
+        return 'Too many attempts. Please try again later.';
+      case 'auth/network-request-failed':
+        return 'Network error. Please check your internet connection.';
+      default:
+        // For unhandled errors, return a generic message or the Firebase message if it's not too technical
+        // We replace 'Firebase: ' prefix for cleaner messages.
+        return `An unexpected error occurred: ${error.message.replace('Firebase: ', '')}`;
+    }
+  };
+
+  // Check URL for form parameter on page load
+  // Check URL for form parameter on page load
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const formToShow = urlParams.get('form');
+    const signupSuccess = urlParams.get('signupSuccess'); // IMPORTANT: ADD THIS LINE
+
+    if (formToShow === 'signup') {
+        // Hide login instantly for initial load, without animation
+        loginFormContainer.style.display = 'none';
+        loginFormContainer.classList.remove('visible');
+        loginFormContainer.classList.add('hidden');
+
+        // Show signup instantly, without animation
+        signupFormContainer.style.display = 'block';
+        signupFormContainer.classList.remove('hidden');
+        signupFormContainer.classList.add('visible');
+    } else {
+        // Default to login if no parameter or invalid parameter
+        loginFormContainer.style.display = 'block';
+        loginFormContainer.classList.add('visible');
+        loginFormContainer.classList.remove('hidden');
+
+        signupFormContainer.style.display = 'none';
+        signupFormContainer.classList.remove('visible');
+        signupFormContainer.classList.add('hidden');
+    }
+
+    // IMPORTANT: ADD THIS NEW BLOCK to display success message after signup/redirect
+    if (signupSuccess === 'true') {
+        // Ensure the login message box is visible when showing this message
+        const loginMessageBox = document.getElementById('login-message');
+        loginMessageBox.style.display = 'block'; // Make sure the element itself is displayed
+        showMessage(loginMessageBox, 'Account created! Please *VERIFY* your email and THEN log in.', 'success');
+    }
+});
+
+
+  // Switch UI views with transition
   document.getElementById('show-signup').addEventListener('click', (e) => {
     e.preventDefault();
-    document.getElementById('login-form-container').style.display = 'none';
-    document.getElementById('signup-form-container').style.display = 'block';
+    hideMessage(document.getElementById('login-message')); // Hide any login messages
+    loginFormContainer.classList.remove('visible');
+    loginFormContainer.classList.add('hidden');
+    // After transition, change display
+    setTimeout(() => {
+        loginFormContainer.style.display = 'none';
+        signupFormContainer.style.display = 'block';
+        setTimeout(() => { // Allow display change to register before adding visible class
+            signupFormContainer.classList.remove('hidden');
+            signupFormContainer.classList.add('visible');
+        }, 10);
+    }, 500); // Match transition duration (0.5s)
   });
 
   document.getElementById('show-login').addEventListener('click', (e) => {
     e.preventDefault();
-    document.getElementById('signup-form-container').style.display = 'none';
-    document.getElementById('login-form-container').style.display = 'block';
+    hideMessage(document.getElementById('signup-message')); // Hide any signup messages
+    signupFormContainer.classList.remove('visible');
+    signupFormContainer.classList.add('hidden');
+    // After transition, change display
+    setTimeout(() => {
+        signupFormContainer.style.display = 'none';
+        loginFormContainer.style.display = 'block';
+        setTimeout(() => { // Allow display change to register before adding visible class
+            loginFormContainer.classList.remove('hidden');
+            loginFormContainer.classList.add('visible');
+        }, 10);
+    }, 500); // Match transition duration (0.5s)
   });
+
 
   const showMessage = (element, text, type = 'error') => {
     element.textContent = text;
@@ -98,9 +497,6 @@
 
   const hideMessage = (element) => {
     element.style.opacity = '0';
-    setTimeout(() => {
-      element.style.display = 'none';
-    }, 300);
   };
 
   // Login form submit
@@ -112,17 +508,22 @@
     const spinner = document.getElementById('login-spinner');
     const submitBtn = e.target.querySelector('button[type="submit"]');
 
+    hideMessage(messageBox); // Hide message on new attempt
     spinner.style.display = 'block';
     submitBtn.disabled = true;
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      showMessage(messageBox, `Welcome back, ${userCredential.user.email}`, 'success');
+      const user = userCredential.user; // Get the user object from the credential
+
+      const username = user.displayName || user.email; // Fallback to email if displayName is not set
+      showMessage(messageBox, `Welcome back, ${username}!`, 'success');
+
       setTimeout(() => {
         window.location.href = 'home.html';
-      }, 1000);
+      }, 1500); // Increased delay for success message visibility
     } catch (error) {
-      showMessage(messageBox, error.message, 'error');
+      showMessage(messageBox, getFirebaseErrorMessage(error), 'error');
     } finally {
       spinner.style.display = 'none';
       submitBtn.disabled = false;
@@ -135,9 +536,17 @@
     const username = document.getElementById('signup-username').value.trim();
     const email = document.getElementById('signup-email').value.trim();
     const password = document.getElementById('signup-password').value.trim();
+    const confirmPassword = document.getElementById('signup-confirm-password').value.trim();
     const messageBox = document.getElementById('signup-message');
     const spinner = document.getElementById('signup-spinner');
     const submitBtn = e.target.querySelector('button[type="submit"]');
+
+    hideMessage(messageBox); // Hide message on new attempt
+
+    if (password !== confirmPassword) {
+      showMessage(messageBox, 'Passwords do not match.', 'error');
+      return;
+    }
 
     spinner.style.display = 'block';
     submitBtn.disabled = true;
@@ -149,6 +558,10 @@
       // Set the display name
       await updateProfile(user, { displayName: username });
 
+      // Send email verification
+      await sendEmailVerification(user);
+      console.log('Verification email sent!');
+
       // Store user data in Firestore, including initial difficulty completion status
       const userData = {
         uid: user.uid,
@@ -158,7 +571,6 @@
         totalQuizzes: 0,
         highScore: 0,
         achievements: [],
-        // Add these fields to initialize difficulty completion status
         completedEasy: false,
         completedMedium: false,
         completedHard: false
@@ -166,16 +578,35 @@
 
       await setDoc(doc(db, "users", user.uid), userData);
 
-      showMessage(messageBox, `Signed up as ${username}`, 'success');
-      setTimeout(() => {
-        window.location.href = 'home.html';
-      }, 1000);
+      // --- IMPORTANT: NEW LOGIC HERE ---
+      // 1. Sign out the newly created user immediately
+      await signOut(auth);
+
+      // 2. Redirect to the login page with a success flag
+      window.location.href = 'auth.html?form=login&signupSuccess=true'; // Redirect IMMEDIATELY, no setTimeout
+
     } catch (error) {
-      showMessage(messageBox, error.message, 'error');
+      showMessage(messageBox, getFirebaseErrorMessage(error), 'error');
     } finally {
       spinner.style.display = 'none';
       submitBtn.disabled = false;
     }
+  });
+
+  // Password Toggle Logic
+  document.querySelectorAll('.password-toggle-icon').forEach(icon => {
+      icon.addEventListener('click', () => {
+          const targetId = icon.dataset.target; // Get the ID of the input to toggle
+          const passwordInput = document.getElementById(targetId);
+
+          if (passwordInput.type === 'password') {
+              passwordInput.type = 'text';
+              icon.textContent = 'visibility'; // Change icon to open eye
+          } else {
+              passwordInput.type = 'password';
+              icon.textContent = 'visibility_off'; // Change icon to closed eye
+          }
+      });
   });
   </script>
 

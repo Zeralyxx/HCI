@@ -1,8 +1,24 @@
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.getElementById('nav-links');
 
+// Function to close the menu
+function closeNavMenu() {
+    if (navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+    }
+}
+
+// Event listener for the hamburger button (existing functionality)
 hamburger.addEventListener('click', () => {
-  navLinks.classList.toggle('active');
+    navLinks.classList.toggle('active');
+});
+
+// NEW: Event listener to close the menu when clicking outside
+document.addEventListener('click', (event) => {
+    // Check if the click happened outside the nav-links AND outside the hamburger button
+    if (!navLinks.contains(event.target) && !hamburger.contains(event.target)) {
+        closeNavMenu();
+    }
 });
 
 // Highlight current nav link

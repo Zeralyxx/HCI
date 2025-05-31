@@ -7,7 +7,153 @@
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+  <link rel="icon" href="/images/favicon.png" type="image/png">
   <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    html, body {
+        height: 100%;       /* Ensure html and body take full height */
+        margin: 0;          /* Remove any default browser margins */
+        padding: 0;         /* Remove any default browser padding */
+    }
+
+    body {
+        /* Keep existing body styles here if they are not height-related */
+        min-height: 100vh; /* Ensure body takes at least full viewport height */
+        display: flex;     /* Make body a flex container to allow children to control layout */
+        flex-direction: column; /* Stack children vertically */
+    }
+
+    /* Ensure your main content area can flex-grow if you have one */
+    /* Example if you have a <main> tag or a specific wrapper for your page content: */
+    /* main { flex-grow: 1; } */
+
+
+    /* Basic Modal Structure (Ensures it covers the whole screen) */
+    .modal {
+      display: none; /* Hidden by default; JS sets display:flex */
+      position: fixed; /* Stay in place */
+      z-index: 9999; /* Sit on top, ensure it's above other content */
+      left: 0;
+      top: 0;
+      width: 100vw;   /* Explicitly use viewport width */
+      height: 100vh;  /* Explicitly use viewport height */
+      background-color: rgba(0, 0, 0, 0.7); /* Black w/ opacity */
+
+      /* CRUCIAL FLEX PROPERTIES FOR CENTERING CONTENT */
+      justify-content: center; /* Center horizontally */
+      align-items: center;   /* Center vertically */
+
+      box-sizing: border-box; /* Include padding in element's total width and height */
+    }
+
+    /* Modal Content Box */
+    .modal-content {
+      background-color: #fefefe;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+      /* CRUCIAL FOR CENTERING WITHIN FLEX CONTAINER */
+      margin: auto;
+
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+      position: relative;
+      animation: fadeIn 0.3s ease-out;
+      color: #333;
+
+      /* Internal flex for stacking content elements */
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      max-height: 90vh; /* Add a max-height to the content */
+      overflow-y: auto; /* Allow content to scroll if it exceeds max-height */
+    }
+
+    /* Specific Styles for Small Confirmation Modal (like logout confirmation) */
+    .modal-content.small-modal {
+      max-width: 350px;
+      padding: 30px;
+      gap: 15px;
+    }
+
+    .modal-content h2 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .modal-content p {
+      color: #555;
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+
+    /* Modal action buttons container */
+    .modal-actions {
+      display: flex;
+      justify-content: space-around;
+      gap: 15px;
+      width: 100%;
+    }
+
+    /* Adjust button styles within the modal */
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .modal-actions .btn {
+      flex-grow: 1;
+      margin: 0;
+    }
+
+    /* Specific button colors for confirmation */
+    .red-btn {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .red-btn:hover:not(:disabled) {
+      background-color: #c82333;
+    }
+
+    .green-btn {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .green-btn:hover {
+      background-color: #218838;
+    }
+
+    /* Media query for larger screens */
+    @media (min-width: 500px) {
+        .modal-actions {
+            flex-direction: row;
+            justify-content: space-around;
+        }
+        .modal-actions .btn {
+            flex-grow: 1;
+            max-width: 48%;
+        }
+    }
+
+    /* Keyframe for fade-in animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
 
@@ -120,6 +266,18 @@
       </ul>
     </div>
   </footer>
+
+  <div id="logout-confirm-modal" class="modal">
+  <div class="modal-content small-modal">
+    <h2>Log Out?</h2>
+    <p>Are you sure you want to log out?</p>
+    <div class="modal-actions">
+      <button id="logout-yes-btn" class="btn red-btn">Yes, Log Out</button>
+      <button id="logout-no-btn" class="btn green-btn">No, Stay Logged In</button>
+    </div>
+  </div>
+</div>
+
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="script.js"></script>
    <script type="module">
@@ -145,62 +303,84 @@
   const db = getFirestore(app); // Get Firestore
 
   const authSection = document.getElementById("auth-section");
+  const logoutConfirmModal = document.getElementById('logout-confirm-modal');
+  const logoutYesBtn = document.getElementById('logout-yes-btn');
+  const logoutNoBtn = document.getElementById('logout-no-btn');
 
-  // Define functions globally first
-window.toggleProfileMenu = function () {
-  const menu = document.getElementById('profileMenu');
-  if (!menu) return;
+  // Define functions globally first (including the single, correct logoutUser)
+  window.toggleProfileMenu = function () {
+    const menu = document.getElementById('profileMenu');
+    if (!menu) return;
 
-  if (!window.isProfileMenuOpen) {
-    menu.classList.add('show');
-    window.isProfileMenuOpen = true;
-    document.addEventListener('click', handleOutsideClick);
-  } else {
-    menu.classList.remove('show');
-    window.isProfileMenuOpen = false;
-    document.removeEventListener('click', handleOutsideClick);
+    if (!window.isProfileMenuOpen) {
+      menu.classList.add('show');
+      window.isProfileMenuOpen = true;
+      document.addEventListener('click', handleOutsideClick);
+    } else {
+      menu.classList.remove('show');
+      window.isProfileMenuOpen = false;
+      document.removeEventListener('click', handleOutsideClick);
+    }
+  };
+
+  function handleOutsideClick(e) {
+    const menu = document.getElementById('profileMenu');
+    const profileIcon = document.querySelector('.profile-icon');
+    if (!menu.contains(e.target) && !profileIcon.contains(e.target)) {
+      menu.classList.remove('show');
+      window.isProfileMenuOpen = false;
+      document.removeEventListener('click', handleOutsideClick);
+    }
   }
-};
 
-function handleOutsideClick(e) {
-  const menu = document.getElementById('profileMenu');
-  const profileIcon = document.querySelector('.profile-icon');
-  if (!menu.contains(e.target) && !profileIcon.contains(e.target)) {
-    menu.classList.remove('show');
-    window.isProfileMenuOpen = false;
-    document.removeEventListener('click', handleOutsideClick);
-  }
-}
+  // THIS IS THE CORRECT, MERGED logoutUser FUNCTION:
+  window.logoutUser = function () {
+    logoutConfirmModal.style.display = 'flex'; // Show the logout confirmation modal
+  };
 
-window.logoutUser = function () {
-  signOut(auth).then(() => {
-    window.location.reload();
+  // Event Listeners for the modal buttons (these are correct as they are)
+  logoutYesBtn.addEventListener('click', () => {
+    signOut(auth).then(() => {
+      window.location.reload(); // Proceed with logout and refresh
+    }).catch((error) => {
+      console.error("Error signing out:", error);
+      alert("Failed to log out. Please try again.");
+    });
+    logoutConfirmModal.style.display = 'none'; // Hide modal after action
   });
-};
 
-// Then run this AFTER the functions are declared:
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // Get the first initial of the display name, or default to '?'
-    // Ensure user.displayName exists before trying to access its first character
-    const userInitial = (user.displayName ? user.displayName[0] : '?').toUpperCase();
+  logoutNoBtn.addEventListener('click', () => {
+    logoutConfirmModal.style.display = 'none'; // Hide modal, user cancelled
+  });
 
-    authSection.innerHTML = `
-      <div class="profile-wrapper">
-        <div class="profile-icon" onclick="toggleProfileMenu()">
-          ${userInitial}
+  // Optional: Allow clicking outside the modal to cancel logout
+  window.addEventListener('click', (event) => {
+    if (event.target === logoutConfirmModal) {
+      logoutConfirmModal.style.display = 'none';
+    }
+  });
+
+  // Then run this AFTER the functions are declared:
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const userInitial = (user.displayName ? user.displayName[0] : '?').toUpperCase();
+      authSection.innerHTML = `
+        <div class="profile-wrapper">
+          <div class="profile-icon" onclick="toggleProfileMenu()">
+            ${userInitial}
+          </div>
+          <div id="profileMenu" class="profile-menu">
+            <button onclick="window.location.href='account.html'">Manage Account</button>
+            <button onclick="logoutUser()">Logout</button>
+          </div>
         </div>
-        <div id="profileMenu" class="profile-menu">
-          <button onclick="window.location.href='account.html'">Manage Account</button>
-          <button onclick="logoutUser()">Logout</button>
-        </div>
-      </div>
-    `;
-  } else {
-    authSection.innerHTML = `<button class="nav-btn" id="loginBtn" onclick="window.location.href='auth.html'">Login</button>`;
-  }
-});
-  // --- Leaderboard Logic ---
+      `;
+    } else {
+      authSection.innerHTML = `<button class="nav-btn" id="loginBtn" onclick="window.location.href='auth.html'">Login</button>`;
+    }
+  });
+
+  // --- Leaderboard Logic (This part remains unchanged as it's separate) ---
   async function loadLeaderboard() {
     const leaderboardTable = document.querySelector('.leaderboard-table tbody');
     leaderboardTable.innerHTML = '';
@@ -228,7 +408,7 @@ onAuthStateChanged(auth, (user) => {
         rank++;
       });
 
-      AOS.init({ once: true });
+      AOS.init({ once: true }); // This initializes AOS animations for the loaded elements
     } catch (error) {
       console.error("Error loading leaderboard:", error);
     }
