@@ -32,23 +32,42 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(45deg, #1A0526, #2E0B40, #1A0526); /* Darker purple gradient */
-        animation: gradient-shift 15s ease infinite alternate; /* Slower, smoother animation */
-        opacity: 0.8; /* Subtle opacity */
-        z-index: -1; /* Behind the content */
+        animation: gradientAnimation 20s ease infinite; /* Adjust duration and ease as needed */
+        z-index: -1; /* Place behind content */
+    }
+
+    .auth-body::before {
+        background: linear-gradient(135deg, rgba(46, 11, 64, 0.8), rgba(25, 25, 25, 0.8));
+        transform: rotate(15deg) scale(1.2);
     }
 
     .auth-body::after {
-        background: linear-gradient(-45deg, #2E0B40, #1A0526, #2E0B40); /* Different gradient direction */
-        animation-delay: 7.5s; /* Stagger the animation */
-        filter: blur(100px); /* Add a strong blur for a nebulae effect */
-        opacity: 0.5;
+        background: linear-gradient(45deg, rgba(25, 25, 25, 0.8), rgba(63, 17, 78, 0.8));
+        transform: rotate(-10deg) scale(1.1);
+        animation-delay: -10s; /* Offset animation for continuous effect */
     }
 
-    @keyframes gradient-shift {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
+    @keyframes gradientAnimation {
+        0% {
+            transform: rotate(0deg) scale(1);
+            opacity: 0.8;
+        }
+        25% {
+            transform: rotate(20deg) scale(1.05);
+            opacity: 0.9;
+        }
+        50% {
+            transform: rotate(0deg) scale(1);
+            opacity: 0.8;
+        }
+        75% {
+            transform: rotate(-20deg) scale(1.05);
+            opacity: 0.9;
+        }
+        100% {
+            transform: rotate(0deg) scale(1);
+            opacity: 0.8;
+        }
     }
 
     .auth-container {
@@ -296,7 +315,133 @@
     .back-home-btn .material-icons {
         font-size: 2.5rem; /* Ensure the icon itself respects the size */
     }
-  </style>
+
+    /* Forgot Password Modal Styles */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1000; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+        opacity: 0; /* Initially transparent */
+        transition: opacity 0.3s ease-out;
+        pointer-events: none; /* IMPORTANT: Disable interaction when hidden */
+    }
+
+    .modal.show {
+        opacity: 1;
+        display: flex; /* IMPORTANT: This is where display: flex should be applied */
+        justify-content: center; /* Center content horizontally */
+        align-items: center; /* Center content vertically */
+        pointer-events: auto; /* IMPORTANT: Enable interaction when shown */
+    }
+
+    .modal-content {
+        background-color: #2E0B40; /* Darker background, matching auth-card */
+        margin: 15% auto; /* Not needed with flex centering, but good fallback */
+        padding: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        width: 90%;
+        max-width: 400px; /* Adjust max-width to match auth-card */
+        box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        color: white;
+        text-align: center;
+        transform: translateY(-50px); /* Initial position for animation */
+        opacity: 0;
+        animation: modalFadeIn 0.3s forwards ease-out;
+    }
+
+    .modal.show .modal-content {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @keyframes modalFadeIn {
+        from { transform: translateY(-50px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-content h2 {
+        color: #FFF;
+        margin-bottom: 20px;
+        font-family: var(--heading-font);
+    }
+
+    .modal-content p {
+        margin-bottom: 25px;
+        line-height: 1.5;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .modal-content .input-group {
+      margin-bottom: 20px; /* Space below email input */
+    }
+
+    .modal-content .input-group input {
+      width: 100%;
+      padding: 10px 15px; /* Adjust padding for modal inputs */
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      background: rgba(25, 25, 25, 0.7);
+      color: white;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .modal-content .input-group input:focus {
+        outline: none;
+        border-color: #8e44ad;
+        box-shadow: 0 0 8px rgba(142, 68, 173, 0.6);
+    }
+
+    .modal-actions {
+        display: flex;
+        flex-direction: column; /* Stack buttons by default */
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .modal-actions button {
+        width: 100%; /* Full width for modal buttons */
+        padding: 12px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    /* Specific button colors for modal actions */
+    .modal-actions .btn-primary {
+        background-color: #7E3FF2; /* Primary action color */
+        color: white;
+    }
+
+    .modal-actions .btn-primary:hover {
+        background-color: #9a5dff;
+        transform: translateY(-2px);
+    }
+
+    .modal-actions .btn-cancel {
+        background-color: #4a4a4a; /* Gray for cancel */
+        color: white;
+    }
+
+    .modal-actions .btn-cancel:hover {
+        background-color: #6a6a6a;
+        transform: translateY(-2px);
+    }
+
+    /* Adjust spinner position within modal */
+    .modal-content .spinner {
+      margin-top: 15px;
+    }
+</style>
 </head>
 <body class="auth-body">
 
@@ -320,6 +465,7 @@
           <button type="submit" class="primary">Log In</button>
         </form>
         <p class="auth-switch">
+          <a href="#" id="forgot-password-link">Forgot Password?</a><br>
           Don't have an account? <a href="#" id="show-signup">Sign Up</a>
         </p>
       </div>
@@ -349,6 +495,22 @@
     </div>
   </section>
 
+  <div id="forgot-password-modal" class="modal">
+    <div class="modal-content">
+      <h2>Reset Password</h2>
+      <p>Enter your email address below to receive a password reset link.</p>
+      <div class="input-group">
+        <input type="email" id="reset-email" placeholder="Your Email Address" required />
+      </div>
+      <div id="reset-message" class="auth-message"></div>
+      <div class="modal-actions">
+        <button id="send-reset-email-btn" class="btn-primary">Send Reset Email</button>
+        <button id="cancel-reset-btn" class="btn-cancel">Cancel</button>
+      </div>
+      <div id="reset-spinner" class="spinner" style="display:none;">Sending...</div>
+    </div>
+  </div>
+
   <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import {
@@ -357,7 +519,8 @@
     signInWithEmailAndPassword,
     updateProfile,
     sendEmailVerification,
-    signOut // NEW: Import signOut
+    signOut, // NEW: Import signOut
+    sendPasswordResetEmail
   } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import {
     getFirestore,
@@ -384,6 +547,15 @@
   // Get form containers
   const loginFormContainer = document.getElementById('login-form-container');
   const signupFormContainer = document.getElementById('signup-form-container');
+
+    // Forgot Password Elements
+  const forgotPasswordLink = document.getElementById('forgot-password-link');
+  const forgotPasswordModal = document.getElementById('forgot-password-modal');
+  const resetEmailInput = document.getElementById('reset-email');
+  const sendResetEmailBtn = document.getElementById('send-reset-email-btn');
+  const cancelResetBtn = document.getElementById('cancel-reset-btn');
+  const resetMessageBox = document.getElementById('reset-message');
+  const resetSpinner = document.getElementById('reset-spinner');
 
   // Function to translate Firebase error codes to user-friendly messages
   const getFirebaseErrorMessage = (error) => {
@@ -607,6 +779,59 @@ document.addEventListener('DOMContentLoaded', () => {
               icon.textContent = 'visibility_off'; // Change icon to closed eye
           }
       });
+  });
+
+   // Forgot Password Modal Logic
+  forgotPasswordLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    forgotPasswordModal.style.display = 'flex'; // Show modal container
+    setTimeout(() => { // Trigger animation
+        forgotPasswordModal.classList.add('show');
+    }, 10);
+    resetEmailInput.value = ''; // Clear email input
+    hideMessage(document.getElementById('login-message')); // Hide any messages on login form
+    hideMessage(resetMessageBox); // Hide any previous reset messages
+  });
+
+  cancelResetBtn.addEventListener('click', () => {
+    forgotPasswordModal.classList.remove('show'); // Animate out
+    resetSpinner.style.display = 'none';
+    setTimeout(() => { // Hide completely after animation
+        forgotPasswordModal.style.display = 'none';
+    }, 300); // Match transition duration
+  });
+
+  // Close modal if clicking outside
+  window.addEventListener('click', (event) => {
+    if (event.target === forgotPasswordModal) {
+      forgotPasswordModal.classList.remove('show');
+      resetSpinner.style.display = 'none';
+      setTimeout(() => {
+          forgotPasswordModal.style.display = 'none';
+      }, 300);
+    }
+  });
+
+  sendResetEmailBtn.addEventListener('click', async () => {
+    const email = resetEmailInput.value.trim();
+    if (!email) {
+      showMessage(resetMessageBox, 'Please enter your email address.', 'error');
+      return;
+    }
+
+    sendResetEmailBtn.disabled = true;
+    resetSpinner.style.display = 'block';
+    hideMessage(resetMessageBox);
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      showMessage(resetMessageBox, `Password reset link sent to ${email}! Please check your inbox and spam folder.`, 'success');
+    } catch (error) {
+      showMessage(resetMessageBox, getFirebaseErrorMessage(error), 'error');
+    } finally {
+      sendResetEmailBtn.disabled = false;
+      resetSpinner.style.display = 'none';
+    }
   });
   </script>
 

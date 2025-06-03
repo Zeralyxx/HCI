@@ -23,6 +23,7 @@
         display: flex;     /* Make body a flex container to allow children to control layout */
         flex-direction: column; /* Stack children vertically */
     }
+    
 
     /* Ensure your main content area can flex-grow if you have one */
     /* Example if you have a <main> tag or a specific wrapper for your page content: */
@@ -200,8 +201,8 @@
           </p>
         </div>
         <div class="contact-details">
-          <p><strong>Email:</strong><br><a href="mailto:hello@emailme.io">hello@emailme.io</a></p>
-          <p><strong>Phone:</strong><br><a href="tel:+16561234567">+1 (656) 123-4567</a></p>
+          <p><strong>Email:</strong><br><a href="mailto:hello@emailme.io">zeralyx@gmail.com</a></p>
+          <p><strong>Phone:</strong><br><a href="tel:+16561234567">09123456789</a></p>
         </div>
       </div>
       <div class="map-large">
@@ -214,32 +215,53 @@
   
 
   <!-- Contact Form Section -->
-  <section class="contact-form-section purple-bg" data-aos="fade-left">
-    <div class="container form-flex">
-      <div class="form-column">
-        <p class="section-label">Connect</p>
-        <h2>Get in Touch</h2>
-        <p class="section-subtext">We’d love to hear from you!</p>
-        <form>
-          <label for="name" data-aos="zoom-in">Name</label>
-          <input type="text" id="name" placeholder="Your name..." data-aos="zoom-in">
-          
-          <label for="email" data-aos="zoom-in">Email</label>
-          <input type="email" id="email" placeholder="Your email..." data-aos="zoom-in">
-          
-          <label for="message" data-aos="zoom-in">Message</label>
-          <textarea id="message" placeholder="Type your message..." data-aos="zoom-in"></textarea>
+ <section class="contact-form-section purple-bg" data-aos="fade-left">
+  <div class="container form-flex">
+    <div class="form-column">
+      <p class="section-label">Connect</p>
+      <h2 class="section-heading">Send Us a Message</h2>
+      <p class="section-subtext">Have a question or feedback? Fill out the form below and we'll get back to you shortly.</p>
+      
+      <form id="contactForm" action="https://formspree.io/f/mrbkgdwq" method="POST">
+        <div class="form-group" data-aos="zoom-in">
+            <label for="name">Name</label>
+            <div class="input-with-icon">
+                <input type="text" id="name" name="name" placeholder="Your full name" required>
+            </div>
+        </div>
+        
+        <div class="form-group" data-aos="zoom-in">
+            <label for="email">Email</label>
+            <div class="input-with-icon">
+                <input type="email" id="email" name="email" placeholder="Your email address" required>
+            </div>
+        </div>
+        
+        <div class="form-group" data-aos="zoom-in">
+            <label for="subject">Subject</label>
+            <div class="input-with-icon">
+                <input type="text" id="subject" name="_subject" placeholder="Topic of your message" required>
+            </div>
+        </div>
 
-          <button type="submit" class="submit-button" data-aos="zoom-in">Submit</button>
-        </form>
-      </div>
-      <div class="map-vertical">
-        <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1329.4990224913718!2d121.0543992415016!3d14.490049243817028!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397cf1341034c3f%3A0x577df6b237087b9a!2s5%20Paraiso%2C%20Taguig%2C%201633%20Metro%20Manila!5e1!3m2!1sen!2sph!4v1746631292019!5m2!1sen!2sph"          
-        width="100%" height="100%" style="border:0; border-radius: 1rem;" allowfullscreen="" loading="lazy"></iframe>
-      </div>      
+        <div class="form-group" data-aos="zoom-in">
+            <label for="message">Message</label>
+            <div class="input-with-icon textarea">
+                <textarea id="message" name="message" placeholder="Type your detailed message here..." required></textarea>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-button" data-aos="zoom-in">Send Message</button>
+        <p id="formStatus" style="margin-top: 1rem; text-align: center; font-weight: bold;"></p>
+      </form>
     </div>
-  </section>
+    <div class="map-vertical">
+      <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1329.4990224913718!2d121.0543992415016!3d14.490049243817028!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397cf1341034c3f%3A0x577df6b237087b9a!2s5%20Paraiso%2C%20Taguig%2C%201633%20Metro%20Manila!5e1!3m2!1sen!2sph!4v1746631292019!5m2!1sen!2sph"          
+      width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+    </div>      
+  </div>
+</section>
 
  <!-- Footer -->
  <footer class="footer">
@@ -393,6 +415,54 @@
       authSection.innerHTML = `<button class="nav-btn" id="loginBtn" onclick="window.location.href='auth.html'">Login</button>`;
     }
   });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const contactForm = document.getElementById('contactForm');
+    const formStatus = document.getElementById('formStatus');
+
+    if (contactForm) {
+        contactForm.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent the default browser form submission
+
+            const form = event.target;
+            const data = new FormData(form); // Get form data from all input fields
+
+            // Display a "sending" message to the user
+            formStatus.textContent = 'Sending message...';
+            formStatus.style.color = 'yellow'; // You can customize this color
+
+            try {
+                // Using your provided Formspree endpoint
+                const response = await fetch("https://formspree.io/f/mrbkgdwq", {
+                    method: form.method,
+                    body: data,
+                    headers: {
+                        'Accept': 'application/json' // Formspree requires this for JSON response
+                    }
+                });
+
+                if (response.ok) {
+                    formStatus.textContent = 'Message sent successfully! We\'ll get back to you soon.';
+                    formStatus.style.color = '#28a745'; // Green for success
+                    form.reset(); // Clear the form fields after successful submission
+                } else {
+                    const result = await response.json();
+                    if (result.errors) {
+                        // Display specific error messages from Formspree if available
+                        formStatus.textContent = result.errors.map(error => error.message).join(', ');
+                    } else {
+                        formStatus.textContent = 'Oops! There was a problem sending your message.';
+                    }
+                    formStatus.style.color = '#dc3545'; // Red for error
+                }
+            } catch (error) {
+                console.error('Submission error:', error);
+                formStatus.textContent = 'Network error. Please check your internet connection.';
+                formStatus.style.color = '#dc3545'; // Red for error
+            }
+        });
+    }
+});
 
 </script>
 </body>
