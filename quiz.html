@@ -44,6 +44,7 @@
             height: 100vh;
             padding: 16px;
             color: var(--text-dark); /* Default text color */
+            transition: background 0.8s ease-in-out; /* Smooth transition for background */
         }
 
         #start-screen, #quiz-screen {
@@ -286,7 +287,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.75); /* Slightly darker overlay */
             justify-content: center;
             align-items: center;
             animation: fadeIn 0.3s ease-out; /* Added fade in to modal display */
@@ -295,9 +296,9 @@
         .modal-content {
             background-color: var(--white);
             margin: auto;
-            padding: 30px; /* More padding */
+            padding: 35px; /* More padding */
             border-radius: var(--rounded);
-            box-shadow: var(--shadow);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25); /* Stronger, softer shadow */
             width: 90%; /* Increased width for responsiveness */
             max-width: 600px;
             text-align: center;
@@ -307,6 +308,7 @@
             flex-direction: column;
             align-items: center;
             gap: 15px; /* Spacing between elements inside modal */
+            border: 2px solid var(--primary-medium); /* Subtle border for definition */
         }
 
         .close-modal-btn {
@@ -360,43 +362,45 @@
         }
 
 
-        /* New styles for general message modal */
+        /* New styles for general message modal - focusing on score display */
         #message-modal .modal-content {
-            max-width: 450px; /* Smaller max-width for alerts */
-            padding: 25px;
-            gap: 10px;
+            max-width: 480px; /* Slightly wider for better text flow */
+            padding: 35px; /* Consistent padding */
+            gap: 20px; /* More space between elements */
+            background: linear-gradient(160deg, var(--white) 0%, #f9f9f9 100%); /* Subtle gradient background */
+            border: none; /* Remove existing border here, let main modal-content handle it */
         }
 
         #message-modal .modal-content h3 {
-            margin-top: 0;
-            color: var(--primary-dark);
-            font-size: 24px;
+            font-size: 30px; /* Larger title */
+            color: var(--primary-dark); /* Strong primary color */
+            margin-bottom: 5px; /* Less margin before the text */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Subtle text shadow */
         }
 
         #message-modal .modal-content p {
-            margin-bottom: 15px;
-            color: var(--text-light-gray);
-            font-size: 16px;
-            line-height: 1.5;
+            font-size: 18px; /* Larger message text */
+            line-height: 1.6; /* Better readability */
+            color: var(--text-dark); /* Darker text for score details */
+            font-weight: 600; /* Make the score/XP/level bold */
+            white-space: pre-wrap; /* Ensure line breaks from JS are respected */
         }
 
         #message-modal .modal-content button {
-            background-color: var(--primary-medium); /* A primary color, e.g., purple */
-            color: white;
-            border: none;
-            padding: 12px 25px; /* Larger padding */
-            border-radius: var(--rounded); /* Use general rounded style */
-            cursor: pointer;
-            font-size: 17px;
-            font-weight: bold;
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            padding: 14px 30px; /* Larger button */
+            font-size: 18px; /* Larger font on button */
+            border-radius: 12px; /* Slightly more rounded */
+            background: linear-gradient(45deg, #7B1FA2, #A020F0); /* More vibrant purple gradient */
+            box-shadow: 0 5px 15px rgba(123, 31, 162, 0.4); /* Stronger shadow */
+            letter-spacing: 0.5px; /* Add some letter spacing */
         }
 
         #message-modal .modal-content button:hover {
-            background-color: #6a0dad;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(45deg, #8A2BE2, #B366FF); /* Lighter on hover */
+            transform: translateY(-3px); /* More pronounced lift */
+            box-shadow: 0 8px 20px rgba(138, 43, 226, 0.5); /* Stronger shadow on hover */
         }
+
 
         /* Small Modal Specific Styles (for quit confirmation) */
         .small-modal {
@@ -501,14 +505,14 @@
                 font-size: 14px;
             }
             #message-modal .modal-content h3 {
-                font-size: 20px;
+                font-size: 26px; /* Adjusted for smaller screens */
             }
             #message-modal .modal-content p {
-                font-size: 14px;
+                font-size: 16px; /* Adjusted for smaller screens */
             }
             #message-modal .modal-content button {
-                font-size: 15px;
-                padding: 10px 20px;
+                font-size: 16px; /* Adjusted for smaller screens */
+                padding: 12px 25px;
             }
         }
 
@@ -529,13 +533,6 @@
             transform: translateY(-5px); /* Slight lift effect */
         }
 
-        /* Add these new CSS rules to your <style> block */
-
-        /* Base body transition for smooth background changes */
-        body {
-            transition: background 0.8s ease-in-out; /* Smooth transition for background */
-        }
-        
         /* Streak specific backgrounds */
         body.streak-2-bg {
             background: linear-gradient(135deg, #4CAF50, #66BB6A); /* Greenish for 2x streak */
@@ -590,15 +587,15 @@
         <h1>Start Quiz</h1>
         <p>Select difficulty:</p>
         <button class="btn difficulty-btn" id="easy-btn" data-difficulty="Easy">
-            <span class="icon-left">🟢</span> Easy
+            <span class="icon-left">🟢</span> Level 1
             <span class="material-symbols-outlined lock-icon" id="easy-lock-icon">lock_open</span>
         </button>
         <button class="btn difficulty-btn" id="medium-btn" data-difficulty="Medium">
-            <span class="icon-left">🟡</span> Medium
+            <span class="icon-left">🟡</span> Level 2
             <span class="material-symbols-outlined lock-icon" id="medium-lock-icon">lock</span>
         </button>
         <button class="btn difficulty-btn" id="hard-btn" data-difficulty="Hard">
-            <span class="icon-left">🔴</span> Hard
+            <span class="icon-left">🔴</span> Level 3
             <span class="material-symbols-outlined lock-icon" id="hard-lock-icon">lock</span>
         </button>
         <button class="btn" id="claim-btn-icon">Claim Certificate</button>
@@ -649,861 +646,1080 @@
     </div>
 
     <script type="module">
-    import {
-        initializeApp
-    } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
-    import { getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
+        import {
+            initializeApp
+        } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
+        import { getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
 
-    import {
-        getFirestore,
-        collection,
-        getDocs,
-        addDoc,
-        serverTimestamp,
-        query,
-        where,
-        updateDoc,
-        doc
-    } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
-    import {
-        getAuth,
-        onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
-    import {
-        getAnalytics
-    } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-analytics.js";
+        import {
+            getFirestore,
+            collection,
+            getDocs,
+            addDoc,
+            serverTimestamp,
+            query,
+            where,
+            updateDoc,
+            doc
+        } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js";
+        import {
+            getAuth,
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
+        import {
+            getAnalytics
+        } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-analytics.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyAZLZPVAlZUJWLturWzJ3nqyceZbSIevl4",
-        authDomain: "mindblast-icons.firebaseapp.com",
-        projectId: "mindblast-icons",
-        storageBucket: "mindblast-icons.firebasestorage.app",
-        messagingSenderId: "807795058423",
-        appId: "1:807795058423:web:2066a5d149852a43af55f2",
-        measurementId: "G-LSJ3SWQP6M"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
-    const analytics = getAnalytics(app);
-
-    let quizData = [];
-    let currentQuestion = 0;
-    let score = 0;
-    let scoreStreak = 0;
-    let correctAnswers = 0;
-    let difficulty = '';
-    let questionStartTime = 0;
-    let currentUser = null;
-    let timePerQuestion = 20;
-    let currentTimer = 0;
-    let timerInterval;
-
-    // Track completed difficulties for the current user
-    let completedDifficulties = {
-        Easy: false,
-        Medium: false,
-        Hard: false
-    };
-
-    const totalScoreDisplay = document.getElementById("total-score");
-    const scoreFeedback = document.getElementById("score-feedback");
-    const startScreen = document.getElementById("start-screen");
-    const quizScreen = document.getElementById("quiz-screen");
-    const iconPlaceholder = document.getElementById("icon-placeholder");
-    const optionsDiv = document.getElementById("options");
-    const progressText = document.getElementById("progress");
-    const timerDisplay = document.getElementById("timer");
-
-    const closeQuizBtn = document.querySelector('.close'); // This is the 'a' tag
-    const quitConfirmModal = document.getElementById('quit-confirm-modal');
-    const quitYesBtn = document.getElementById('quit-yes-btn');
-    const quitNoBtn = document.getElementById('quit-no-btn');
-
-    const easyBtn = document.getElementById("easy-btn");
-    const mediumBtn = document.getElementById("medium-btn");
-    const hardBtn = document.getElementById("hard-btn");
-
-    const easyLockIcon = document.getElementById("easy-lock-icon");
-    const mediumLockIcon = document.getElementById("medium-lock-icon");
-    const hardLockIcon = document.getElementById("hard-lock-icon");
-
-    const claimCertificateBtn = document.getElementById("claim-btn-icon");
-    const certificateModal = document.getElementById("certificate-modal");
-    const closeModalBtn = document.querySelector(".close-modal-btn");
-    const downloadCertificateBtn = document.getElementById("download-certificate-btn");
-    const certificateCanvas = document.getElementById('certificate-canvas');
-    const ctx = certificateCanvas.getContext('2d');
-
-    // New message modal elements
-    const messageModal = document.getElementById('message-modal');
-    const messageModalTitle = document.getElementById('message-modal-title');
-    const messageModalText = document.getElementById('message-modal-text');
-    const messageModalOkBtn = document.getElementById('message-modal-ok-btn');
-
-    // Optional: Allow user interaction to resume music if browser blocks autoplay
-    document.body.addEventListener("click", () => {
-        if (bgMusic.paused) {
-            bgMusic.play().catch(() => {});
-        }
-    });
-
-    /**
- * Displays a general-purpose modal message.
- * Returns a Promise that resolves when the modal is dismissed by clicking OK or outside.
- * @param {string} title The title of the message.
- * @param {string} message The message content.
- * @param {number} [autoCloseDelay=0] Optional: If > 0, the modal will auto-close after this many milliseconds.
- */
-function showMessageModal(title, message, autoCloseDelay = 0) {
-    return new Promise(resolve => {
-        messageModalTitle.textContent = title;
-        messageModalText.textContent = message;
-
-        // Ensure only the OK button is visible and properly reset
-        messageModalOkBtn.style.display = 'block'; // Make sure OK button is visible
-        messageModalOkBtn.onclick = null; // Clear previous listener
-
-        let autoCloseTimer = null;
-
-        const cleanupListeners = () => {
-            messageModalOkBtn.onclick = null;
-            messageModal.removeEventListener('click', clickOutsideHandler);
-            if (autoCloseTimer) {
-                clearTimeout(autoCloseTimer);
-            }
+        const firebaseConfig = {
+            apiKey: "AIzaSyAZLZPVAlZUJWLturWzJ3nqyceZbSIevl4",
+            authDomain: "mindblast-icons.firebaseapp.com",
+            projectId: "mindblast-icons",
+            storageBucket: "mindblast-icons.firebasestorage.app",
+            messagingSenderId: "807795058423",
+            appId: "1:807795058423:web:2066a5d149852a43af55f2",
+            measurementId: "G-LSJ3SWQP6M"
         };
 
-        const closeAndResolve = () => {
-            messageModal.style.display = 'none';
-            cleanupListeners();
-            resolve(); // Resolve the promise when dismissed
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const analytics = getAnalytics(app);
+
+        let quizData = [];
+        let currentQuestion = 0;
+        let score = 0;
+        let scoreStreak = 0;
+        let correctAnswers = 0;
+        let difficulty = '';
+        let questionStartTime = 0;
+        let currentUser = null;
+        let timePerQuestion = 20;
+        let currentTimer = 0;
+        let timerInterval;
+        let totalXP = 0; // NEW: Initialize totalXP
+        let currentLevel = 0; // NEW: Initialize currentLevel
+        let perfectQuizzesCount = 0; // NEW: Track perfect quizzes for achievements
+
+        // Track completed difficulties for the current user
+        let completedDifficulties = {
+            Easy: false,
+            Medium: false,
+            Hard: false
         };
 
-        // Attach new event listener to OK button
-        messageModalOkBtn.onclick = closeAndResolve;
-
-        // Named function for click outside handler to allow proper removal
-        const clickOutsideHandler = function(event) {
-            if (event.target === messageModal) {
-                closeAndResolve();
-            }
+        // NEW: XP Constants
+        const XP_PER_CORRECT_ANSWER = 10; // XP for each correct answer
+        const XP_PER_QUIZ_COMPLETION = 50; // Base XP for completing a quiz
+        const XP_DIFFICULTY_BONUS = { // Additional XP for completing quizzes of certain difficulties
+            "Easy": 10,
+            "Medium": 20,
+            "Hard": 30
         };
-        messageModal.addEventListener('click', clickOutsideHandler);
+        const XP_PERFECT_SCORE_BONUS = 100; // Bonus XP for a perfect quiz score
 
-        messageModal.style.display = 'flex'; // Use flex to center content
+        // NEW: Achievement Definitions
+        const ACHIEVEMENTS = [
+            {
+                id: "FIRST_QUIZ_COMPLETE",
+                name: "First Steps!",
+                description: "Complete your very first quiz.",
+                criteria: { quizzesCompleted: 1 }
+            },
+            {
+                id: "EASY_MASTER",
+                name: "Easy Peasy!",
+                description: "Complete the Easy difficulty quiz.",
+                criteria: { difficultyCompleted: "Easy" }
+            },
+            {
+                id: "MEDIUM_MASTER",
+                name: "Medium Mover!",
+                description: "Complete the Medium difficulty quiz.",
+                criteria: { difficultyCompleted: "Medium" }
+            },
+            {
+                id: "HARD_MASTER",
+                name: "Hard Hitter!",
+                description: "Complete the Hard difficulty quiz.",
+                criteria: { difficultyCompleted: "Hard" }
+            },
+            {
+                id: "QUIZ_BEGINNER", // NEW ACHIEVEMENT
+                name: "Quiz Beginner",
+                description: "Complete 5 quizzes.",
+                icon: "sentiment_very_satisfied", // Material Icons name
+                criteria: { quizzesCompleted: 5 }
+            },
+            {
+                id: "QUIZ_MASTER_10",
+                name: "Quiz Enthusiast!",
+                description: "Complete 10 quizzes.",
+                criteria: { quizzesCompleted: 10 }
+            },
+            {
+                id: "QUIZ_MASTER_50",
+                name: "Quiz Veteran!",
+                description: "Complete 50 quizzes.",
+                criteria: { quizzesCompleted: 50 }
+            },
+            {
+                id: "PERFECT_SCORE_1",
+                name: "Flawless Start!",
+                description: "Achieve 1 perfect score.",
+                criteria: { perfectScores: 1 }
+            },
+            {
+                id: "PERFECT_SCORE_5",
+                name: "Perfect Streak!",
+                description: "Achieve 5 perfect scores.",
+                criteria: { perfectScores: 5 }
+            },
+            {
+                id: "PERFECT_SCORE_10",
+                name: "Unstoppable!",
+                description: "Achieve 10 perfect scores.",
+                criteria: { perfectScores: 10 }
+            },
+            // Add more achievements here as needed
+        ];
 
-        // Handle auto-close if delay is specified
-        if (autoCloseDelay > 0) {
-            autoCloseTimer = setTimeout(() => {
-                closeAndResolve();
-            }, autoCloseDelay);
-        }
-    });
-}
 
+        const totalScoreDisplay = document.getElementById("total-score");
+        const scoreFeedback = document.getElementById("score-feedback");
+        const streakFeedback = document.getElementById("streak-feedback"); // Ensure this is correctly queried
+        const startScreen = document.getElementById("start-screen");
+        const quizScreen = document.getElementById("quiz-screen");
+        const iconPlaceholder = document.getElementById("icon-placeholder");
+        const optionsDiv = document.getElementById("options");
+        const progressText = document.getElementById("progress");
+        const timerDisplay = document.getElementById("timer");
 
-    // Check login state and load user progress
-    onAuthStateChanged(auth, async user => {
-        if (user) {
-            currentUser = user;
-            // NEW: Check if email is verified
-            if (!user.emailVerified) {
-                // Disable all interactive elements on the start screen
-                disableQuizInteractions(true);
-                await showMessageModal( // Await here to block interactions until dismissed
-                    "Email Not Verified",
-                    "Please verify your email address to play quizzes and claim certificates. Check your inbox and spam folder, or go to your account page to resend the verification email."
-                );
-                return; // Stop further execution if email is not verified
-            }
+        const closeQuizBtn = document.querySelector('.close'); // This is the 'a' tag
+        const quitConfirmModal = document.getElementById('quit-confirm-modal');
+        const quitYesBtn = document.getElementById('quit-yes-btn');
+        const quitNoBtn = document.getElementById('quit-no-btn');
 
-            // If user is logged in AND verified, proceed
-            disableQuizInteractions(false); // Re-enable if previously disabled
-            await loadUserProgress(); // Load user's completed difficulties
-            updateDifficultyLocks(); // Update the UI based on loaded progress
+        const easyBtn = document.getElementById("easy-btn");
+        const mediumBtn = document.getElementById("medium-btn");
+        const hardBtn = document.getElementById("hard-btn");
 
-        } else {
-            // User is not logged in
-            disableQuizInteractions(true); // Disable interactions for guests
-            await showMessageModal("Login Required", "You must be logged in to play the quiz.");
-            window.location.href = "auth.html"; // redirect to login
-        }
-    });
+        const easyLockIcon = document.getElementById("easy-lock-icon");
+        const mediumLockIcon = document.getElementById("medium-lock-icon");
+        const hardLockIcon = document.getElementById("hard-lock-icon");
 
-    /**
-     * Disables or enables quiz start buttons and claim certificate button.
-     * @param {boolean} disable True to disable, false to enable.
-     */
-    function disableQuizInteractions(disable) {
-        const buttons = [easyBtn, mediumBtn, hardBtn, claimCertificateBtn];
-        buttons.forEach(btn => {
-            if (disable) {
-                btn.classList.add('locked');
-                btn.onclick = null;
-            } else {
-                // Only remove 'locked' if not already locked by difficulty progression
-                if (!btn.dataset.lockedByDifficulty) { // Use a data attribute to track difficulty locks
-                    btn.classList.remove('locked');
-                }
-                // onclick handlers will be re-assigned by updateDifficultyLocks or specific listeners
+        const claimCertificateBtn = document.getElementById("claim-btn-icon");
+        const certificateModal = document.getElementById("certificate-modal");
+        const closeModalBtn = document.querySelector(".close-modal-btn");
+        const downloadCertificateBtn = document.getElementById("download-certificate-btn");
+        const certificateCanvas = document.getElementById('certificate-canvas');
+        const ctx = certificateCanvas.getContext('2d');
+
+        // New message modal elements
+        const messageModal = document.getElementById('message-modal');
+        const messageModalTitle = document.getElementById('message-modal-title');
+        const messageModalText = document.getElementById('message-modal-text');
+        const messageModalOkBtn = document.getElementById('message-modal-ok-btn');
+
+        // Optional: Allow user interaction to resume music if browser blocks autoplay
+        document.body.addEventListener("click", () => {
+            if (bgMusic.paused) {
+                bgMusic.play().catch(() => {});
             }
         });
-    }
 
-    async function loadUserProgress() {
-        if (!currentUser) return; // This check is already done by onAuthStateChanged
-        const userRef = doc(db, "users", currentUser.uid);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-            const userData = userSnap.data();
-            completedDifficulties.Easy = userData.completedEasy || false;
-            completedDifficulties.Medium = userData.completedMedium || false;
-            completedDifficulties.Hard = userData.completedHard || false;
-        }
-    }
+        /**
+        * Displays a general-purpose modal message.
+        * Returns a Promise that resolves when the modal is dismissed by clicking OK or outside.
+        * @param {string} title The title of the message.
+        * @param {string} message The message content.
+        * @param {number} [autoCloseDelay=0] Optional: If > 0, the modal will auto-close after this many milliseconds.
+        * @param {function} [onOkCallback=null] Optional: A function to call when the OK button is clicked.
+        */
+        function showMessageModal(title, message, autoCloseDelay = 0, onOkCallback = null) {
+            return new Promise(resolve => {
+                messageModalTitle.textContent = title;
+                messageModalText.textContent = message;
 
-    function updateDifficultyLocks() {
-        // Easy is always unlocked if user is verified
-        if (currentUser && currentUser.emailVerified) {
-            easyLockIcon.textContent = 'lock_open';
-            easyBtn.classList.remove('locked');
-            easyBtn.dataset.lockedByDifficulty = 'false'; // Mark as not locked by difficulty
-            easyBtn.onclick = () => startQuiz("Easy");
-        } else {
-             // Keep locked if user is not verified
-            easyLockIcon.textContent = 'lock';
-            easyBtn.classList.add('locked');
-            easyBtn.dataset.lockedByDifficulty = 'true';
-            easyBtn.onclick = null;
-        }
+                // Ensure only the OK button is visible and properly reset
+                messageModalOkBtn.style.display = 'block'; // Make sure OK button is visible
+                messageModalOkBtn.onclick = null; // Clear previous listener
 
+                let autoCloseTimer = null;
 
-        // Medium
-        if (completedDifficulties.Easy && currentUser && currentUser.emailVerified) {
-            mediumLockIcon.textContent = 'lock_open';
-            mediumBtn.classList.remove('locked');
-            mediumBtn.dataset.lockedByDifficulty = 'false';
-            mediumBtn.onclick = () => startQuiz("Medium");
-        } else {
-            mediumLockIcon.textContent = 'lock';
-            mediumBtn.classList.add('locked');
-            mediumBtn.dataset.lockedByDifficulty = 'true';
-            mediumBtn.onclick = null; // Disable click
-        }
+                const cleanupListeners = () => {
+                    messageModalOkBtn.onclick = null;
+                    messageModal.removeEventListener('click', clickOutsideHandler);
+                    if (autoCloseTimer) {
+                        clearTimeout(autoCloseTimer);
+                    }
+                };
 
-        // Hard
-        if (completedDifficulties.Medium && currentUser && currentUser.emailVerified) { // Hard unlocks after Medium
-            hardLockIcon.textContent = 'lock_open';
-            hardBtn.classList.remove('locked');
-            hardBtn.dataset.lockedByDifficulty = 'false';
-            hardBtn.onclick = () => startQuiz("Hard");
-        } else {
-            hardLockIcon.textContent = 'lock';
-            hardBtn.classList.add('locked');
-            hardBtn.dataset.lockedByDifficulty = 'true';
-            hardBtn.onclick = null; // Disable click
-        }
-    }
+                const closeAndResolve = () => {
+                    messageModal.style.display = 'none';
+                    cleanupListeners();
+                    resolve(); // Resolve the promise when dismissed
+                };
 
+                // Attach new event listener to OK button
+                messageModalOkBtn.onclick = () => {
+                    closeAndResolve();
+                    if (onOkCallback) { // Execute callback if provided
+                        onOkCallback();
+                    }
+                };
 
-    async function startQuiz(diff) {
-        if (!currentUser || !currentUser.emailVerified) {
-            await showMessageModal("Email Not Verified", "Please verify your email to start a quiz.");
-            return;
-        }
+                // Named function for click outside handler to allow proper removal
+                const clickOutsideHandler = function(event) {
+                    if (event.target === messageModal) {
+                        closeAndResolve();
+                        // Important: Do not execute onOkCallback here, only on explicit OK click
+                    }
+                };
+                messageModal.addEventListener('click', clickOutsideHandler);
 
-        // Prevent starting locked difficulties
-        if (diff === "Medium" && !completedDifficulties.Easy) {
-            await showMessageModal("Locked Difficulty", "Please complete the Easy difficulty first!");
-            return;
-        }
-        if (diff === "Hard" && !completedDifficulties.Medium) {
-            await showMessageModal("Locked Difficulty", "Please complete the Medium difficulty first!");
-            return;
-        }
+                messageModal.style.display = 'flex'; // Use flex to center content
 
-        difficulty = diff;
-        if (difficulty === "Easy") timePerQuestion = 20;
-        else if (difficulty === "Medium") timePerQuestion = 15;
-        else if (difficulty === "Hard") timePerQuestion = 10;
-
-        quizData = await loadQuestions(diff);
-        currentQuestion = 0;
-        score = 0;
-        correctAnswers = 0;
-        scoreStreak = 0; // <--- ADD THIS LINE TO RESET STREAK
-        startScreen.style.display = "none";
-        quizScreen.style.display = "flex"; // Changed to flex for proper layout
-        startTimer();
-        document.getElementById("progress-bar").style.width = `0%`;
-        showQuestion();
-    }
-
-    async function loadQuestions(difficulty) {
-        const colRef = collection(db, difficulty.charAt(0).toUpperCase() + difficulty.slice(1));
-        const snapshot = await getDocs(colRef);
-        let questions = [];
-        
-        snapshot.forEach(doc => {
-            const data = doc.data();
-            questions.push({
-                icon: `<span class="material-symbols-outlined">${data.icon}</span>`,
-                options: shuffleArray([...data.options]),
-                answer: data.answer
+                // Handle auto-close if delay is specified
+                if (autoCloseDelay > 0) {
+                    autoCloseTimer = setTimeout(() => {
+                        closeAndResolve();
+                        // Important: Do not execute onOkCallback here, as it's an auto-close
+                    }, autoCloseDelay);
+                }
             });
-        });
-    
-        // --- MODIFY THIS SECTION ---
-        let numberOfQuestions = 10; // Default for Easy
-        if (difficulty === "Medium") {
-            numberOfQuestions = 15;
-        } else if (difficulty === "Hard") {
-            numberOfQuestions = 20;
         }
-    
-        return shuffleArray(questions).slice(0, numberOfQuestions);
-        // --- END MODIFICATION ---
-    }
-
-    function shuffleArray(array) {
-        return array.sort(() => Math.random() - 0.5);
-    }
-
-    function startTimer() {
-        currentTimer = timePerQuestion;
-        timerDisplay.textContent = `⏱️ ${currentTimer}s`;
-
-        clearInterval(timerInterval); // Clear previous timer if any
-
-        timerInterval = setInterval(() => {
-            currentTimer--;
-            timerDisplay.textContent = `⏱️ ${currentTimer}s`;
-            if (currentTimer <= 0) {
-                clearInterval(timerInterval);
-                handleTimeUp();
-            }
-        }, 1000);
-    }
 
 
-    function showQuestion() {
-        const q = quizData[currentQuestion];
-        iconPlaceholder.innerHTML = q.icon;
-        optionsDiv.innerHTML = "";
-        progressText.textContent = `${currentQuestion + 1}/${quizData.length}`; // Fixed progress text
-        document.getElementById("progress-bar").style.width = `${((currentQuestion + 1) / quizData.length) * 100}%`;
-        questionStartTime = Date.now();
-
-        q.options.forEach(option => {
-            const btn = document.createElement("button");
-            btn.classList.add("btn", "option");
-            btn.textContent = option;
-            btn.onclick = () => checkAnswer(btn, q.answer);
-            optionsDiv.appendChild(btn);
-        });
-
-        startTimer(); // Ensure timer starts for each new question
-
-    }
-
-    function checkAnswer(selectedBtn, correctAnswer) {
-        clearInterval(timerInterval); // Stop the timer when an answer is selected
-        const timeTaken = (Date.now() - questionStartTime) / 1000;
-        
-        const buttons = document.querySelectorAll(".option");
-        buttons.forEach(btn => {
-            btn.disabled = true; // Disable all buttons
-            if (btn.textContent === correctAnswer) {
-                btn.classList.add("correct");
-            } else {
-                btn.classList.add("incorrect");
-            }
-        });
-    
-        if (selectedBtn.textContent === correctAnswer) {
-            correctAnswers++;
-            playCorrectSound(); // <--- CHANGE THIS LINE
-            scoreStreak++; // <--- INCREMENT STREAK ON CORRECT ANSWER
-        
-            let multiplier = 0;
-            let streakBonus = 0; // Initialize streak bonus
-        
-            if (difficulty === "Easy") {
-                multiplier = timeTaken <= 5 ? 2.0 : timeTaken <= 15 ? 1.0 : 0.5;
-            } else if (difficulty === "Medium") {
-                multiplier = timeTaken <= 5 ? 3.0 : timeTaken <= 10 ? 2.0 : 1.0;
-            } else if (difficulty === "Hard") {
-                multiplier = timeTaken <= 3 ? 4.0 : timeTaken <= 7 ? 3.0 : 1.5;
-            }
-        
-            const basePoints = Math.round(10 * multiplier);
-        
-            // --- NEW: Calculate streak bonus ---
-            if (scoreStreak >= 2) { // Start giving bonus from 2 consecutive correct answers
-                streakBonus = (scoreStreak - 1) * 5; // e.g., 2 streak = +5, 3 streak = +10, etc.
-            }
-            // --- END NEW ---
-        
-            const totalPointsEarned = basePoints + streakBonus; // Combine base and bonus
-        
-            score += totalPointsEarned;
-            updateScoreUI(totalPointsEarned, scoreStreak); // <--- PASS scoreStreak to updateScoreUI
-        } else {
-            playIncorrectSound(); // <--- CHANGE THIS LINE
-            scoreStreak = 0; // <--- RESET STREAK ON INCORRECT ANSWER
-            updateScoreUI(0, scoreStreak); // <--- Pass 0 points and reset streak
-        }
-    
-        setTimeout(() => {
-            currentQuestion++;
-            if (currentQuestion < quizData.length) {
-                showQuestion();
-            } else {
-                clearInterval(timerInterval);
-                showScore();
-            }
-        }, 1000);
-    }
-
-    async function showScore() {
-        setTimeout(async () => {
-            const displayName = currentUser.displayName || currentUser.email;
-
-            try {
-                if (currentUser && currentUser.emailVerified) {
-                    await uploadToLeaderboard(displayName, score, correctAnswers, difficulty);
-                    await updateCompletedDifficulty(difficulty);
-
-                    // Upload successful:
-                    // 1. Show "Quiz Complete!" modal and await its dismissal.
-                    await showMessageModal(
-                        "Quiz Complete!",
-                        `Score: ${score}\nCorrect Answers: ${correctAnswers}\nScore uploaded!`
-                        // No autoCloseDelay here, user clicks OK
+        // Check login state and load user progress
+        onAuthStateChanged(auth, async user => {
+            if (user) {
+                currentUser = user;
+                // NEW: Check if email is verified
+                if (!user.emailVerified) {
+                    // Disable all interactive elements on the start screen
+                    disableQuizInteractions(true);
+                    await showMessageModal( // Await here to block interactions until dismissed
+                        "Email Not Verified",
+                        "Please verify your email address to play quizzes and claim certificates. Check your inbox and spam folder, or go to your account page to resend the verification email."
                     );
-
-                    // 2. Then show "Play Again?" modal and await its dismissal.
-                    // The "Play Again?" prompt still uses a single OK button to continue.
-                    await showMessageModal(
-                        "Play Again?",
-                        "Would you like to try another quiz?"
-                        // No autoCloseDelay here, user clicks OK
-                    );
-                    location.reload(); // Reload after "Play Again?" is dismissed
-                } else {
-                    // Not verified/logged in (score not uploaded):
-                    // 1. Show "Quiz Complete!" modal and await its dismissal.
-                    await showMessageModal(
-                        "Quiz Complete!",
-                        `Score: ${score}\nCorrect Answers: ${correctAnswers}\nYour score could not be uploaded because you are not logged in or your email is not verified.`
-                    );
-
-                    // 2. Then show "Play Again?" modal and await its dismissal.
-                    await showMessageModal(
-                        "Play Again?",
-                        "Would you like to try another quiz?"
-                    );
-                    location.reload(); // Reload after "Play Again?" is dismissed
+                    return; // Stop further execution if email is not verified
                 }
 
-            } catch (error) {
-                // This catch block will be hit if `uploadToLeaderboard` threw an error.
-                // `uploadToLeaderboard` already showed its specific "Upload Failed" message.
-                // Because `showMessageModal` now returns a Promise, we can rely on that.
-                console.error("Quiz completion upload process failed:", error);
+                // If user is logged in AND verified, proceed
+                disableQuizInteractions(false); // Re-enable if previously disabled
+                await loadUserProgress(); // Load user's completed difficulties AND XP/Level
+                updateDifficultyLocks(); // Update the UI based on loaded progress
 
-                // Just show the "Play Again?" modal. The error modal (from uploadToLeaderboard)
-                // will have either auto-closed or been dismissed by the user.
-                await showMessageModal(
-                    "Play Again?",
-                    "Would you like to try another quiz?"
-                );
-                location.reload(); // Reload after "Play Again?" is dismissed
-            }
-
-        }, 200);
-    }
-
-    async function updateCompletedDifficulty(completedDiff) {
-        if (!currentUser || !currentUser.emailVerified) return; // Ensure verified before updating
-        const userRef = doc(db, "users", currentUser.uid);
-
-        // Set the corresponding completed difficulty flag to true
-        const updateData = {};
-        if (completedDiff === "Easy") updateData.completedEasy = true;
-        else if (completedDiff === "Medium") updateData.completedMedium = true;
-        else if (completedDiff === "Hard") updateData.completedHard = true;
-
-        if (Object.keys(updateData).length > 0) {
-            try {
-                await updateDoc(userRef, updateData);
-                console.log(`User ${currentUser.uid} completed ${completedDiff} difficulty.`);
-                // Update the local state for completed difficulties
-                completedDifficulties[completedDiff] = true;
-                // Re-evaluate locks immediately
-                updateDifficultyLocks();
-            } catch (error) {
-                console.error("Error updating user's completed difficulty:", error);
-                // Do not show a modal here, it's a background update for the user.
-                // If critical, handle appropriately, but usually not user-facing.
-            }
-        }
-    }
-
-    async function uploadToLeaderboard(name, score, correct, difficulty) {
-        const user = auth.currentUser;
-        if (!user) {
-            console.error("No user authenticated. Score not uploaded.");
-            await showMessageModal("Upload Failed", "You must be logged in to upload your score.", 5000);
-            throw new Error("User not authenticated.");
-        }
-
-        try {
-            await user.reload();
-            console.log("User emailVerified status after reload:", user.emailVerified);
-        } catch (reloadError) {
-            console.error("Error reloading user for verification check:", reloadError);
-            await showMessageModal("Upload Failed", "Could not verify your account status. Please try logging in again.", 5000);
-            throw new Error("Failed to reload user for verification.");
-        }
-
-        if (!user.emailVerified) {
-            console.error("User email not verified. Score not uploaded.");
-            await showMessageModal("Upload Failed", "Your score could not be uploaded because your email is not verified. Please check your email inbox and click the verification link. After verifying, please log out and log back in to refresh your account status.", 8000);
-            throw new Error("User email not verified.");
-        }
-
-        const currentTime = Date.now();
-        const creationTime = user.metadata.creationTime;
-        const oneMinute = 60 * 1000;
-
-        if (creationTime && (currentTime - creationTime < oneMinute)) {
-            console.warn("New user, potentially first write. Ensure token is fresh.");
-        }
-
-        const leaderboardRef = doc(db, "Leaderboard", user.uid);
-        const userRef = doc(db, "users", user.uid);
-
-        try {
-            const docSnap = await getDoc(leaderboardRef);
-
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                await updateDoc(leaderboardRef, {
-                    score: (data.score || 0) + score,
-                    correct: (data.correct || 0) + correct,
-                    quizzesCompleted: (data.quizzesCompleted || 0) + 1,
-                    lastPlayed: serverTimestamp()
-                });
             } else {
-                await setDoc(leaderboardRef, {
-                    name: user.displayName || name || "Anonymous",
-                    score: score,
-                    correct: correct,
-                    difficulty: difficulty,
-                    quizzesCompleted: 1,
-                    timestamp: serverTimestamp()
-                });
+                // User is not logged in
+                disableQuizInteractions(true); // Disable interactions for guests
+                await showMessageModal("Login Required", "You must be logged in to play the quiz.");
+                window.location.href = "auth.html"; // redirect to login
+            }
+        });
+
+        /**
+         * Disables or enables quiz start buttons and claim certificate button.
+         * @param {boolean} disable True to disable, false to enable.
+         */
+        function disableQuizInteractions(disable) {
+            const buttons = [easyBtn, mediumBtn, hardBtn, claimCertificateBtn];
+            buttons.forEach(btn => {
+                if (disable) {
+                    btn.classList.add('locked');
+                    btn.onclick = null;
+                } else {
+                    // Only remove 'locked' if not already locked by difficulty progression
+                    if (!btn.dataset.lockedByDifficulty) { // Use a data attribute to track difficulty locks
+                        btn.classList.remove('locked');
+                    }
+                    // onclick handlers will be re-assigned by updateDifficultyLocks or specific listeners
+                }
+            });
+        }
+
+        async function loadUserProgress() {
+            if (!currentUser) return; // This check is already done by onAuthStateChanged
+            const userRef = doc(db, "users", currentUser.uid);
+            const userSnap = await getDoc(userRef);
+            if (userSnap.exists()) {
+                const userData = userSnap.data();
+                completedDifficulties.Easy = userData.completedEasy || false;
+                completedDifficulties.Medium = userData.completedMedium || false;
+                completedDifficulties.Hard = userData.completedHard || false;
+                // Load XP and Level
+                totalXP = userData.totalXP || 0;
+                currentLevel = userData.level || 0;
+                // NEW: Load perfectQuizzesCount and achievements
+                perfectQuizzesCount = userData.perfectQuizzesCount || 0;
+                // Ensure achievements is an object, even if null/undefined in Firestore
+                currentUser.achievements = userData.achievements || {};
+                console.log(`User ${currentUser.uid} loaded with XP: ${totalXP}, Level: ${currentLevel}, Perfect Quizzes: ${perfectQuizzesCount}`);
+            } else {
+                // Initialize these fields for new users if the document doesn't exist yet
+                perfectQuizzesCount = 0;
+                currentUser.achievements = {}; // Initialize as empty object
+            }
+        }
+
+        function updateDifficultyLocks() {
+            // Easy is always unlocked if user is verified
+            if (currentUser && currentUser.emailVerified) {
+                easyLockIcon.textContent = 'lock_open';
+                easyBtn.classList.remove('locked');
+                easyBtn.dataset.lockedByDifficulty = 'false'; // Mark as not locked by difficulty
+                easyBtn.onclick = () => startQuiz("Easy");
+            } else {
+                // Keep locked if user is not verified
+                easyLockIcon.textContent = 'lock';
+                easyBtn.classList.add('locked');
+                easyBtn.dataset.lockedByDifficulty = 'true';
+                easyBtn.onclick = null;
             }
 
+
+            // Medium
+            if (completedDifficulties.Easy && currentUser && currentUser.emailVerified) {
+                mediumLockIcon.textContent = 'lock_open';
+                mediumBtn.classList.remove('locked');
+                mediumBtn.dataset.lockedByDifficulty = 'false';
+                mediumBtn.onclick = () => startQuiz("Medium");
+            } else {
+                mediumLockIcon.textContent = 'lock';
+                mediumBtn.classList.add('locked');
+                mediumBtn.dataset.lockedByDifficulty = 'true';
+                mediumBtn.onclick = null; // Disable click
+            }
+
+            // Hard
+            if (completedDifficulties.Medium && currentUser && currentUser.emailVerified) { // Hard unlocks after Medium
+                hardLockIcon.textContent = 'lock_open';
+                hardBtn.classList.remove('locked');
+                hardBtn.dataset.lockedByDifficulty = 'false';
+                hardBtn.onclick = () => startQuiz("Hard");
+            } else {
+                hardLockIcon.textContent = 'lock';
+                hardBtn.classList.add('locked');
+                hardBtn.dataset.lockedByDifficulty = 'true';
+                hardBtn.onclick = null; // Disable click
+            }
+        }
+
+
+        async function startQuiz(diff) {
+            if (!currentUser || !currentUser.emailVerified) {
+                await showMessageModal("Email Not Verified", "Please verify your email to start a quiz.");
+                return;
+            }
+
+            // Prevent starting locked difficulties
+            if (diff === "Medium" && !completedDifficulties.Easy) {
+                await showMessageModal("Locked Difficulty", "Please complete the Easy difficulty first!");
+                return;
+            }
+            if (diff === "Hard" && !completedDifficulties.Medium) {
+                await showMessageModal("Locked Difficulty", "Please complete the Medium difficulty first!");
+                return;
+            }
+
+            difficulty = diff;
+            if (difficulty === "Easy") timePerQuestion = 20;
+            else if (difficulty === "Medium") timePerQuestion = 15;
+            else if (difficulty === "Hard") timePerQuestion = 10;
+
+            quizData = await loadQuestions(diff);
+            currentQuestion = 0;
+            score = 0;
+            correctAnswers = 0;
+            scoreStreak = 0; // <--- ADD THIS LINE TO RESET STREAK
+            startScreen.style.display = "none";
+            quizScreen.style.display = "flex"; // Changed to flex for proper layout
+            startTimer();
+            document.getElementById("progress-bar").style.width = `0%`;
+            showQuestion();
+        }
+
+        async function loadQuestions(difficulty) {
+            const colRef = collection(db, difficulty.charAt(0).toUpperCase() + difficulty.slice(1));
+            const snapshot = await getDocs(colRef);
+            let questions = [];
+            
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                questions.push({
+                    icon: `<span class="material-symbols-outlined">${data.icon}</span>`,
+                    options: shuffleArray([...data.options]),
+                    answer: data.answer
+                });
+            });
+        
+            // --- MODIFY THIS SECTION ---
+            let numberOfQuestions = 10; // Default for Easy
+            if (difficulty === "Medium") {
+                numberOfQuestions = 15;
+            } else if (difficulty === "Hard") {
+                numberOfQuestions = 20;
+            }
+        
+            return shuffleArray(questions).slice(0, numberOfQuestions);
+            // --- END MODIFICATION ---
+        }
+
+        function shuffleArray(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        function startTimer() {
+            currentTimer = timePerQuestion;
+            timerDisplay.textContent = `⏱️ ${currentTimer}s`;
+
+            clearInterval(timerInterval); // Clear previous timer if any
+
+            timerInterval = setInterval(() => {
+                currentTimer--;
+                timerDisplay.textContent = `⏱️ ${currentTimer}s`;
+                if (currentTimer <= 0) {
+                    clearInterval(timerInterval);
+                    handleTimeUp();
+                }
+            }, 1000);
+        }
+
+        function showQuestion() {
+            const q = quizData[currentQuestion];
+            iconPlaceholder.innerHTML = q.icon;
+            optionsDiv.innerHTML = "";
+            progressText.textContent = `${currentQuestion + 1}/${quizData.length}`; // Fixed progress text
+            document.getElementById("progress-bar").style.width = `${((currentQuestion + 1) / quizData.length) * 100}%`;
+            questionStartTime = Date.now();
+
+            q.options.forEach(option => {
+                const btn = document.createElement("button");
+                btn.classList.add("btn", "option");
+                btn.textContent = option;
+                btn.onclick = () => checkAnswer(btn, q.answer);
+                optionsDiv.appendChild(btn);
+            });
+
+            startTimer(); // Ensure timer starts for each new question
+
+        }
+
+        function checkAnswer(selectedBtn, correctAnswer) {
+            clearInterval(timerInterval); // Stop the timer when an answer is selected
+            const timeTaken = (Date.now() - questionStartTime) / 1000;
+            
+            const buttons = document.querySelectorAll(".option");
+            buttons.forEach(btn => {
+                btn.disabled = true; // Disable all buttons
+                if (btn.textContent === correctAnswer) {
+                    btn.classList.add("correct");
+                } else {
+                    btn.classList.add("incorrect");
+                }
+            });
+        
+            if (selectedBtn.textContent === correctAnswer) {
+                correctAnswers++;
+                playCorrectSound(); // <--- CHANGE THIS LINE
+                scoreStreak++; // <--- INCREMENT STREAK ON CORRECT ANSWER
+                // NEW: Add XP for correct answer
+                updateUserXP(XP_PER_CORRECT_ANSWER);
+            
+                let multiplier = 0;
+                let streakBonus = 0; // Initialize streak bonus
+            
+                if (difficulty === "Easy") {
+                    multiplier = timeTaken <= 5 ? 2.0 : timeTaken <= 15 ? 1.0 : 0.5;
+                } else if (difficulty === "Medium") {
+                    multiplier = timeTaken <= 5 ? 3.0 : timeTaken <= 10 ? 2.0 : 1.0;
+                } else if (difficulty === "Hard") {
+                    multiplier = timeTaken <= 3 ? 4.0 : timeTaken <= 7 ? 3.0 : 1.5;
+                }
+            
+                const basePoints = Math.round(10 * multiplier);
+            
+                // --- NEW: Calculate streak bonus ---
+                if (scoreStreak >= 2) { // Start giving bonus from 2 consecutive correct answers
+                    streakBonus = (scoreStreak - 1) * 5; // e.g., 2 streak = +5, 3 streak = +10, etc.
+                }
+                // --- END NEW ---
+            
+                const totalPointsEarned = basePoints + streakBonus; // Combine base and bonus
+            
+                score += totalPointsEarned;
+                updateScoreUI(totalPointsEarned, scoreStreak); // <--- PASS scoreStreak to updateScoreUI
+            } else {
+                playIncorrectSound(); // <--- CHANGE THIS LINE
+                scoreStreak = 0; // <--- RESET STREAK ON INCORRECT ANSWER
+                updateScoreUI(0, scoreStreak); // <--- Pass 0 points and reset streak
+            }
+        
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < quizData.length) {
+                    showQuestion();
+                } else {
+                    clearInterval(timerInterval);
+                    showScore();
+                }
+            }, 1000);
+        }
+
+        // NEW: Function to check and grant achievements
+        async function checkAchievements() {
+            if (!currentUser || !currentUser.uid) return;
+
+            const userRef = doc(db, "users", currentUser.uid);
             const userSnap = await getDoc(userRef);
             const userData = userSnap.exists() ? userSnap.data() : {};
 
-            if (userSnap.exists()) {
+            // Ensure current user's local achievement data is up-to-date
+            // This is crucial because `updateUserXP` and `updateCompletedDifficulty` might have updated Firestore
+            // but not necessarily the `currentUser.achievements` object in memory.
+            // A simpler approach is to reload the user data or pass the current state.
+            // For this, we'll rely on global `totalXP`, `currentLevel`, `completedDifficulties`, `perfectQuizzesCount`
+            // and `currentUser.totalQuizzes` (which is updated in uploadToLeaderboard).
+
+            // Let's ensure currentUser.totalQuizzes is updated from the latest Firestore data if possible
+            // Or, ideally, pass it directly from showScore() after uploadToLeaderboard completes.
+            // For now, we'll assume `uploadToLeaderboard` updates `currentUser.totalQuizzes` if it exists.
+            // If not, we'd need to fetch it again or pass it.
+            const currentTotalQuizzes = userData.totalQuizzes || 0;
+            const currentPerfectQuizzes = userData.perfectQuizzesCount || 0;
+
+            for (const achievement of ACHIEVEMENTS) {
+                if (!currentUser.achievements[achievement.id] || !currentUser.achievements[achievement.id].unlocked) {
+                    let unlocked = false;
+                    if (achievement.criteria.quizzesCompleted && currentTotalQuizzes >= achievement.criteria.quizzesCompleted) {
+                        unlocked = true;
+                    } else if (achievement.criteria.perfectScores && currentPerfectQuizzes >= achievement.criteria.perfectScores) {
+                        unlocked = true;
+                    } else if (achievement.criteria.difficultyCompleted) {
+                        if (completedDifficulties[achievement.criteria.difficultyCompleted]) {
+                            unlocked = true;
+                        }
+                    }
+                    // Add more criteria checks here for other achievement types (e.g., streak, time)
+
+                    if (unlocked) {
+                        await grantAchievement(achievement);
+                    }
+                }
+            }
+        }
+
+        // NEW: Function to grant an achievement
+        async function grantAchievement(achievement) {
+            if (!currentUser || !currentUser.uid) return;
+
+            const userRef = doc(db, "users", currentUser.uid);
+
+            // Update local achievements map
+            currentUser.achievements[achievement.id] = {
+                unlocked: true,
+                unlockedAt: serverTimestamp() // Firestore timestamp
+            };
+
+            try {
                 await updateDoc(userRef, {
-                    totalQuizzes: (userData.totalQuizzes || 0) + 1,
-                    highScore: Math.max(score, userData.highScore || 0)
-                });
-            } else {
-                await setDoc(userRef, {
-                    totalQuizzes: 1,
-                    highScore: score
-                });
+                    [`achievements.${achievement.id}`]: {
+                        unlocked: true,
+                        unlockedAt: serverTimestamp()
+                    }
+                }, { merge: true });
+                console.log(`Achievement unlocked: ${achievement.name}`);
+                await showMessageModal("Achievement Unlocked!", `${achievement.name}\n"${achievement.description}"`);
+            } catch (error) {
+                console.error("Error granting achievement:", error);
+            }
+        }
+
+
+        async function showScore() {
+            setTimeout(async () => {
+                const displayName = currentUser.displayName || currentUser.email;
+
+                // Calculate and add XP for quiz completion and difficulty bonus
+                const quizCompletionXP = XP_PER_QUIZ_COMPLETION + (XP_DIFFICULTY_BONUS[difficulty] || 0);
+                await updateUserXP(quizCompletionXP); // Await XP update
+
+                // Check for perfect score bonus
+                if (correctAnswers === quizData.length) {
+                    await updateUserXP(XP_PERFECT_SCORE_BONUS); // Await perfect score XP
+                }
+
+                let uploadStatusMessage = "";
+                let uploadSuccess = false;
+
+                try {
+                    if (currentUser && currentUser.emailVerified) {
+                        // Ensure perfectQuizzesCount is updated before uploadToLeaderboard
+                        const isPerfectScore = (correctAnswers === quizData.length);
+                        if (isPerfectScore) {
+                            perfectQuizzesCount++; // Update local count immediately
+                        }
+
+                        await uploadToLeaderboard(displayName, score, correctAnswers, difficulty, isPerfectScore);
+                        await updateCompletedDifficulty(difficulty);
+                        uploadStatusMessage = "Score uploaded!";
+                        uploadSuccess = true;
+                    } else {
+                        uploadStatusMessage = "Your score could not be uploaded because you are not logged in or your email is not verified.";
+                    }
+                } catch (error) {
+                    console.error("Quiz completion upload process failed:", error);
+                    uploadStatusMessage = "There was an issue uploading your score. Check previous messages for details.";
+                    // Specific error messages are handled within uploadToLeaderboard
+                }
+
+                // --- ALWAYS show the "Quiz Complete!" modal here, after all XP updates and upload attempt ---
+                // And after achievement checks are done, so any achievement modals appear first.
+                await checkAchievements(); // Call achievement check here
+
+                const scoreMessage = `Score: ${score}\nCorrect Answers: ${correctAnswers}\nTotal XP: ${totalXP}\nYour Level: ${currentLevel}`;
+                
+                // Define the callback function for the OK button on the score screen
+                const goToQuizStart = () => {
+                    // Reset quiz state
+                    currentQuestion = 0;
+                    score = 0;
+                    correctAnswers = 0;
+                    scoreStreak = 0;
+                    clearInterval(timerInterval); // Ensure timer is stopped
+                    // Reset background to default
+                    document.body.className = ''; // Remove all streak classes
+
+                    // Show start screen, hide quiz screen
+                    quizScreen.style.display = "none";
+                    startScreen.style.display = "flex";
+                };
+
+                await showMessageModal(
+                    "🎉 Quiz Complete! 🎉", // Added emojis here
+                    `${scoreMessage}\n\n${uploadStatusMessage}`,
+                    0, // no auto-close delay
+                    goToQuizStart // THE CALLBACK
+                );
+
+                // No finally block with location.reload() or "Play Again?" modal anymore.
+            }, 200);
+        }
+
+        // NEW: Function to update user XP and level in Firestore
+        async function updateUserXP(xpGained) {
+            if (!currentUser) return;
+
+            const userRef = doc(db, "users", currentUser.uid);
+            const userSnap = await getDoc(userRef);
+            let userData = userSnap.exists() ? userSnap.data() : {};
+
+            let currentXP = userData.totalXP || 0;
+            let currentLevel = userData.level || 0;
+
+            currentXP += xpGained;
+
+            // Calculate new level
+            // Example formula: level = floor(sqrt(XP / 100)) - makes levels progressively harder
+            let newLevel = Math.floor(Math.sqrt(currentXP / 100)); 
+
+            if (newLevel > currentLevel) {
+                // User leveled up!
+                console.log(`User ${currentUser.uid} leveled up to Level ${newLevel}!`);
+                await showMessageModal("Level Up!", `Congratulations! You reached Level ${newLevel}!\nTotal XP: ${currentXP}`); // Notify user
+                currentLevel = newLevel; // Update local level
             }
 
-            console.log(`User ${user.uid} completed ${difficulty} difficulty.`);
+            try {
+                await updateDoc(userRef, {
+                    totalXP: currentXP,
+                    level: currentLevel
+                }, { merge: true }); // Use merge to avoid overwriting other fields
+                console.log(`User XP updated: ${xpGained} added, total ${currentXP}, level ${currentLevel}`);
+                totalXP = currentXP; // Update global totalXP variable
+            } catch (error) {
+                console.error("Error updating user XP:", error);
+            }
         }
-        catch (error) {
-            console.error("Error uploading to leaderboard:", error);
-            if (error.code === 'permission-denied' || error.message.includes('Missing or insufficient permissions') || error.message.includes('Bad Request') || error.message.includes('BLOCKED_BY_CLIENT')) {
-                const creationTime = user && user.metadata.creationTime ? new Date(user.metadata.creationTime).getTime() : 0;
-                const fiveMinutes = 5 * 60 * 1000;
 
-                if (creationTime && (currentTime - creationTime < fiveMinutes)) {
-                    await showMessageModal(
-                        "Upload Failed",
-                        "Your score could not be uploaded because your email is not verified or you have already verified it but after logging in, if so kindly re-logged in again, thank you.",
-                        12000
-                    );
+
+        async function updateCompletedDifficulty(completedDiff) {
+            if (!currentUser || !currentUser.emailVerified) return; // Ensure verified before updating
+            const userRef = doc(db, "users", currentUser.uid);
+
+            // Set the corresponding completed difficulty flag to true
+            const updateData = {};
+            if (completedDiff === "Easy") updateData.completedEasy = true;
+            else if (completedDiff === "Medium") updateData.completedMedium = true;
+            else if (completedDiff === "Hard") updateData.completedHard = true;
+
+            if (Object.keys(updateData).length > 0) {
+                try {
+                    await updateDoc(userRef, updateData);
+                    console.log(`User ${currentUser.uid} completed ${completedDiff} difficulty.`);
+                    // Update the local state for completed difficulties
+                    completedDifficulties[completedDiff] = true;
+                    // Re-evaluate locks immediately
+                    updateDifficultyLocks();
+                } catch (error) {
+                    console.error("Error updating user's completed difficulty:", error);
+                    // Do not show a modal here, it's a background update for the user.
+                    // If critical, handle appropriately, but usually not user-facing.
+                }
+            }
+        }
+
+        async function uploadToLeaderboard(name, score, correct, difficulty, isPerfectScore) { // Added isPerfectScore parameter
+            const user = auth.currentUser;
+            if (!user) {
+                console.error("No user authenticated. Score not uploaded.");
+                await showMessageModal("Upload Failed", "You must be logged in to upload your score.", 5000);
+                throw new Error("User not authenticated.");
+            }
+
+            try {
+                await user.reload();
+                console.log("User emailVerified status after reload:", user.emailVerified);
+            } catch (reloadError) {
+                console.error("Error reloading user for verification check:", reloadError);
+                await showMessageModal("Upload Failed", "Could not verify your account status. Please try logging in again.", 5000);
+                throw new Error("Failed to reload user for verification.");
+            }
+
+            if (!user.emailVerified) {
+                console.error("User email not verified. Score not uploaded.");
+                await showMessageModal("Upload Failed", "Your score could not be uploaded because your email is not verified. Please check your email inbox and click the verification link. After verifying, please log out and log back in to refresh your account status.", 8000);
+                throw new Error("User email not verified.");
+            }
+
+            const currentTime = Date.now();
+            const creationTime = user.metadata.creationTime;
+            const oneMinute = 60 * 1000;
+
+            if (creationTime && (currentTime - creationTime < oneMinute)) {
+                console.warn("New user, potentially first write. Ensure token is fresh.");
+            }
+
+            const leaderboardRef = doc(db, "Leaderboard", user.uid);
+            const userRef = doc(db, "users", user.uid);
+
+            try {
+                const docSnap = await getDoc(leaderboardRef);
+                const userSnap = await getDoc(userRef); // Get user data for updates
+
+                // Update leaderboard
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    await updateDoc(leaderboardRef, {
+                        score: (data.score || 0) + score,
+                        correct: (data.correct || 0) + correct,
+                        quizzesCompleted: (data.quizzesCompleted || 0) + 1,
+                        lastPlayed: serverTimestamp()
+                    });
+                } else {
+                    await setDoc(leaderboardRef, {
+                        name: user.displayName || name || "Anonymous",
+                        score: score,
+                        correct: correct,
+                        difficulty: difficulty,
+                        quizzesCompleted: 1,
+                        timestamp: serverTimestamp()
+                    });
+                }
+
+                // Update user profile (totalQuizzes, highScore, perfectQuizzesCount)
+                let userData = userSnap.exists() ? userSnap.data() : {};
+                
+                await updateDoc(userRef, {
+                    totalQuizzes: (userData.totalQuizzes || 0) + 1,
+                    highScore: Math.max(score, userData.highScore || 0),
+                    perfectQuizzesCount: (userData.perfectQuizzesCount || 0) + (isPerfectScore ? 1 : 0), // Increment if perfect
+                }, { merge: true });
+
+                // Update local perfectQuizzesCount for immediate use in checkAchievements
+                perfectQuizzesCount = (userData.perfectQuizzesCount || 0) + (isPerfectScore ? 1 : 0);
+
+                console.log(`User ${user.uid} completed ${difficulty} difficulty. Total Quizzes: ${perfectQuizzesCount}`);
+            }
+            catch (error) {
+                console.error("Error uploading to leaderboard or user profile:", error);
+                if (error.code === 'permission-denied' || error.message.includes('Missing or insufficient permissions') || error.message.includes('Bad Request') || error.message.includes('BLOCKED_BY_CLIENT')) {
+                    const creationTime = user && user.metadata.creationTime ? new Date(user.metadata.creationTime).getTime() : 0;
+                    const fiveMinutes = 5 * 60 * 1000;
+
+                    if (creationTime && (currentTime - creationTime < fiveMinutes)) {
+                        await showMessageModal(
+                            "Upload Failed",
+                            "Your score could not be uploaded because your email is not verified or you have already verified it but after logging in, if so kindly re-logged in again, thank you.",
+                            12000
+                        );
+                    } else {
+                        await showMessageModal(
+                            "Upload Failed",
+                            "There was an issue uploading your score. If this is a new account, please ensure your email is verified. Then, **log out and log back in** to fully activate your account and try again.",
+                            8000
+                        );
+                    }
                 } else {
                     await showMessageModal(
                         "Upload Failed",
-                        "There was an issue uploading your score. If this is a new account, please ensure your email is verified. Then, **log out and log back in** to fully activate your account and try again.",
-                        8000
+                        "An unexpected error occurred. Please try again.",
+                        5000
                     );
                 }
+                throw error; // Always re-throw the error on failure for showScore to catch it
+            }
+        }
+
+        function handleTimeUp() {
+            const q = quizData[currentQuestion];
+
+            const buttons = document.querySelectorAll(".option");
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent === q.answer) {
+                    btn.classList.add("correct");
+                } else {
+                    btn.classList.add("incorrect");
+                }
+            });
+            playIncorrectSound(); // <--- CHANGE THIS LINE (if time runs out, it's like an incorrect answer)
+            scoreStreak = 0; // <--- RESET STREAK WHEN TIME IS UP
+            updateScoreUI(0, scoreStreak); // <--- Pass 0 points and reset streak
+
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < quizData.length) {
+                    showQuestion();
+                } else {
+                    clearInterval(timerInterval);
+                    showScore();
+                }
+            }, 1000);
+        }
+
+        // Get the new streak feedback element
+        // const streakFeedback = document.getElementById("streak-feedback"); // Add this line near other element queries // Already present in top section
+
+        function updateScoreUI(points, currentStreak) { // currentStreak is already passed from previous steps
+            totalScoreDisplay.textContent = `Score: ${score}`;
+
+            // Update score feedback (existing logic)
+            if (points > 0) {
+                scoreFeedback.textContent = `+${points}`;
+                scoreFeedback.classList.add("show");
             } else {
-                await showMessageModal(
-                    "Upload Failed",
-                    "An unexpected error occurred. Please try again.",
-                    5000
-                );
+                scoreFeedback.classList.remove("show");
+                scoreFeedback.textContent = "";
             }
-            throw error; // Always re-throw the error on failure for showScore to catch it
-        }
-    }
 
-    function handleTimeUp() {
-        const q = quizData[currentQuestion];
-
-        const buttons = document.querySelectorAll(".option");
-        buttons.forEach(btn => {
-            btn.disabled = true;
-            if (btn.textContent === q.answer) {
-                btn.classList.add("correct");
+            // Update streak feedback (existing logic)
+            if (currentStreak >= 2) {
+                streakFeedback.textContent = `🔥 ${currentStreak}x Streak!`;
+                streakFeedback.classList.add("show");
             } else {
-                btn.classList.add("incorrect");
+                streakFeedback.classList.remove("show");
+                streakFeedback.textContent = "";
             }
-        });
-        playIncorrectSound(); // <--- CHANGE THIS LINE (if time runs out, it's like an incorrect answer)
-        scoreStreak = 0; // <--- RESET STREAK WHEN TIME IS UP
-        updateScoreUI(0, scoreStreak); // <--- Pass 0 points and reset streak
 
-        setTimeout(() => {
-            currentQuestion++;
-            if (currentQuestion < quizData.length) {
-                showQuestion();
+            // --- NEW: Handle Background Color Change based on Streak ---
+
+            // 1. Remove all existing streak background classes from the body
+            const bodyClasses = Array.from(document.body.classList); // Get current classes as array
+            bodyClasses.forEach(className => {
+                if (className.startsWith('streak-') && className.endsWith('-bg')) {
+                    document.body.classList.remove(className);
+                }
+            });
+
+            // 2. Add the appropriate new streak background class
+            if (currentStreak >= 2) {
+                // We'll apply the specific background for streaks 2 through 9.
+                // For streaks 10 and above, we'll use the 'streak-10-bg' class.
+                let streakBgClass = '';
+                if (currentStreak >= 10) {
+                    streakBgClass = 'streak-10-bg';
+                } else if (currentStreak >= 2) { // For streaks 2 to 9
+                    streakBgClass = `streak-${currentStreak}-bg`;
+                }
+
+                if (streakBgClass) {
+                    document.body.classList.add(streakBgClass);
+                }
             } else {
-                clearInterval(timerInterval);
-                showScore();
+                // If streak is 0 or 1, ensure the default primary gradient is applied
+                // (which is defined in your initial body styles). No specific streak class is needed.
+                // The filtering above already removes any existing streak classes.
             }
-        }, 1000);
-    }
 
-    // Get the new streak feedback element
-const streakFeedback = document.getElementById("streak-feedback"); // Add this line near other element queries
+            // --- END NEW BACKGROUND LOGIC ---
 
-    function updateScoreUI(points, currentStreak) { // currentStreak is already passed from previous steps
-        totalScoreDisplay.textContent = `Score: ${score}`;
 
-        // Update score feedback (existing logic)
-        if (points > 0) {
-            scoreFeedback.textContent = `+${points}`;
-            scoreFeedback.classList.add("show");
-        } else {
-            scoreFeedback.classList.remove("show");
-            scoreFeedback.textContent = "";
+            // Hide feedback after a delay (existing logic)
+            setTimeout(() => {
+                scoreFeedback.classList.remove("show");
+                scoreFeedback.textContent = "";
+                // You might want streakFeedback to stay longer or fade out with points.
+                // If you want it to fade out here too:
+                // streakFeedback.classList.remove("show");
+                // streakFeedback.textContent = "";
+            }, 800);
         }
 
-        // Update streak feedback (existing logic)
-        if (currentStreak >= 2) {
-            streakFeedback.textContent = `🔥 ${currentStreak}x Streak!`;
-            streakFeedback.classList.add("show");
-        } else {
-            streakFeedback.classList.remove("show");
-            streakFeedback.textContent = "";
+        const bgMusic = document.getElementById("bg-music");
+        // const correctSound = document.getElementById("correct-sound"); // REMOVE OR COMMENT OUT THIS LINE
+        // const incorrectSound = document.getElementById("incorrect-sound"); // REMOVE OR COMMENT OUT THIS LINE
+        
+        // NEW: Define functions to play sounds dynamically
+        function playCorrectSound() {
+            const sound = new Audio('sounds/correct.mp3');
+            sound.volume = 1.0; // Set volume here
+            sound.play().catch(e => console.error("Error playing correct sound:", e));
+        }
+        
+        function playIncorrectSound() {
+            const sound = new Audio('sounds/incorrect.mp3');
+            sound.volume = 1.0; // Set volume here
+            sound.play().catch(e => console.error("Error playing incorrect sound:", e));
         }
 
-        // --- NEW: Handle Background Color Change based on Streak ---
-
-        // 1. Remove all existing streak background classes from the body
-        const bodyClasses = Array.from(document.body.classList); // Get current classes as array
-        bodyClasses.forEach(className => {
-            if (className.startsWith('streak-') && className.endsWith('-bg')) {
-                document.body.classList.remove(className);
-            }
-        });
-
-        // 2. Add the appropriate new streak background class
-        if (currentStreak >= 2) {
-            // We'll apply the specific background for streaks 2 through 9.
-            // For streaks 10 and above, we'll use the 'streak-10-bg' class.
-            let streakBgClass = '';
-            if (currentStreak >= 10) {
-                streakBgClass = 'streak-10-bg';
-            } else if (currentStreak >= 2) { // For streaks 2 to 9
-                streakBgClass = `streak-${currentStreak}-bg`;
-            }
-
-            if (streakBgClass) {
-                document.body.classList.add(streakBgClass);
-            }
-        } else {
-            // If streak is 0 or 1, ensure the default primary gradient is applied
-            // (which is defined in your initial body styles). No specific streak class is needed.
-            // The filtering above already removes any existing streak classes.
-        }
-
-        // --- END NEW BACKGROUND LOGIC ---
-
-
-        // Hide feedback after a delay (existing logic)
-        setTimeout(() => {
-            scoreFeedback.classList.remove("show");
-            scoreFeedback.textContent = "";
-            // You might want streakFeedback to stay longer or fade out with points.
-            // If you want it to fade out here too:
-            // streakFeedback.classList.remove("show");
-            // streakFeedback.textContent = "";
-        }, 800);
-    }
-
-    const bgMusic = document.getElementById("bg-music");
-    // const correctSound = document.getElementById("correct-sound"); // REMOVE OR COMMENT OUT THIS LINE
-    // const incorrectSound = document.getElementById("incorrect-sound"); // REMOVE OR COMMENT OUT THIS LINE
-    
-    // NEW: Define functions to play sounds dynamically
-    function playCorrectSound() {
-        const sound = new Audio('sounds/correct.mp3');
-        sound.volume = 1.0; // Set volume here
-        sound.play().catch(e => console.error("Error playing correct sound:", e));
-    }
-    
-    function playIncorrectSound() {
-        const sound = new Audio('sounds/incorrect.mp3');
-        sound.volume = 1.0; // Set volume here
-        sound.play().catch(e => console.error("Error playing incorrect sound:", e));
-    }
-
-    bgMusic.volume = 0.1;
+        bgMusic.volume = 0.1;
 
 
 
 
-    window.onload = () => {
-        // Event listeners for difficulty buttons are now managed by updateDifficultyLocks
-        // which is called after user login and quiz completion.
-        // Initial call to updateDifficultyLocks will set them up correctly.
+        window.onload = () => {
+            // Event listeners for difficulty buttons are now managed by updateDifficultyLocks
+            // which is called after user login and quiz completion.
+            // Initial call to updateDifficultyLocks will set them up correctly.
 
-        // Certificate functionality
-        claimCertificateBtn.addEventListener("click", async () => {
-            if (!currentUser) {
-                await showMessageModal("Login Required", "Please log in to claim your certificate.");
-                window.location.href = "auth.html"; // Redirect if not logged in
-                return;
-            }
+            // Certificate functionality
+            claimCertificateBtn.addEventListener("click", async () => {
+                if (!currentUser) {
+                    await showMessageModal("Login Required", "Please log in to claim your certificate.");
+                    window.location.href = "auth.html"; // Redirect if not logged in
+                    return;
+                }
 
-            // NEW: Email verification check for claiming certificate
-            if (!currentUser.emailVerified) {
-                await showMessageModal("Email Not Verified", "Please verify your email address to claim your certificate.");
-                return;
-            }
+                // NEW: Email verification check for claiming certificate
+                if (!currentUser.emailVerified) {
+                    await showMessageModal("Email Not Verified", "Please verify your email address to claim your certificate.");
+                    return;
+                }
 
-            // For certificate, let's make it available only if all difficulties are completed.
-            if (!completedDifficulties.Easy || !completedDifficulties.Medium || !completedDifficulties.Hard) {
-                await showMessageModal("Certificate Locked", "Complete all difficulties (Easy, Medium, and Hard) to earn your certificate!");
-                return;
-            }
+                // For certificate, let's make it available only if all difficulties are completed.
+                if (!completedDifficulties.Easy || !completedDifficulties.Medium || !completedDifficulties.Hard) {
+                    await showMessageModal("Certificate Locked", "Complete all difficulties (Easy, Medium, and Hard) to earn your certificate!");
+                    return;
+                }
 
 
-            const userName = currentUser.displayName || "Valued User"; // Get user's name
-            const today = new Date();
-            const completionDate = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                const userName = currentUser.displayName || "Valued User"; // Get user's name
+                const today = new Date();
+                const completionDate = today.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
-            // Load the certificate template image
-            const certificateImage = new Image();
-            // Assuming your images folder is at the root level or accessible via /images/
-            certificateImage.src = '/images/certificate-template.png';
+                // Load the certificate template image
+                const certificateImage = new Image();
+                // Assuming your images folder is at the root level or accessible via /images/
+                certificateImage.src = '/images/certificate-template.png';
 
-            certificateImage.onload = () => {
-                // Set canvas dimensions to match the image
-                certificateCanvas.width = certificateImage.width;
-                certificateCanvas.height = certificateImage.height;
+                certificateImage.onload = () => {
+                    // Set canvas dimensions to match the image
+                    certificateCanvas.width = certificateImage.width;
+                    certificateCanvas.height = certificateImage.height;
 
-                // Draw the background image
-                ctx.drawImage(certificateImage, 0, 0);
+                    // Draw the background image
+                    ctx.drawImage(certificateImage, 0, 0);
 
-                // Set text styles for the name
-                ctx.font = 'bold 100px Fredoka'; // Adjust font size and family as needed
-                ctx.fillStyle = '#2E0B40'; // Adjust color to match your design (dark purple from your CSS)
-                ctx.textAlign = 'center';
+                    // Set text styles for the name
+                    ctx.font = 'bold 100px Fredoka'; // Adjust font size and family as needed
+                    ctx.fillStyle = '#2E0B40'; // Adjust color to match your design (dark purple from your CSS)
+                    ctx.textAlign = 'center';
 
-                // Draw the user's name on the underline
-                // You'll need to adjust these coordinates (x, y) based on your image's layout
-                // x: horizontal center of the canvas
-                // y: estimated vertical position of the underline
-                const nameX = certificateCanvas.width / 2;
-                const nameY = certificateCanvas.height * 0.49; // Adjust this '0.53' multiplier as needed
+                    // Draw the user's name on the underline
+                    // You'll need to adjust these coordinates (x, y) based on your image's layout
+                    // x: horizontal center of the canvas
+                    // y: estimated vertical position of the underline
+                    const nameX = certificateCanvas.width / 2;
+                    const nameY = certificateCanvas.height * 0.49; // Adjust this '0.53' multiplier as needed
 
-                ctx.fillText(userName.toUpperCase(), nameX, nameY); // Convert name to uppercase if preferred
+                    ctx.fillText(userName.toUpperCase(), nameX, nameY); // Convert name to uppercase if preferred
 
-                // Set text styles for the date
-                ctx.font = '30px IBM Plex Sans'; // Adjust font size and family
-                ctx.fillStyle = '#2E0B40'; // Same color as name
-                ctx.textAlign = 'center';
+                    // Set text styles for the date
+                    ctx.font = '30px IBM Plex Sans'; // Adjust font size and family
+                    ctx.fillStyle = '#2E0B40'; // Same color as name
+                    ctx.textAlign = 'center';
 
-                // Draw the date below MindBlast
-                // x: horizontal center of the canvas
-                // y: estimated vertical position below MindBlast
-                const dateX = certificateCanvas.width / 2;
-                const dateY = certificateCanvas.height * 0.9; // Adjust this '0.86' multiplier as needed
+                    // Draw the date below MindBlast
+                    // x: horizontal center of the canvas
+                    // y: estimated vertical position below MindBlast
+                    const dateX = certificateCanvas.width / 2;
+                    const dateY = certificateCanvas.height * 0.9; // Adjust this '0.86' multiplier as needed
 
-                ctx.fillText(completionDate, dateX, dateY);
+                    ctx.fillText(completionDate, dateX, dateY);
 
-                // Show the modal
-                certificateModal.style.display = "flex";
+                    // Show the modal
+                    certificateModal.style.display = "flex";
 
-                // Set the download link for the generated certificate
-                downloadCertificateBtn.onclick = () => {
-                    const dataURL = certificateCanvas.toDataURL('image/png'); // Get image data as PNG
-                    const link = document.createElement('a');
-                    link.href = dataURL;
-                    link.download = `${userName}_MindBlast_Certificate.png`; // Dynamic download filename
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
+                    // Set the download link for the generated certificate
+                    downloadCertificateBtn.onclick = () => {
+                        const dataURL = certificateCanvas.toDataURL('image/png'); // Get image data as PNG
+                        const link = document.createElement('a');
+                        link.href = dataURL;
+                        link.download = `${userName}_MindBlast_Certificate.png`; // Dynamic download filename
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    };
                 };
-            };
 
-            certificateImage.onerror = () => {
-                console.error("Failed to load certificate template image. Make sure the path is correct.");
-                showMessageModal("Error", "Could not load certificate template. Please try again later.");
-            };
-        });
+                certificateImage.onerror = () => {
+                    console.error("Failed to load certificate template image. Make sure the path is correct.");
+                    showMessageModal("Error", "Could not load certificate template. Please try again later.");
+                };
+            });
 
-        closeModalBtn.addEventListener("click", () => {
-            certificateModal.style.display = "none";
-        });
-
-        // Close modal if user clicks outside of it
-        window.addEventListener("click", (event) => {
-            if (event.target == certificateModal) {
+            closeModalBtn.addEventListener("click", () => {
                 certificateModal.style.display = "none";
-            }
-        });
+            });
 
-        // Quit Confirmation Logic
-        closeQuizBtn.addEventListener('click', (event) => {
-            event.preventDefault(); // Prevent default link navigation
-            clearInterval(timerInterval); // Stop quiz timer if it's running
-            quitConfirmModal.style.display = 'flex'; // Show the modal
-        });
+            // Close modal if user clicks outside of it
+            window.addEventListener("click", (event) => {
+                if (event.target == certificateModal) {
+                    certificateModal.style.display = "none";
+                }
+            });
 
-        quitYesBtn.addEventListener('click', () => {
-            window.location.href = 'home.html'; // User confirmed, navigate away
-        });
+            // Quit Confirmation Logic
+            closeQuizBtn.addEventListener('click', (event) => {
+                event.preventDefault(); // Prevent default link navigation
+                clearInterval(timerInterval); // Stop quiz timer if it's running
+                quitConfirmModal.style.display = 'flex'; // Show the modal
+            });
 
-        quitNoBtn.addEventListener('click', () => {
-            quitConfirmModal.style.display = 'none'; // User cancelled, hide modal
-            // If the quiz was in progress, resume timer
-            if (quizScreen.style.display === 'flex' && currentTimer > 0) {
-                startTimer();
-            }
-        });
+            quitYesBtn.addEventListener('click', () => {
+                window.location.href = 'home.html'; // User confirmed, navigate away
+            });
 
-        // Also allow clicking outside to close (optional, but good UX)
-        window.addEventListener('click', (event) => {
-            if (event.target === quitConfirmModal) {
-                quitConfirmModal.style.display = 'none';
+            quitNoBtn.addEventListener('click', () => {
+                quitConfirmModal.style.display = 'none'; // User cancelled, hide modal
                 // If the quiz was in progress, resume timer
                 if (quizScreen.style.display === 'flex' && currentTimer > 0) {
                     startTimer();
                 }
-            }
-        });
-    };
+            });
+
+            // Also allow clicking outside to close (optional, but good UX)
+            window.addEventListener('click', (event) => {
+                if (event.target === quitConfirmModal) {
+                    quitConfirmModal.style.display = 'none';
+                    // If the quiz was in progress, resume timer
+                    if (quizScreen.style.display === 'flex' && currentTimer > 0) {
+                        startTimer();
+                    }
+                }
+            });
+        };
     </script>
 </body>
 </html>

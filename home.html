@@ -153,6 +153,35 @@
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* Hero Buttons Layout */
+    .hero-buttons {
+      display: flex; /* Make buttons lay out horizontally */
+      gap: 1rem;     /* Add space between buttons */
+      flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+      justify-content: flex-start; /* Align buttons to the start of the flex container */
+    }
+
+    /* Ensure buttons don't take full width if they are flex items */
+    .hero-buttons .primary,
+    .hero-buttons .secondary {
+        width: auto; /* Override any full-width settings */
+        flex-shrink: 0; /* Prevent shrinking if space is tight */
+    }
+
+    @media (max-width: 480px) {
+        .hero-buttons {
+            flex-direction: column; /* Stack buttons vertically on very small screens */
+            align-items: center; /* Center buttons when stacked */
+        }
+        .hero-buttons .primary,
+        .hero-buttons .secondary {
+            width: 100%; /* Make them full width when stacked */
+            max-width: 200px; /* Limit their maximum width on mobile */
+            margin: 0 auto; /* Center them horizontally */
+        }
+    }
+
   </style>
   </head>
 <body>
@@ -186,7 +215,7 @@
       <p>Welcome to our platform, where learning icons becomes fun and interactive. Our flashcard quizzes are designed to enhance your knowledge and retention effortlessly.</p>
       <div class="hero-buttons">
         <button class="primary" onclick="window.location.href='quiz.html'">Start</button>
-        <button class="secondary" onclick="window.location.href='auth.html?form=signup'">Sign Up</button>
+        <button class="secondary" id="signupBtn" onclick="window.location.href='auth.html?form=signup'">Sign Up</button>
       </div>
     </div>
     <div class="hero-image">
@@ -304,6 +333,7 @@
   const auth = getAuth(app);
 
   const authSection = document.getElementById("auth-section");
+  const signupBtn = document.getElementById("signupBtn"); // Get reference to the Sign Up button
   const logoutConfirmModal = document.getElementById('logout-confirm-modal');
   const logoutYesBtn = document.getElementById('logout-yes-btn');
   const logoutNoBtn = document.getElementById('logout-no-btn');
@@ -378,8 +408,16 @@ onAuthStateChanged(auth, (user) => {
         </div>
       </div>
     `;
+    // Hide the Sign Up button when logged in
+    if (signupBtn) {
+      signupBtn.style.display = 'none';
+    }
   } else {
     authSection.innerHTML = `<button class="nav-btn" id="loginBtn" onclick="window.location.href='auth.html'">Login</button>`;
+    // Show the Sign Up button when logged out
+    if (signupBtn) {
+      signupBtn.style.display = 'inline-block'; // Use inline-block for buttons to sit next to each other by default
+    }
   }
 });
 
