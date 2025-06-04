@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MindBlast</title>
+    <title>MindBlast - Icon Library</title>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
@@ -13,39 +13,32 @@
 
     <style>
     html, body {
-        height: 100%;       /* Ensure html and body take full height */
-        margin: 0;          /* Remove any default browser margins */
-        padding: 0;         /* Remove any default browser padding */
+        height: 100%;
+        margin: 0;
+        padding: 0;
     }
 
     body {
-        /* Keep existing body styles here if they are not height-related */
-        min-height: 100vh; /* Ensure body takes at least full viewport height */
-        display: flex;     /* Make body a flex container to allow children to control layout */
-        flex-direction: column; /* Stack children vertically */
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
     }
 
-    /* Ensure your main content area can flex-grow if you have one */
-    /* Example if you have a <main> tag or a specific wrapper for your page content: */
-    /* main { flex-grow: 1; } */
+    /* main { flex-grow: 1; } /* Uncomment if you have a main content wrapper */
 
-
-    /* Basic Modal Structure (Ensures it covers the whole screen) */
+    /* Basic Modal Structure */
     .modal {
-      display: none; /* Hidden by default; JS sets display:flex */
-      position: fixed; /* Stay in place */
-      z-index: 9999; /* Sit on top, ensure it's above other content */
+      display: none;
+      position: fixed;
+      z-index: 9999;
       left: 0;
       top: 0;
-      width: 100vw;   /* Explicitly use viewport width */
-      height: 100vh;  /* Explicitly use viewport height */
-      background-color: rgba(0, 0, 0, 0.7); /* Black w/ opacity */
-
-      /* CRUCIAL FLEX PROPERTIES FOR CENTERING CONTENT */
-      justify-content: center; /* Center horizontally */
-      align-items: center;   /* Center vertically */
-
-      box-sizing: border-box; /* Include padding in element's total width and height */
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
     }
 
     /* Modal Content Box */
@@ -54,27 +47,21 @@
       padding: 20px;
       border-radius: 20px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-
-      /* CRUCIAL FOR CENTERING WITHIN FLEX CONTAINER */
       margin: auto;
-
-      width: 100%;
+      width: 90%; /* Responsive width */
       max-width: 600px;
       text-align: center;
       position: relative;
       animation: fadeIn 0.3s ease-out;
       color: #333;
-
-      /* Internal flex for stacking content elements */
       display: flex;
       flex-direction: column;
-      gap: 20px;
-
-      max-height: 90vh; /* Add a max-height to the content */
-      overflow-y: auto; /* Allow content to scroll if it exceeds max-height */
+      gap: 15px; /* Reduced gap for icon modal */
+      max-height: 90vh;
+      overflow-y: auto;
     }
 
-    /* Specific Styles for Small Confirmation Modal (like logout confirmation) */
+    /* Specific Styles for Small Confirmation Modal */
     .modal-content.small-modal {
       max-width: 350px;
       padding: 30px;
@@ -83,13 +70,18 @@
 
     .modal-content h2 {
       color: #333;
-      margin-bottom: 15px;
+      margin-top: 0; /* Reset margin for h2 inside modal */
+      margin-bottom: 10px;
     }
 
     .modal-content p {
       color: #555;
-      margin-bottom: 25px;
+      margin-bottom: 10px; /* Adjust paragraph margin */
       line-height: 1.5;
+      text-align: left; /* Align text to left for readability */
+    }
+    .modal-content p strong {
+        color: #333;
     }
 
     /* Modal action buttons container */
@@ -98,9 +90,9 @@
       justify-content: space-around;
       gap: 15px;
       width: 100%;
+      margin-top: 15px; /* Add some space above buttons */
     }
 
-    /* Adjust button styles within the modal */
     .btn {
       display: block;
       width: 100%;
@@ -118,12 +110,10 @@
       margin: 0;
     }
 
-    /* Specific button colors for confirmation */
     .red-btn {
       background-color: #dc3545;
       color: white;
     }
-
     .red-btn:hover:not(:disabled) {
       background-color: #c82333;
     }
@@ -132,12 +122,54 @@
       background-color: #28a745;
       color: white;
     }
-
     .green-btn:hover {
       background-color: #218838;
     }
 
-    /* Media query for larger screens */
+    /* Styles for the Icon Info Modal */
+    #icon-info-modal .modal-icon-display {
+        font-size: 48px; /* Make icon prominent */
+        color: #337ab7; /* A nice blue, or your theme color */
+        margin-bottom: 5px;
+    }
+
+    #icon-info-modal .modal-content h2 {
+        font-family: 'Fredoka', sans-serif;
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+    
+    #icon-info-modal .modal-content p {
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 1rem;
+        margin-bottom: 8px;
+    }
+    #icon-info-modal .modal-content p.usage-text {
+        background-color: #f9f9f9;
+        border-left: 3px solid #337ab7;
+        padding: 10px;
+        border-radius: 4px;
+        font-style: italic;
+    }
+
+
+    /* Close button for modals */
+    .close-modal-btn {
+      color: #aaa;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close-modal-btn:hover,
+    .close-modal-btn:focus {
+      color: black;
+      text-decoration: none;
+    }
+
+
     @media (min-width: 500px) {
         .modal-actions {
             flex-direction: row;
@@ -149,242 +181,413 @@
         }
     }
 
-    /* Keyframe for fade-in animation */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* Additional styles for icon-card to make it feel more clickable */
+    .icon-card {
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .icon-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    }
+
   </style>
 </head>
 <body>
-<!-- Navbar -->
-  <nav class="navbar">
+<nav class="navbar">
     <div class="logo">MindBlast</div>
-
     <div class="hamburger" id="hamburger">
       <span></span>
       <span></span>
       <span></span>
     </div>
-
     <ul class="nav-links" id="nav-links">
       <li><a href="home.html">Home</a></li>
-      <li><a href="about.html">About Us</a></li>
-      <li><a href="contact.html">Contact Us</a></li>
       <li><a href="leaderboard.html">Leaderboard</a></li>
       <li><a href="library.html">Icon Library</a></li>
+      <li><a href="flashcard.html">Flashcards</a></li> </ul>
     </ul>
     <div id="auth-section">
       <button class="nav-btn" id="loginBtn" onclick="window.location.href='auth.html'">Login</button>
     </div>
   </nav>
 
-  <!-- Hero Section -->
-<section class="library-hero">
+  <section class="library-hero">
     <div class="container hero-grid" data-aos="fade-left">
       <div class="hero-left">
         <h1>Explore Our Icons</h1>
       </div>
       <div class="hero-right">
         <p>
-          Welcome to our Library, your ultimate resource for studying icons. Here, you'll find a comprehensive collection of all available icons, designed to enhance your learning experience.
+          Welcome to our Library, your ultimate resource for studying icons. Click on any icon to learn more about its meaning and common uses.
         </p>
       </div>
     </div>
   </section>  
 
-  <!-- Gallery Section -->
-<section class="library-gallery" data-aos="fade-right">
+  <section class="library-gallery" data-aos="fade-right">
     <div class="container">
       <h2 class="text-center">Icon Showcase</h2>
-      <p class="text-center">Explore our collection of iconic designs and symbols.</p>
+      <p class="text-center">Explore our collection of iconic designs and symbols. Click an icon to see more details.</p>
   
       <section class="icon-gallery">
-        <!-- Category Tabs -->
         <div class="category-tabs">
           <button class="tab-button active" data-tab="basics">Basics</button>
           <button class="tab-button" data-tab="essentials">Essentials</button>
           <button class="tab-button" data-tab="advanced">Advanced</button>
         </div>
 
-        <!-- Basics Tab-->
+        <!-- Basic Icons -->
         <div class="tab-content active" id="basics">
               <div class="icon-grid">
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">home</span><p>Home</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">menu</span><p>Menu</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">search</span><p>Search</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">add</span><p>Add</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">check</span><p>Check</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">close</span><p>Close</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">cancel</span><p>Cancel</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">refresh</span><p>Refresh</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">logout</span><p>Logout</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">sort</span><p>Sort</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">redo</span><p>Redo</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">fullscreen</span><p>Fullscreen</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">settings</span><p>Settings</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">share</span><p>Share</p></div>
-
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">info</span><p>Info</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">help</span><p>Help</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">favorite</span><p>Favorite</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">bookmark</span><p>Bookmark</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">visibility</span><p>Visibility</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">lock</span><p>Lock</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">check_circle</span><p>Check circle</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">bolt</span><p>Bolt</p></div>
-
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">phone</span><p>Phone</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">email</span><p>Email</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">wifi</span><p>Wifi</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">bluetooth</span><p>Bluetooth</p></div>
-
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">edit</span><p>Edit</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">delete</span><p>Delete</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">upload</span><p>Upload</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">download</span><p>Download</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">print</span><p>Print</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">camera</span><p>Camera</p></div>
-
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">map</span><p>Map</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">alarm</span><p>Alarm</p></div>
-
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">thumb_up</span><p>Thumbs up</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">zoom_in</span><p>Zoom In</p></div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents the main page, starting point, or primary screen of an application or website." data-usage="Typically found in navigation bars or headers. Clicking it returns the user to the homepage or main dashboard."><span class="material-symbols-outlined">home</span><p>Home</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Indicates a list of options or navigation links, often hidden in a drawer. Commonly a 'hamburger menu' (three lines)." data-usage="Used to save screen space, especially on mobile. Clicking reveals main navigation, settings, or other sections."><span class="material-symbols-outlined">menu</span><p>Menu</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Signifies a search functionality, allowing users to find specific content or items." data-usage="Usually paired with an input field. Clicking can expand a search bar, initiate a search, or navigate to a dedicated search page."><span class="material-symbols-outlined">search</span><p>Search</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents the action of adding a new item, creating new content, or increasing a quantity." data-usage="Commonly used for adding new documents, users, products to a cart, or new entries in a list."><span class="material-symbols-outlined">add</span><p>Add</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Indicates confirmation, completion, success, or selection. Often used for tasks, approvals, or to signify 'yes'." data-usage="Used in to-do lists, form submissions (success), accepting terms, or selecting options."><span class="material-symbols-outlined">check</span><p>Check</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents the action of closing, dismissing, or canceling. Often an 'X' shape." data-usage="Used to close windows, modals, pop-ups, dismiss notifications, or cancel an ongoing process."><span class="material-symbols-outlined">close</span><p>Close</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Similar to 'Close', but can also mean to stop or abort an operation that has started, or to negate a selection." data-usage="Used to stop downloads/uploads, undo selections, or exit a process without saving changes."><span class="material-symbols-outlined">cancel</span><p>Cancel</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Indicates the action of reloading or updating content to its latest version." data-usage="Used to refresh a webpage, update a data feed, or synchronize information."><span class="material-symbols-outlined">refresh</span><p>Refresh</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Signifies the action of signing out or logging off from an account or system." data-usage="Typically found in user account menus to end a session securely."><span class="material-symbols-outlined">logout</span><p>Logout</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents the action of arranging items in a specific order (e.g., alphabetical, numerical, by date)." data-usage="Used in tables or lists to allow users to sort data for better readability or analysis."><span class="material-symbols-outlined">sort</span><p>Sort</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents the action of performing a previously undone action again." data-usage="Commonly found in text editors, design software, or any application with an undo feature to reapply the last undone change."><span class="material-symbols-outlined">redo</span><p>Redo</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Indicates the action of expanding content to fill the entire screen, hiding system UI elements." data-usage="Used for videos, presentations, images, games, or applications where an immersive, focused view is desired."><span class="material-symbols-outlined">fullscreen</span><p>Fullscreen</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Indicates access to application settings, preferences, or configuration options. Often represented by a gear/cogwheel." data-usage="Used to customize application behavior, manage account details, or adjust system parameters."><span class="material-symbols-outlined">settings</span><p>Settings</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents the action of sharing content with others or through other applications (e.g., social media)." data-usage="Commonly used for sharing articles, images, or links via email, social platforms, or messaging apps."><span class="material-symbols-outlined">share</span><p>Share</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Indicates the availability of additional information, details, or context about a specific item or feature." data-usage="Often used for tooltips, help sections, or to provide non-critical supplementary details."><span class="material-symbols-outlined">info</span><p>Info</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Signifies access to help documentation, FAQs, tutorials, or customer support." data-usage="Typically leads to a help center, contact form, or guided assistance for users."><span class="material-symbols-outlined">help</span><p>Help</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents marking an item as a favorite, liked, or specially preferred. Often a heart shape." data-usage="Used to bookmark items, express approval (like a 'like' button), or quickly access preferred content."><span class="material-symbols-outlined">favorite</span><p>Favorite</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents saving or marking an item for easy retrieval or future reference." data-usage="Used for saving web pages in browsers, specific locations in documents, or items in a list to revisit later."><span class="material-symbols-outlined">bookmark</span><p>Bookmark</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Indicates that an item is visible or allows toggling visibility. Often an eye icon." data-usage="Used for password fields (show/hide password), layer visibility in design tools, or making content public/private."><span class="material-symbols-outlined">visibility</span><p>Visibility</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents security, privacy, or a locked state. Can also mean to fix an item in place." data-usage="Indicates secure connections (SSL), password-protected content, or features that are locked/unavailable until certain conditions are met."><span class="material-symbols-outlined">lock</span><p>Lock</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Indicates a successful verification, completion, or a selected state, often with more emphasis than a simple checkmark." data-usage="Used for completed tasks, verified accounts, positive status indicators, or highlighting a chosen option within a list."><span class="material-symbols-outlined">check_circle</span><p>Check circle</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents speed, power, energy, an instant action, or a notification of high importance." data-usage="Often used for 'flash' sales, quick actions, power-saving modes, critical alerts, or features that activate rapidly."><span class="material-symbols-outlined">bolt</span><p>Bolt</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents a telephone, phone call functionality, or contact via phone." data-usage="Used to display a phone number, initiate a call directly from an app, or link to contact information."><span class="material-symbols-outlined">phone</span><p>Phone</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents electronic mail, email functionality, or contact via email." data-usage="Used to display an email address, compose a new email, or link to an email client or contact form."><span class="material-symbols-outlined">email</span><p>Email</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Indicates wireless network connectivity through Wi-Fi technology." data-usage="Used to show Wi-Fi connection status, list available networks, access Wi-Fi settings, or indicate a feature requiring Wi-Fi."><span class="material-symbols-outlined">wifi</span><p>Wifi</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents Bluetooth wireless technology for short-range communication between devices." data-usage="Used to show Bluetooth connection status, initiate pairing with other devices, or manage connected Bluetooth peripherals."><span class="material-symbols-outlined">bluetooth</span><p>Bluetooth</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Indicates the action of modifying or changing existing content or settings. Often a pencil icon." data-usage="Used to edit documents, user profiles, item details, or any editable field within an application."><span class="material-symbols-outlined">edit</span><p>Edit</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents the action of removing or discarding an item permanently. Often a trash can icon." data-usage="Used to delete files, messages, user accounts, or any unwanted data. Usually requires confirmation."><span class="material-symbols-outlined">delete</span><p>Delete</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents the action of transferring data from a local system to a remote system or server." data-usage="Commonly used for submitting files, photos, documents to a website, cloud storage, or online service."><span class="material-symbols-outlined">upload</span><p>Upload</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents the action of transferring data from a remote system or server to a local system." data-usage="Used for saving files, applications, documents, or media from the internet or a server to a user's device."><span class="material-symbols-outlined">download</span><p>Download</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents the action of sending a document or image to a printer to create a physical copy." data-usage="Used in applications that handle documents, images, reports, or any content that might need a hard copy."><span class="material-symbols-outlined">print</span><p>Print</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents a camera, image capture, or video recording functionality." data-usage="Used to initiate photo or video taking, access the device's camera, or navigate to a gallery of captured media."><span class="material-symbols-outlined">camera</span><p>Camera</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents a geographical map, location-based services, or navigation." data-usage="Used to display directions, find points of interest, show a user's current location, or interact with map data."><span class="material-symbols-outlined">map</span><p>Map</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents an alarm clock, a scheduled reminder, or a time-sensitive notification." data-usage="Used for setting alarms, timers, event reminders, or indicating an upcoming deadline or appointment."><span class="material-symbols-outlined">alarm</span><p>Alarm</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Indicates approval, agreement, a positive response, or a 'like'." data-usage="Commonly used in social media, feedback systems, content rating, or voting mechanisms to express a favorable opinion."><span class="material-symbols-outlined">thumb_up</span><p>Thumbs up</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents the action of enlarging the view of content for closer inspection or detail." data-usage="Used in image viewers, maps, document readers, or any interface where users might need to see content more closely."><span class="material-symbols-outlined">zoom_in</span><p>Zoom In</p></div>
+                  </div>
               </div>
           </div>
-  
-          <!-- Essentials Tab -->
+
+        <!-- Essential Icons -->
           <div class="tab-content" id="essentials">
-            <div class="icon-grid">
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">security</span><p>Security</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">update</span><p>Update</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">sync</span><p>Sync</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">build</span><p>Build</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">tune</span><p>Tune</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">emergency</span><p>Emergency</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">visibility_off</span><p>Visibility off</p></div>
-
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">cloud</span><p>Cloud</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">cloud_upload</span><p>Cloud upload</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">folder</span><p>Folder</p></div>
-
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">dashboard</span><p>Dashboard</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">apps</span><p>Apps</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">tab</span><p>Tab</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">stacks</span><p>Stacks</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">new_window</span><p>New window</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">drag_pan</span><p>Drag pan</p></div>
-
-
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">notifications</span><p>Notifications</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">send</span><p>Send</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">group</span><p>Group</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">person</span><p>Person</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">account_box</span><p>Account box</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">chat</span><p>Chat</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">forum</span><p>Forum</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">feedback</span><p>Feedback</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">language</span><p>Language</p></div>
-
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">receipt</span><p>Receipt</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">wallet</span><p>Wallet</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">credit_card</span><p>Credit card</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">assessment</span><p>Assessment</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">analytics</span><p>Analytics</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">bar_chart</span><p>Bar chart</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">pie_chart</span><p>Pie chart</p></div>
-
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">event</span><p>Event</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">link</span><p>Link</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">location_on</span><p>Location on</p></div>
-                <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">cycle</span><p>Cycle</p></div>
-
-            </div>
+              <div class="icon-grid">
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Pertains to safety, protection, and measures against unauthorized access or harm." data-usage="Indicates security settings, antivirus software, secure areas, privacy features, or system protection status."><span class="material-symbols-outlined">security</span><p>Security</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Indicates an update is available, the action to update software/content, or a version change." data-usage="Used for software updates, refreshing data feeds, app versioning, or indicating content has been recently modified."><span class="material-symbols-outlined">update</span><p>Update</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents the action of synchronizing data between multiple devices, locations, or accounts." data-usage="Used for cloud services, calendars, contacts, file hosting, ensuring data consistency across platforms."><span class="material-symbols-outlined">sync</span><p>Sync</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents construction, creation, compilation processes, or configuration tools." data-usage="Used in development tools (compiling code), project management (building a project), or advanced settings/configuration panels."><span class="material-symbols-outlined">build</span><p>Build</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents fine-tuning, adjustments, customization, or advanced control settings." data-usage="Used for adjusting preferences, audio/video settings, performance parameters, or color calibration."><span class="material-symbols-outlined">tune</span><p>Tune</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Indicates an urgent situation, critical alert, emergency services, or a safety feature." data-usage="Used for SOS signals, emergency contact information, critical system warnings, or access to emergency procedures."><span class="material-symbols-outlined">emergency</span><p>Emergency</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Indicates that an item is hidden, private, or allows toggling to a hidden state. The opposite of 'visibility'." data-usage="Used for password fields (complement to 'visibility'), hiding layers, making content private, or muting notifications."><span class="material-symbols-outlined">visibility_off</span><p>Visibility off</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents cloud computing, online storage, or services hosted on the internet." data-usage="Used for cloud storage access, syncing data across devices, online backup services, or indicating cloud-based features."><span class="material-symbols-outlined">cloud</span><p>Cloud</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Specifically indicates the action of uploading data to a cloud storage or service." data-usage="Used for backing up files to the cloud, saving documents online, or transferring data to a remote server via cloud."><span class="material-symbols-outlined">cloud_upload</span><p>Cloud upload</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a directory or container for organizing files and other folders." data-usage="Used in file management systems to group related documents, media, or other digital assets."><span class="material-symbols-outlined">folder</span><p>Folder</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a central overview or control panel displaying key information, metrics, and shortcuts." data-usage="Used in analytics platforms, admin panels, user account summaries, or project management tools for quick insights."><span class="material-symbols-outlined">dashboard</span><p>Dashboard</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a collection of applications, or access to an app launcher, store, or app management." data-usage="Used to open an app drawer, view installed applications, browse for new apps, or manage app settings."><span class="material-symbols-outlined">apps</span><p>Apps</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a tab in a user interface, allowing multiple documents or sections to be open within a single window." data-usage="Used in web browsers, text editors, settings panels, or any interface that benefits from tabbed navigation."><span class="material-symbols-outlined">tab</span><p>Tab</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a collection of items layered, grouped, or stacked together, often for organization or navigation." data-usage="Used in card-based UIs, document management, representing multiple layers in design, or stacked notifications."><span class="material-symbols-outlined">stacks</span><p>Stacks</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents the action of opening content or an application in a separate, new window." data-usage="Used to view content alongside the current window, launch a distinct part of an application, or for pop-out features."><span class="material-symbols-outlined">new_window</span><p>New window</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Indicates the ability to move or navigate content by clicking and dragging (panning)." data-usage="Commonly used in maps, large images, virtual desktops, or draggable interface elements for exploration."><span class="material-symbols-outlined">drag_pan</span><p>Drag pan</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Indicates alerts, updates, or new messages that require user attention. Often a bell icon." data-usage="Displays a count of unread notifications; clicking usually shows a list of recent activities, messages, or alerts."><span class="material-symbols-outlined">notifications</span><p>Notifications</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents the action of sending a message, email, data, or initiating a dispatch." data-usage="Commonly found in messaging apps, email clients, form submissions, or for dispatching orders/tasks."><span class="material-symbols-outlined">send</span><p>Send</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a collection of users, items, settings, or the action of grouping elements." data-usage="Used for user groups, team collaboration, grouping layers in design software, or categorizing items."><span class="material-symbols-outlined">group</span><p>Group</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a user, individual profile, or a single person." data-usage="Used for user login, viewing a user's profile, managing account settings, or assigning tasks to an individual."><span class="material-symbols-outlined">person</span><p>Person</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a user's account, profile, or login information, often with a visual container or frame." data-usage="Used for accessing user profiles, detailed account settings, login/registration areas, or contact cards."><span class="material-symbols-outlined">account_box</span><p>Account box</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a chat, messaging functionality, or real-time conversation." data-usage="Used to open a chat window, view messages, indicate online status for chat, or access direct messaging features."><span class="material-symbols-outlined">chat</span><p>Chat</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a discussion forum, community Q&A area, or a place for public discourse." data-usage="Used to access community discussions, ask questions, provide answers, or participate in online forums."><span class="material-symbols-outlined">forum</span><p>Forum</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents providing or viewing feedback, suggestions, reviews, or opinions." data-usage="Used for submitting bug reports, product reviews, user satisfaction surveys, or leaving comments."><span class="material-symbols-outlined">feedback</span><p>Feedback</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents language settings, translation options, or global/international features." data-usage="Used to change the application's display language, access translation tools, or indicate content available in multiple languages."><span class="material-symbols-outlined">language</span><p>Language</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a proof of purchase, invoice, bill, or transaction record." data-usage="Used in e-commerce order history, billing systems, expense tracking applications, or for generating sales slips."><span class="material-symbols-outlined">receipt</span><p>Receipt</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a digital or physical wallet for storing money, payment cards, passes, or cryptocurrencies." data-usage="Used for accessing payment methods, managing funds, storing digital tickets/passes, or cryptocurrency transactions."><span class="material-symbols-outlined">wallet</span><p>Wallet</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a credit card, debit card, or general card-based payment processing." data-usage="Used for entering payment details, selecting a card as a payment method, or indicating accepted card types."><span class="material-symbols-outlined">credit_card</span><p>Credit card</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents evaluation, analysis, testing, or a formal review process." data-usage="Used for quizzes, performance reviews, system diagnostics, skills tests, or formal assessments."><span class="material-symbols-outlined">assessment</span><p>Assessment</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents data analysis, tracking, reporting, and insights derived from data." data-usage="Used to view statistics, user behavior, performance metrics, business intelligence, or website traffic."><span class="material-symbols-outlined">analytics</span><p>Analytics</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents data visualized as a bar chart, typically used for comparing quantities across categories." data-usage="Used for displaying comparisons, trends over time, statistical data, or survey results."><span class="material-symbols-outlined">bar_chart</span><p>Bar chart</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents data visualized as a pie chart, showing proportions or percentages of a whole." data-usage="Used for showing market share, budget allocations, demographic distributions, or survey response breakdowns."><span class="material-symbols-outlined">pie_chart</span><p>Pie chart</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a calendar event, appointment, scheduled occurrence, or a significant date." data-usage="Used for viewing or adding calendar entries, setting reminders, booking appointments, or highlighting special occasions."><span class="material-symbols-outlined">event</span><p>Event</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a hyperlink, a connection between two items, or the action of linking/attaching." data-usage="Used to navigate to another webpage/document, share URLs, attach files, or show relationships between entities."><span class="material-symbols-outlined">link</span><p>Link</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Indicates a specific geographic location, often the current location or a pinned point on a map." data-usage="Used for GPS services, displaying addresses, tagging content with a location, or finding nearby places."><span class="material-symbols-outlined">location_on</span><p>Location on</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a recurring process, repetition, a circular flow, or a lifecycle." data-usage="Used for refresh cycles, recurring events, iterative processes, recycling, or stages in a workflow."><span class="material-symbols-outlined">cycle</span><p>Cycle</p></div>
+                  </div>
+              </div>
           </div>
                   
-          <!-- Advanced Tab -->
+        <!-- Advanced Icons -->
           <div class="tab-content" id="advanced">
               <div class="icon-grid">
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">terminal</span><p>Terminal</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">code_blocks</span><p>Code blocks</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">data_object</span><p>Data object</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">schema</span><p>Schema</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">variables</span><p>Variables</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">api</span><p>API</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">account_tree</span><p>Account tree</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">adb</span><p>ADB</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">build_circle</span><p>Build circle</p></div>
-
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">public</span><p>Public</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">dns</span><p>Dns</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">hub</span><p>Hub</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">cast</span><p>Cast</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">satellite</span><p>Satellite</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">wifi_proxy</span><p>Wifi proxy</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">cell_tower</span><p>Cell tower</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">wifi_channel</span><p>Wifi channel</p></div>
-
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">power</span><p>Power</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">memory</span><p>Memory</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">storage</span><p>Storage</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">settings_cell</span><p>Settings cell</p></div>
-
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">privacy</span><p>Privacy</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">vpn_key</span><p>Vpn key</p></div>
-
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">psychology</span><p>Psychology</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">tornado</span><p>Tornado</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">storm</span><p>Storm</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">pageless</span><p>Pageless</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">dirty_lens</span><p>Dirty lens</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">inbox_text</span><p>Inbox text</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">menu_book</span><p>Menu book</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">cloud_queue</span><p>Cloud queue</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">pin_drop</span><p>Pin drop</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">spatial_audio</span><p>Spatial audio</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">swap_vert</span><p>Swap vert</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">swap_horiz</span><p>Swap horiz</p></div>
-                  <div class="icon-card" data-aos="zoom-in"><span class="material-symbols-outlined">open_jam</span><p>Open jam</p></div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a command-line interface (CLI) or console for executing text-based commands." data-usage="Used by developers or advanced users for system administration, coding, running scripts, or direct system interaction."><span class="material-symbols-outlined">terminal</span><p>Terminal</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents snippets of code, programming-related content, or structured text blocks." data-usage="Used in developer documentation, code editors, tutorials to display formatted code, or for code embedding."><span class="material-symbols-outlined">code_blocks</span><p>Code blocks</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a structured piece of data, often in formats like JSON or XML, or a data entity." data-usage="Used in programming contexts, API documentation, database schema visualization, or representing complex data structures."><span class="material-symbols-outlined">data_object</span><p>Data object</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents the structure, blueprint, or model of a database, system, or data organization." data-usage="Used in database design, API development, system architecture diagrams, or defining data relationships."><span class="material-symbols-outlined">schema</span><p>Schema</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents placeholders, named storage locations for data in programming, formulas, or configurations." data-usage="Used in code editors, mathematical software, configuration settings, or dynamic content systems."><span class="material-symbols-outlined">variables</span><p>Variables</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Acronym for Application Programming Interface; represents a way for different software components to communicate and interact." data-usage="Indicates settings, documentation, or tools related to integrating with other services or accessing data programmatically."><span class="material-symbols-outlined">api</span><p>API</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a hierarchical structure of accounts, elements, or organizational units, like a tree diagram." data-usage="Used in financial systems (chart of accounts), directory services, complex navigation structures, or displaying organizational charts."><span class="material-symbols-outlined">account_tree</span><p>Account tree</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Stands for Android Debug Bridge, a command-line tool for developers to communicate with an Android device or emulator." data-usage="Used in Android development environments for app installation, debugging, file transfer, and executing shell commands."><span class="material-symbols-outlined">adb</span><p>ADB</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Similar to 'build', often with a circular arrow or enclosed in a circle, emphasizing an ongoing, cyclical, or complete build/compilation process." data-usage="Used in continuous integration/deployment (CI/CD) systems, software development status indicators, or to signify a build artifact."><span class="material-symbols-outlined">build_circle</span><p>Build circle</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents content, settings, or networks that are publicly accessible, shared with everyone, or related to the globe/world." data-usage="Used for visibility settings (e.g., public posts), indicating open Wi-Fi networks, global access, or earth/map related features."><span class="material-symbols-outlined">public</span><p>Public</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Stands for Domain Name System; relates to how domain names (e.g., www.google.com) are translated into IP addresses." data-usage="Usually found in network settings, server configurations, or tools for managing website and internet connectivity."><span class="material-symbols-outlined">dns</span><p>Dns</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a central connection point, network hub, a collection of resources/services, or a central place for activity." data-usage="Used in networking diagrams, project management dashboards, service aggregators, or community centers."><span class="material-symbols-outlined">hub</span><p>Hub</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents streaming or projecting audio/video content from one device to another (e.g., phone to TV or speaker)." data-usage="Used for screen mirroring, media casting services (like Chromecast), remote display controls, or broadcasting."><span class="material-symbols-outlined">cast</span><p>Cast</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents satellite communication, GPS, space-related technology, or global positioning." data-usage="Used for location services, satellite imagery, telecommunication settings, or indicating satellite-based connectivity."><span class="material-symbols-outlined">satellite</span><p>Satellite</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents settings or status related to a Wi-Fi proxy server, used for routing internet traffic." data-usage="Found in advanced network configurations for routing Wi-Fi traffic through a proxy for security, filtering, or access control."><span class="material-symbols-outlined">wifi_proxy</span><p>Wifi proxy</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents a cellular network tower, mobile signal strength, or cellular connectivity." data-usage="Used to indicate network connectivity quality, signal strength, mobile data settings, or cell network information."><span class="material-symbols-outlined">cell_tower</span><p>Cell tower</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card" data-description="Represents settings, information, or analysis related to Wi-Fi channels for wireless networks." data-usage="Used in network analysis tools or router configurations to select or optimize wireless channels for better performance and less interference."><span class="material-symbols-outlined">wifi_channel</span><p>Wifi channel</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents power on/off functionality, battery status, energy settings, or electrical power." data-usage="Used for device power buttons, battery level indicators, power management options, or indicating an active power source."><span class="material-symbols-outlined">power</span><p>Power</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents computer memory (RAM), storage capacity, or a memory chip/card." data-usage="Used for system information display (RAM usage), memory usage monitoring, memory card access, or cognitive functions."><span class="material-symbols-outlined">memory</span><p>Memory</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents data storage, disk space, database storage, or a physical storage device." data-usage="Indicates information about available storage, memory usage, settings related to data persistence, or server storage."><span class="material-symbols-outlined">storage</span><p>Storage</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents settings or configuration options specifically related to cellular or mobile network connectivity." data-usage="Used for configuring mobile data, Access Point Names (APN), network operators, roaming settings, or SIM card options."><span class="material-symbols-outlined">settings_cell</span><p>Settings cell</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents privacy settings, data protection, confidential information, or features ensuring user anonymity." data-usage="Used for accessing privacy controls, managing data sharing preferences, indicating secure or incognito modes, or privacy policies."><span class="material-symbols-outlined">privacy</span><p>Privacy</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a Virtual Private Network (VPN) key, indicating secure, encrypted connections or VPN access." data-usage="Used in network settings to configure or activate a VPN service for enhanced privacy, security, or bypassing geo-restrictions."><span class="material-symbols-outlined">vpn_key</span><p>Vpn key</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents concepts related to the mind, mental processes, human behavior, or psychology as a field." data-usage="Used in educational apps, health platforms, AI with emotional intelligence, or tools dealing with cognitive functions or mental well-being."><span class="material-symbols-outlined">psychology</span><p>Psychology</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a tornado, a severe weather warning for tornadoes, or highly destructive cyclonic winds." data-usage="Used in weather applications, emergency alert systems, or to symbolize rapid, chaotic change."><span class="material-symbols-outlined">tornado</span><p>Tornado</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a storm (rain, thunder, lightning, wind), severe weather conditions, or a turbulent situation." data-usage="Used in weather apps, to indicate disruptions, or metaphorically for intense activity or conflict."><span class="material-symbols-outlined">storm</span><p>Storm</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a continuous scrolling document format that does not have distinct pages, or infinite scroll." data-usage="Used in document editors, web design to indicate a pageless layout option, or for continuous content feeds."><span class="material-symbols-outlined">pageless</span><p>Pageless</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a dirty camera lens, smudged screen, or a need for cleaning optical equipment to improve clarity." data-usage="Used in camera apps as a warning, in image editing to simulate lens imperfections, or as a general alert for cleaning."><span class="material-symbols-outlined">dirty_lens</span><p>Dirty lens</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents messages, textual content within an inbox, or a summary of incoming text communications." data-usage="Used in messaging apps, email clients to indicate textual communication, or notifications containing text."><span class="material-symbols-outlined">inbox_text</span><p>Inbox text</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a restaurant menu, recipe book, a detailed guide, manual, or a catalog of items." data-usage="Used for food ordering apps, culinary resources, extensive help documentation, or library/catalog access."><span class="material-symbols-outlined">menu_book</span><p>Menu book</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents a queue of tasks, data, or messages being processed or waiting in the cloud." data-usage="Used in distributed systems, background job processing, data synchronization status, or cloud-based message queues."><span class="material-symbols-outlined">cloud_queue</span><p>Cloud queue</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents marking a specific point on a map, often by dropping a pin, or indicating a saved/target location." data-usage="Used in map applications for saving locations, setting destinations, sharing points of interest, or geofencing."><span class="material-symbols-outlined">pin_drop</span><p>Pin drop</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents immersive audio technology that creates a 3D sound experience, where sound is perceived to come from different directions." data-usage="Used in media players, headphones settings, gaming, virtual reality, or applications supporting spatial sound."><span class="material-symbols-outlined">spatial_audio</span><p>Spatial audio</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents swapping items vertically, reordering in a vertical list, or vertical sorting controls." data-usage="Used in list management, reordering elements up/down, data comparison, or indicating vertical scroll/swap actions."><span class="material-symbols-outlined">swap_vert</span><p>Swap vert</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents swapping items horizontally, reordering in a horizontal list/tabs, or horizontal sorting controls." data-usage="Used for reordering tabs, image carousels, comparing items side-by-side, or indicating horizontal scroll/swap actions."><span class="material-symbols-outlined">swap_horiz</span><p>Swap horiz</p></div>
+                  </div>
+                  <div data-aos="zoom-in">
+                      <div class="icon-card"  data-description="Represents an open session, collaborative work (jam session), an accessible container/package, or an unlocked resource." data-usage="Often used for collaborative tools, open project files, user-accessible content packages, or indicating an 'open' status."><span class="material-symbols-outlined">open_jam</span><p>Open jam</p></div>
+                  </div>
               </div>
           </div>
         </div>          
       </section>
     </div>
   </section>
-  
 
-  <!-- FAQ Section -->
-<section class="library-faq" data-aos="fade-left">
-    <div class="container faq-grid">
-      <div class="faq-left" data-aos="zoom-in">
-        <h2>FAQs</h2>
-        <p>Explore our frequently asked questions to enhance your experience in the Library.</p>
-      </div>
-      <div class="faq-right">
-        <div class="faq-item" data-aos="zoom-in">
-          <strong>Is this platform free to use?</strong>
-          <p>Yes, our platform is completely free to use for all learners.</p>
-        </div>
-        <div class="faq-item" data-aos="zoom-in">
-          <strong>Can I save icons for later?</strong>
-          <p>This feature is not available for now, but we're actively working on it.</p>
-        </div>
-        <div class="faq-item" data-aos="zoom-in">
-          <strong>Do I receive any rewards after completing a quiz?</strong>
-          <p>Yes, upon completion of a quiz, you’ll receive a certificate to celebrate your achievement.</p>
-        </div>
-        <div class="faq-item" data-aos="zoom-in">
-          <strong>How can I contact support?</strong>
-          <p>You can reach our support team through the form on our <a href="contact.html">Contact Us</a> page.</p>
-        </div>
-        <div class="faq-item" data-aos="zoom-in">
-          <strong>Can I sign in with Google?</strong>
-          <p>Google sign-in is coming soon! We're working to make the login process even easier.</p>
-        </div>
-      </div>
-    </div>
-  </section>  
 
   <!-- Footer -->
   <footer class="footer">
@@ -392,11 +595,8 @@
       <div class="footer-logo">MindBlast</div>
   
       <ul class="footer-links">
-        <li><a href="home.html">Home</a></li>
         <li><a href="about.html">About Us</a></li>
         <li><a href="contact.html">Contact Us</a></li>
-        <li><a href="leaderboard.html">Leaderboard</a></li>
-        <li><a href="library.html">Our Library</a></li>
       </ul>
 
       <div class="footer-socials">
@@ -422,11 +622,6 @@
   
     <div class="footer-bottom">
       <p>© 2025 MindBlast. All rights reserved.</p>
-      <ul>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Terms of Use</a></li>
-        <li><a href="#">Cookie Policy</a></li>
-      </ul>
     </div>
   </footer>
 
@@ -441,9 +636,97 @@
   </div>
 </div>
 
+<div id="icon-info-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal-btn" id="close-icon-info-modal">&times;</span>
+    <span class="material-symbols-outlined modal-icon-display" id="modal-icon-glyph"></span>
+    <h2 id="modal-icon-name">Icon Name</h2>
+    <p><strong>Description:</strong></p>
+    <p id="modal-icon-description">Detailed description of the icon will appear here.</p>
+    <p><strong>Common Uses:</strong></p>
+    <p id="modal-icon-usage" class="usage-text">Examples of where and how this icon is commonly used will appear here.</p>
+  </div>
+</div>
+
+
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script src="script.js"></script>
-  <!-- Firebase Auth Display Logic -->
+  <script src="script.js"></script> <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        AOS.init({
+            duration: 800,
+            once: false, // whether animation should happen only once - while scrolling down
+        });
+
+        // Tab functionality
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and contents
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+
+                // Add active class to the clicked button and corresponding content
+                button.classList.add('active');
+                document.getElementById(button.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Icon Info Modal Functionality
+        const iconInfoModal = document.getElementById('icon-info-modal');
+        const closeIconInfoModalBtn = document.getElementById('close-icon-info-modal');
+        
+        const modalIconGlyph = document.getElementById('modal-icon-glyph');
+        const modalIconName = document.getElementById('modal-icon-name');
+        const modalIconDescription = document.getElementById('modal-icon-description');
+        const modalIconUsage = document.getElementById('modal-icon-usage');
+
+        const iconCards = document.querySelectorAll('.icon-card');
+
+        iconCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const iconName = card.querySelector('p').textContent;
+                const iconGlyph = card.querySelector('.material-symbols-outlined').textContent;
+                const description = card.dataset.description || "No description available.";
+                const usage = card.dataset.usage || "No usage information available.";
+
+                modalIconGlyph.textContent = iconGlyph;
+                modalIconName.textContent = iconName;
+                modalIconDescription.textContent = description;
+                modalIconUsage.textContent = usage;
+
+                iconInfoModal.style.display = 'flex';
+            });
+        });
+
+        // Close icon info modal
+        if(closeIconInfoModalBtn) {
+            closeIconInfoModalBtn.addEventListener('click', () => {
+                iconInfoModal.style.display = 'none';
+            });
+        }
+
+        // Close modal when clicking outside of it
+        window.addEventListener('click', (event) => {
+            if (event.target === iconInfoModal) {
+                iconInfoModal.style.display = 'none';
+            }
+        });
+
+        // Hamburger menu (ensure this is in your script.js or here if not)
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+
+        if (hamburger && navLinks) {
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                hamburger.classList.toggle('active');
+            });
+        }
+    });
+  </script>
+
   <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
   import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
@@ -466,7 +749,8 @@
   const logoutYesBtn = document.getElementById('logout-yes-btn');
   const logoutNoBtn = document.getElementById('logout-no-btn');
 
-  // Define functions globally first (including the single, correct logoutUser)
+  window.isProfileMenuOpen = false; // Initialize flag
+
   window.toggleProfileMenu = function () {
     const menu = document.getElementById('profileMenu');
     if (!menu) return;
@@ -474,55 +758,57 @@
     if (!window.isProfileMenuOpen) {
       menu.classList.add('show');
       window.isProfileMenuOpen = true;
-      document.addEventListener('click', handleOutsideClick);
+      // Add listener with a slight delay to ensure it doesn't catch the opening click
+      setTimeout(() => document.addEventListener('click', handleOutsideClickProfileMenu), 0);
     } else {
       menu.classList.remove('show');
       window.isProfileMenuOpen = false;
-      document.removeEventListener('click', handleOutsideClick);
+      document.removeEventListener('click', handleOutsideClickProfileMenu);
     }
   };
 
-  function handleOutsideClick(e) {
+  function handleOutsideClickProfileMenu(e) {
     const menu = document.getElementById('profileMenu');
     const profileIcon = document.querySelector('.profile-icon');
-    if (!menu.contains(e.target) && !profileIcon.contains(e.target)) {
+    // Check if the click is outside the menu AND outside the profile icon
+    if (menu && profileIcon && !menu.contains(e.target) && !profileIcon.contains(e.target)) {
       menu.classList.remove('show');
       window.isProfileMenuOpen = false;
-      document.removeEventListener('click', handleOutsideClick);
+      document.removeEventListener('click', handleOutsideClickProfileMenu);
     }
   }
-
-  // THIS IS THE CORRECT, MERGED logoutUser FUNCTION:
+  
   window.logoutUser = function () {
-    logoutConfirmModal.style.display = 'flex'; // Show the logout confirmation modal
+    if (logoutConfirmModal) logoutConfirmModal.style.display = 'flex';
   };
 
-  // Event Listeners for the modal buttons (these are correct as they are)
-  logoutYesBtn.addEventListener('click', () => {
-    signOut(auth).then(() => {
-      window.location.reload(); // Proceed with logout and refresh
-    }).catch((error) => {
-      console.error("Error signing out:", error);
-      alert("Failed to log out. Please try again.");
+  if (logoutYesBtn) {
+    logoutYesBtn.addEventListener('click', () => {
+      signOut(auth).then(() => {
+        window.location.reload(); 
+      }).catch((error) => {
+        console.error("Error signing out:", error);
+        alert("Failed to log out. Please try again.");
+      });
+      if (logoutConfirmModal) logoutConfirmModal.style.display = 'none';
     });
-    logoutConfirmModal.style.display = 'none'; // Hide modal after action
-  });
+  }
 
-  logoutNoBtn.addEventListener('click', () => {
-    logoutConfirmModal.style.display = 'none'; // Hide modal, user cancelled
-  });
-
-  // Optional: Allow clicking outside the modal to cancel logout
+  if (logoutNoBtn) {
+    logoutNoBtn.addEventListener('click', () => {
+      if (logoutConfirmModal) logoutConfirmModal.style.display = 'none';
+    });
+  }
+  
   window.addEventListener('click', (event) => {
     if (event.target === logoutConfirmModal) {
       logoutConfirmModal.style.display = 'none';
     }
   });
 
-  // Then run this AFTER the functions are declared:
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      const userInitial = (user.displayName ? user.displayName[0] : '?').toUpperCase();
+      const userInitial = (user.displayName ? user.displayName.charAt(0) : (user.email ? user.email.charAt(0) : '?')).toUpperCase();
       authSection.innerHTML = `
         <div class="profile-wrapper">
           <div class="profile-icon" onclick="toggleProfileMenu()">

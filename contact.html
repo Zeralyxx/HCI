@@ -23,6 +23,15 @@
         display: flex;     /* Make body a flex container to allow children to control layout */
         flex-direction: column; /* Stack children vertically */
     }
+
+    .faq-item p .highlight {
+    background-color: rgba(255, 255, 255, 0.1); /* A subtle white background for highlight */
+    color: #fff; /* Keep text white for contrast */
+    padding: 2px 5px; /* Add some padding around the highlighted text */
+    border-radius: 4px; /* Slightly rounded corners for a softer look */
+    font-weight: bold; /* Ensure it's still bold */
+    display: inline; /* Ensure it stays inline and doesn't add new lines */
+}
     
 
     /* Ensure your main content area can flex-grow if you have one */
@@ -170,10 +179,9 @@
 
     <ul class="nav-links" id="nav-links">
       <li><a href="home.html">Home</a></li>
-      <li><a href="about.html">About Us</a></li>
-      <li><a href="contact.html">Contact Us</a></li>
       <li><a href="leaderboard.html">Leaderboard</a></li>
       <li><a href="library.html">Icon Library</a></li>
+      <li><a href="flashcard.html">Flashcards</a></li> </ul>
     </ul>
     <div id="auth-section">
       <button class="nav-btn" id="loginBtn" onclick="window.location.href='auth.html'">Login</button>
@@ -263,17 +271,80 @@
   </div>
 </section>
 
+<!-- FAQ Section -->
+<section class="library-faq" data-aos="fade-left">
+    <div class="container faq-grid">
+      <div class="faq-left">
+        <h2>Frequently Asked Questions</h2>
+        <p>Got questions about using the Icon Library and Flashcard Quiz? We've got answers! Dive into our FAQs to get the most out of your learning experience.</p>
+      </div>
+      <div class="faq-right">
+        <div class="faq-item" data-aos="zoom-in">
+          <strong>Is this platform completely free to use?</strong>
+          <p>Yes, absolutely! Our platform, including all the icon library features and flashcard quizzes, is <span class="highlight">100% free</span> for all learners. There are no hidden fees or subscriptions required.</p>
+        </div>
+        <div class="faq-item" data-aos="zoom-in">
+          <strong>Can I save or bookmark specific icons for later review?</strong>
+          <p>Currently, the feature to save or bookmark individual icons for later is <span class="highlight">not available</span>. However, this is a highly requested feature, and we are actively working on implementing it in a future update. Stay tuned!</p>
+        </div>
+        <div class="faq-item" data-aos="zoom-in">
+          <strong>What happens after I complete a flashcard quiz? Do I get a reward?</strong>
+          <p>Yes! Upon successfully completing a flashcard quiz, you'll receive a personalized <span class="highlight">certificate of completion</span> to celebrate your achievement and recognize your mastery of the icons. It's a great way to track your progress!</p>
+        </div>
+        <div class="faq-item" data-aos="zoom-in">
+          <strong>How do I contact your support team if I have an issue or a suggestion?</strong>
+          <p>We're here to help! You can easily reach our dedicated support team by filling out the form on our <a href="contact.html" style="color: #007bff; text-decoration: underline;">Contact Us</a> page. We aim to respond to all inquiries promptly.</p>
+        </div>
+        <div class="faq-item" data-aos="zoom-in">
+          <strong>Will there be an option to sign in using my Google account?</strong>
+          <p>Yes, good news! We are actively working on integrating <span class="highlight">Google Sign-In</span> to make your login process even faster and more convenient. This feature will be available soon!</p>
+        </div>
+        <div class="faq-item" data-aos="zoom-in">
+          <strong>How many icons are currently available in the library?</strong>
+          <p>Our library currently features <span class="highlight">108 unique icons</span> for you to learn and explore. We're continuously expanding our collection, so check back often for new additions!</p>
+        </div>
+        <div class="faq-item" data-aos="zoom-in">
+          <strong>Are the flashcards randomized, or do they follow a fixed order?</strong>
+          <p>To provide the best learning experience, all flashcard quizzes are <span class="highlight">fully randomized</span>. Each time you start a new quiz, the order of the icons will be different, helping you truly test your knowledge rather than memorizing a sequence.</p>
+        </div>
+        <div class="faq-item" data-aos="zoom-in">
+          <strong>Can I use these icons in my own projects?</strong>
+          <p>The icons displayed are sourced from Material Symbols. While this platform helps you learn them, you should always refer to the official <a href="https://fonts.google.com/icons" target="_blank" style="color: #007bff; text-decoration: underline;">Material Symbols documentation</a> for licensing and usage guidelines if you intend to use them in your own design or development projects.</p>
+        </div>
+
+        <div class="faq-item" data-aos="zoom-in">
+          <strong>Can I use the flashcards or library offline?</strong>
+          <p>This platform requires an internet connection to load icons and run the flashcard quizzes. <span class="highlight">Offline access is not currently supported</span>.</p>
+        </div>
+        <div class="faq-item" data-aos="zoom-in">
+          <strong>Which web browsers are supported?</strong>
+          <p>Our platform is designed to be compatible with <span class="highlight">all modern web browsers</span>, including Chrome, Firefox, Safari, Edge, and others. For the best experience, we recommend using the latest version of your preferred browser.</p>
+        </div>
+        <div class="faq-item" data-aos="zoom-in">
+          <strong>Is the platform optimized for mobile devices?</strong>
+          <p>Yes! Our website is fully <span class="highlight">responsive and optimized for mobile devices</span>, tablets, and desktops. You can comfortably use the Icon Library and Flashcard Quiz on any screen size.</p>
+        </div>
+        <div class="faq-item" data-aos="zoom-in">
+          <strong>Are there features for users with disabilities (accessibility)?</strong>
+          <p>We are committed to making our platform accessible to everyone. We follow standard web accessibility guidelines to ensure a user-friendly experience. We are continuously working to <span class="highlight">improve accessibility</span> for all users.</p>
+        </div>
+        <div class="faq-item" data-aos="zoom-in">
+          <strong>How do I change my account details like password or email?</strong>
+          <p>If you have an account, you can manage your personal details, including changing your password or email, by visiting your <a href="account.html" style="color: #007bff; text-decoration: underline;">Account Management</a> page.</p>
+        </div>
+
+      </div>
+    </div>
+</section>
+
  <!-- Footer -->
  <footer class="footer">
     <div class="footer-nav">
       <div class="footer-logo">MindBlast</div>
   
       <ul class="footer-links">
-        <li><a href="home.html">Home</a></li>
         <li><a href="about.html">About Us</a></li>
         <li><a href="contact.html">Contact Us</a></li>
-        <li><a href="leaderboard.html">Leaderboard</a></li>
-        <li><a href="library.html">Our Library</a></li>
       </ul>
   
       <div class="footer-socials">
@@ -299,11 +370,6 @@
   
     <div class="footer-bottom">
       <p>© 2025 MindBlast. All rights reserved.</p>
-      <ul>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Terms of Use</a></li>
-        <li><a href="#">Cookie Policy</a></li>
-      </ul>
     </div>
   </footer>
 

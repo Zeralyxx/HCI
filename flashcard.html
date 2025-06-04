@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MindBlast - Flashcards</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600&family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+    <link rel="stylesheet" href="styles.css" />
+
+    <style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    main { flex-grow: 1; } /* Important for pushing footer to bottom */
+
+    /* Basic Modal Structure (from your library.html) */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+    }
+
+    /* Modal Content Box (from your library.html) */
+    .modal-content {
+      background-color: #fefefe;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      margin: auto;
+      width: 90%; /* Responsive width */
+      max-width: 600px;
+      text-align: center;
+      position: relative;
+      animation: fadeIn 0.3s ease-out;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      gap: 15px; /* Reduced gap for icon modal */
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    /* Specific Styles for Small Confirmation Modal (from your library.html) */
+    .modal-content.small-modal {
+      max-width: 350px;
+      padding: 30px;
+      gap: 15px;
+    }
+
+    .modal-content h2 {
+      color: #333;
+      margin-top: 0; /* Reset margin for h2 inside modal */
+      margin-bottom: 10px;
+    }
+
+    .modal-content p {
+      color: #555;
+      margin-bottom: 10px; /* Adjust paragraph margin */
+      line-height: 1.5;
+      text-align: left; /* Align text to left for readability */
+    }
+    .modal-content p strong {
+        color: #333;
+    }
+
+    /* Modal action buttons container (from your library.html) */
+    .modal-actions {
+      display: flex;
+      justify-content: space-around;
+      gap: 15px;
+      width: 100%;
+      margin-top: 15px; /* Add some space above buttons */
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .modal-actions .btn {
+      flex-grow: 1;
+      margin: 0;
+    }
+
+    .red-btn {
+      background-color: #dc3545;
+      color: white;
+    }
+    .red-btn:hover:not(:disabled) {
+      background-color: #c82333;
+    }
+
+    .green-btn {
+      background-color: #28a745;
+      color: white;
+    }
+    .green-btn:hover {
+      background-color: #218838;
+    }
+
+    /* Styles for the Icon Info Modal (from your library.html) */
+    #icon-info-modal .modal-icon-display {
+        font-size: 48px; /* Make icon prominent */
+        color: #337ab7; /* A nice blue, or your theme color */
+        margin-bottom: 5px;
+    }
+
+    #icon-info-modal .modal-content h2 {
+        font-family: 'Fredoka', sans-serif;
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+
+    #icon-info-modal .modal-content p {
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 1rem;
+        margin-bottom: 8px;
+    }
+    #icon-info-modal .modal-content p.usage-text {
+        background-color: #f9f9f9;
+        border-left: 3px solid #337ab7;
+        padding: 10px;
+        border-radius: 4px;
+        font-style: italic;
+    }
+
+
+    /* Close button for modals (from your library.html) */
+    .close-modal-btn {
+      color: #aaa;
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close-modal-btn:hover,
+    .close-modal-btn:focus {
+      color: black;
+      text-decoration: none;
+    }
+
+
+    @media (min-width: 500px) {
+        .modal-actions {
+            flex-direction: row;
+            justify-content: space-around;
+        }
+        .modal-actions .btn {
+            flex-grow: 1;
+            max-width: 48%;
+        }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Flashcard Specific Styles */
+    .flashcard-section {
+        flex-grow: 1; /* Allow section to take available space */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 20px;
+        background-color: var(--dark-gray); /* Light background for the section */
+    }
+
+    .flashcard-container {
+        width: 100%;
+        max-width: 450px; /* Adjust max-width for the card */
+        height: 300px; /* Fixed height for the card */
+        perspective: 1000px; /* For 3D flip effect */
+        margin-bottom: 30px;
+        position: relative;
+    }
+
+    .flashcard {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.6s ease-in-out;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 15px;
+    }
+
+    .flashcard.flipped {
+        transform: rotateY(180deg);
+    }
+
+    .flashcard-face {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden; /* Hide back of the card when not flipped */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #ffffff;
+        border-radius: 15px;
+        padding: 20px;
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    .flashcard-front {
+        /* Styles for the front of the card (icon only) */
+    }
+
+    .flashcard-front .material-symbols-outlined {
+        font-size: 120px; /* Even larger icon on flashcard front */
+        color: #000000;
+        margin: 0; /* Remove margin as it's the only element */
+    }
+
+    .flashcard-back {
+        transform: rotateY(180deg); /* Start rotated for the back face */
+        /* Styles for the back of the card (name, description, usage) */
+        color: #333;
+        font-family: 'IBM Plex Sans', sans-serif;
+        justify-content: flex-start; /* Align content to the top */
+        padding-top: 30px; /* Add some top padding */
+        overflow-y: auto; /* Allow scrolling if content is too long */
+    }
+
+    .flashcard-back h3 {
+        font-family: 'Fredoka', sans-serif;
+        font-size: 1.5rem;
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: #337ab7;
+    }
+
+    .flashcard-back p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        text-align: left; /* Left align description for readability */
+        padding: 0 20px; /* Horizontal padding for text */
+        margin-bottom: 10px;
+    }
+    .flashcard-back p strong {
+        color: #333;
+    }
+
+    .flashcard-actions {
+        display: flex;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .flashcard-actions .btn {
+        padding: 12px 25px;
+        font-size: 1.1rem;
+        min-width: 120px;
+    }
+
+    .flashcard-progress {
+        margin-top: 20px;
+        font-family: 'IBM Plex Sans', sans-serif;
+        font-size: 1rem;
+        color: white;
+    }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">MindBlast</div>
+    <div class="hamburger" id="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="leaderboard.html">Leaderboard</a></li>
+      <li><a href="library.html">Icon Library</a></li>
+      <li><a href="flashcard.html" class="active">Flashcards</a></li> </ul>
+    <div id="auth-section">
+      <button class="nav-btn" id="loginBtn" onclick="window.location.href='auth.html'">Login</button>
+    </div>
+  </nav>
+
+  <main>
+    <section class="flashcard-section">
+      <div class="flashcard-container">
+        <div class="flashcard" id="flashcard">
+          <div class="flashcard-face flashcard-front">
+            <span class="material-symbols-outlined" id="flashcard-icon-glyph"></span>
+            </div>
+          <div class="flashcard-face flashcard-back">
+            <h3 id="flashcard-back-name"></h3>
+            <p><strong>Description:</strong></p>
+            <p id="flashcard-back-description"></p>
+            <p><strong>Common Uses:</strong></p>
+            <p id="flashcard-back-usage"></p>
+          </div>
+        </div>
+      </div>
+      <div class="flashcard-actions">
+        <button class="btn green-btn" id="flip-card-btn">Flip Card</button>
+        <button class="btn red-btn" id="next-card-btn">Next Icon</button>
+      </div>
+      <p class="flashcard-progress">Card <span id="current-card-index">0</span> of <span id="total-cards">0</span></p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-nav">
+      <div class="footer-logo">MindBlast</div>
+
+      <ul class="footer-links">
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+      </ul>
+
+      <div class="footer-socials">
+        <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24px" height="24px">
+                <path d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.347V11.91h2.347V9.272c0-2.31 1.392-3.594 3.5-3.594 1.007 0 1.965.075 2.225.109v2.43h-1.44c-1.149 0-1.374.548-1.374 1.353v1.667h2.77l-.362 2.906h-2.408V22C17.343 21.128 22 16.991 22 12 22 6.477 17.523 2 12 2z"/>
+            </svg>
+        </a>
+        <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24px" height="24px">
+                <path d="M19.615 3.184c-1.342-.18-3.53-.341-6.615-.389V.595l-3.001 2.689c-.136.121-.326.178-.517.179a.59.59 0 0 1-.407-.16l-3.001-2.689v2.2c-3.085.048-5.273.21-6.615.39C.387 3.45 0 4.12 0 5.077v13.846c0 .957.387 1.628 1.385 1.764 1.342.18 3.53.341 6.615.389v2.2l3.001-2.689a.59.59 0 0 1 .924 0l3.001 2.689v-2.2c3.085-.048 5.273-.21 6.615-.389.998-.136 1.385-.807 1.385-1.764V5.077c0-.957-.387-1.628-1.385-1.764zM9 16.5v-9L15 12l-6 4.5z"/>
+            </svg>
+        </a>
+        <a href="https://www.github.com/" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24px" height="24px">
+                <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.73.084-.73 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.49.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.33-5.466-5.934 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.4 3-.4.92 0 1.94.133 3 .4 2.28-1.552 3.295-1.23 3.295-1.23.645 1.653.24 2.873.105 3.176.77.84 1.235 1.91 1.235 3.22 0 4.61-2.805 5.624-5.475 5.92.42.36.81 1.096.81 2.215 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12z"/>
+            </svg>
+        </a>
+    </div>
+    </div>
+
+    <hr />
+
+    <div class="footer-bottom">
+      <p>© 2025 MindBlast. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <div id="logout-confirm-modal" class="modal">
+    <div class="modal-content small-modal">
+        <h2>Log Out?</h2>
+        <p>Are you sure you want to log out?</p>
+        <div class="modal-actions">
+            <button id="logout-yes-btn" class="btn red-btn">Yes, Log Out</button>
+            <button id="logout-no-btn" class="btn green-btn">No, Stay Logged In</button>
+        </div>
+    </div>
+  </div>
+
+  <div id="icon-info-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal-btn" id="close-icon-info-modal">×</span>
+        <span class="material-symbols-outlined modal-icon-display" id="modal-icon-glyph"></span>
+        <h2 id="modal-icon-name">Icon Name</h2>
+        <p><strong>Description:</strong></p>
+        <p id="modal-icon-description">Detailed description of the icon will appear here.</p>
+        <p><strong>Common Uses:</strong></p>
+        <p id="modal-icon-usage" class="usage-text">Examples of where and how this icon is commonly used will appear here.</p>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="script.js"></script>
+  <script type="module">
+    // Firebase initialization and auth state observer (from your library.html)
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZLZPVAlZUJWLturWzJ3nqyceZbSIevl4",
+      authDomain: "mindblast-icons.firebaseapp.com",
+      projectId: "mindblast-icons",
+      storageBucket: "mindblast-icons.firebasestorage.app",
+      messagingSenderId: "807795058423",
+      appId: "1:807795058423:web:2066a5d149852a43af55f2",
+      measurementId: "G-LSJ3SWQP6M"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const authSection = document.getElementById("auth-section");
+    const logoutConfirmModal = document.getElementById('logout-confirm-modal');
+    const logoutYesBtn = document.getElementById('logout-yes-btn');
+    const logoutNoBtn = document.getElementById('logout-no-btn');
+
+    window.isProfileMenuOpen = false; // Initialize flag
+
+    window.toggleProfileMenu = function () {
+      const menu = document.getElementById('profileMenu');
+      if (!menu) return;
+
+      if (!window.isProfileMenuOpen) {
+        menu.classList.add('show');
+        window.isProfileMenuOpen = true;
+        // Add listener with a slight delay to ensure it doesn't catch the opening click
+        setTimeout(() => document.addEventListener('click', handleOutsideClickProfileMenu), 0);
+      } else {
+        menu.classList.remove('show');
+        window.isProfileMenuOpen = false;
+        document.removeEventListener('click', handleOutsideClickProfileMenu);
+      }
+    };
+
+    function handleOutsideClickProfileMenu(e) {
+      const menu = document.getElementById('profileMenu');
+      const profileIcon = document.querySelector('.profile-icon');
+      // Check if the click is outside the menu AND outside the profile icon
+      if (menu && profileIcon && !menu.contains(e.target) && !profileIcon.contains(e.target)) {
+        menu.classList.remove('show');
+        window.isProfileMenuOpen = false;
+        document.removeEventListener('click', handleOutsideClickProfileMenu);
+      }
+    }
+
+    window.logoutUser = function () {
+      if (logoutConfirmModal) logoutConfirmModal.style.display = 'flex';
+    };
+
+    if (logoutYesBtn) {
+      logoutYesBtn.addEventListener('click', () => {
+        signOut(auth).then(() => {
+          window.location.reload();
+        }).catch((error) => {
+          console.error("Error signing out:", error);
+          alert("Failed to log out. Please try again.");
+        });
+        if (logoutConfirmModal) logoutConfirmModal.style.display = 'none';
+      });
+    }
+
+    if (logoutNoBtn) {
+      logoutNoBtn.addEventListener('click', () => {
+        if (logoutConfirmModal) logoutConfirmModal.style.display = 'none';
+      });
+    }
+
+    window.addEventListener('click', (event) => {
+      if (event.target === logoutConfirmModal) {
+        logoutConfirmModal.style.display = 'none';
+      }
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const userInitial = (user.displayName ? user.displayName.charAt(0) : (user.email ? user.email.charAt(0) : '?')).toUpperCase();
+        authSection.innerHTML = `
+          <div class="profile-wrapper">
+            <div class="profile-icon" onclick="toggleProfileMenu()">
+              ${userInitial}
+            </div>
+            <div id="profileMenu" class="profile-menu">
+              <button onclick="window.location.href='account.html'">Manage Account</button>
+              <button onclick="logoutUser()">Logout</button>
+            </div>
+          </div>
+        `;
+      } else {
+        authSection.innerHTML = `<button class="nav-btn" id="loginBtn" onclick="window.location.href='auth.html'">Login</button>`;
+      }
+    });
+
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        AOS.init({
+            duration: 800,
+            once: false,
+        });
+
+        const flashcard = document.getElementById('flashcard');
+        const flipCardBtn = document.getElementById('flip-card-btn');
+        const nextCardBtn = document.getElementById('next-card-btn');
+        const flashcardIconGlyph = document.getElementById('flashcard-icon-glyph');
+        const flashcardBackName = document.getElementById('flashcard-back-name');
+        const flashcardBackDescription = document.getElementById('flashcard-back-description');
+        const flashcardBackUsage = document.getElementById('flashcard-back-usage');
+        const currentCardIndexSpan = document.getElementById('current-card-index');
+        const totalCardsSpan = document.getElementById('total-cards');
+
+        // This is your complete icon data, copied from your previous library structure.
+        // It's highly recommended to move this to a separate file (e.g., iconsData.js)
+        // and import it into both library.html and flashcard.html for better maintenance.
+        const iconsData = [
+            {
+                name: "Home",
+                glyph: "home",
+                description: "Represents the main page, starting point, or primary screen of an application or website.",
+                usage: "Typically found in navigation bars or headers. Clicking it returns the user to the homepage or main dashboard."
+            },
+            {
+                name: "Menu",
+                glyph: "menu",
+                description: "Indicates a list of options or navigation links, often hidden in a drawer. Commonly a 'hamburger menu' (three lines).",
+                usage: "Used to save screen space, especially on mobile. Clicking reveals main navigation, settings, or other sections."
+            },
+            {
+                name: "Search",
+                glyph: "search",
+                description: "Signifies a search functionality, allowing users to find specific content or items.",
+                usage: "Usually paired with an input field. Clicking can expand a search bar, initiate a search, or navigate to a dedicated search page."
+            },
+            {
+                name: "Add",
+                glyph: "add",
+                description: "Represents the action of adding a new item, creating new content, or increasing a quantity.",
+                usage: "Commonly used for adding new documents, users, products to a cart, or new entries in a list."
+            },
+            {
+                name: "Check",
+                glyph: "check",
+                description: "Indicates confirmation, completion, success, or selection. Often used for tasks, approvals, or to signify 'yes'.",
+                usage: "Used in to-do lists, form submissions (success), accepting terms, or selecting options."
+            },
+            {
+                name: "Close",
+                glyph: "close",
+                description: "Represents the action of closing, dismissing, or canceling. Often an 'X' shape.",
+                usage: "Used to close windows, modals, pop-ups, dismiss notifications, or cancel an ongoing process."
+            },
+            {
+                name: "Cancel",
+                glyph: "cancel",
+                description: "Similar to 'Close', but can also mean to stop or abort an operation that has started, or to negate a selection.",
+                usage: "Used to stop downloads/uploads, undo selections, or exit a process without saving changes."
+            },
+            {
+                name: "Refresh",
+                glyph: "refresh",
+                description: "Indicates the action of reloading or updating content to its latest version.",
+                usage: "Used to refresh a webpage, update a data feed, or synchronize information."
+            },
+            {
+                name: "Logout",
+                glyph: "logout",
+                description: "Signifies the action of signing out or logging off from an account or system.",
+                usage: "Typically found in user account menus to end a session securely."
+            },
+            {
+                name: "Sort",
+                glyph: "sort",
+                description: "Represents the action of arranging items in a specific order (e.g., alphabetical, numerical, by date).",
+                usage: "Used in tables or lists to allow users to sort data for better readability or analysis."
+            },
+            {
+                name: "Redo",
+                glyph: "redo",
+                description: "Represents the action of performing a previously undone action again.",
+                usage: "Commonly found in text editors, design software, or any application with an undo feature to reapply the last undone change."
+            },
+            {
+                name: "Fullscreen",
+                glyph: "fullscreen",
+                description: "Indicates the action of expanding content to fill the entire screen, hiding system UI elements.",
+                usage: "Used for videos, presentations, images, games, or applications where an immersive, focused view is desired."
+            },
+            {
+                name: "Settings",
+                glyph: "settings",
+                description: "Indicates access to application settings, preferences, or configuration options. Often represented by a gear/cogwheel.",
+                usage: "Used to customize application behavior, manage account details, or adjust system parameters."
+            },
+            {
+                name: "Share",
+                glyph: "share",
+                description: "Represents the action of sharing content with others or through other applications (e.g., social media).",
+                usage: "Commonly used for sharing articles, images, or links via email, social platforms, or messaging apps."
+            },
+            {
+                name: "Info",
+                glyph: "info",
+                description: "Indicates the availability of additional information, details, or context about a specific item or feature.",
+                usage: "Often used for tooltips, help sections, or to provide non-critical supplementary details."
+            },
+            {
+                name: "Help",
+                glyph: "help",
+                description: "Signifies access to help documentation, FAQs, tutorials, or customer support.",
+                usage: "Typically leads to a help center, contact form, or guided assistance for users."
+            },
+            {
+                name: "Favorite",
+                glyph: "favorite",
+                description: "Represents marking an item as a favorite, liked, or specially preferred. Often a heart shape.",
+                usage: "Used to bookmark items, express approval (like a 'like' button), or quickly access preferred content."
+            },
+            {
+                name: "Bookmark",
+                glyph: "bookmark",
+                description: "Represents saving or marking an item for easy retrieval or future reference.",
+                usage: "Used for saving web pages in browsers, specific locations in documents, or items in a list to revisit later."
+            },
+            {
+                name: "Visibility",
+                glyph: "visibility",
+                description: "Indicates that an item is visible or allows toggling visibility. Often an eye icon.",
+                usage: "Used for password fields (show/hide password), layer visibility in design tools, or making content public/private."
+            },
+            {
+                name: "Lock",
+                glyph: "lock",
+                description: "Represents security, privacy, or a locked state. Can also mean to fix an item in place.",
+                usage: "Indicates secure connections (SSL), password-protected content, or features that are locked/unavailable until certain conditions are met."
+            },
+            {
+                name: "Check circle",
+                glyph: "check_circle",
+                description: "Indicates a successful verification, completion, or a selected state, often with more emphasis than a simple checkmark.",
+                usage: "Used for completed tasks, verified accounts, positive status indicators, or highlighting a chosen option within a list."
+            },
+            {
+                name: "Bolt",
+                glyph: "bolt",
+                description: "Represents speed, power, energy, an instant action, or a notification of high importance.",
+                usage: "Often used for 'flash' sales, quick actions, power-saving modes, critical alerts, or features that activate rapidly."
+            },
+            {
+                name: "Phone",
+                glyph: "phone",
+                description: "Represents a telephone, phone call functionality, or contact via phone.",
+                usage: "Used to display a phone number, initiate a call directly from an app, or link to contact information."
+            },
+            {
+                name: "Email",
+                glyph: "email",
+                description: "Represents electronic mail, email functionality, or contact via email.",
+                usage: "Used to display an email address, compose a new email, or link to an email client or contact form."
+            },
+            {
+                name: "Wifi",
+                glyph: "wifi",
+                description: "Indicates wireless network connectivity through Wi-Fi technology.",
+                usage: "Used to show Wi-Fi connection status, list available networks, access Wi-Fi settings, or indicate a feature requiring Wi-Fi."
+            },
+            {
+                name: "Bluetooth",
+                glyph: "bluetooth",
+                description: "Represents Bluetooth wireless technology for short-range communication between devices.",
+                usage: "Used to show Bluetooth connection status, initiate pairing with other devices, or manage connected Bluetooth peripherals."
+            },
+            {
+                name: "Edit",
+                glyph: "edit",
+                description: "Indicates the action of modifying or changing existing content or settings. Often a pencil icon.",
+                usage: "Used to edit documents, user profiles, item details, or any editable field within an application."
+            },
+            {
+                name: "Delete",
+                glyph: "delete",
+                description: "Represents the action of removing or discarding an item permanently. Often a trash can icon.",
+                usage: "Used to delete files, messages, user accounts, or any unwanted data. Usually requires confirmation."
+            },
+            {
+                name: "Upload",
+                glyph: "upload",
+                description: "Represents the action of transferring data from a local system to a remote system or server.",
+                usage: "Commonly used for submitting files, photos, documents to a website, cloud storage, or online service."
+            },
+            {
+                name: "Download",
+                glyph: "download",
+                description: "Represents the action of transferring data from a remote system or server to a local system.",
+                usage: "Used for saving files, applications, documents, or media from the internet or a server to a user's device."
+            },
+            {
+                name: "Print",
+                glyph: "print",
+                description: "Represents the action of sending a document or image to a printer to create a physical copy.",
+                usage: "Used in applications that handle documents, images, reports, or any content that might need a hard copy."
+            },
+            {
+                name: "Camera",
+                glyph: "camera",
+                description: "Represents a camera, image capture, or video recording functionality.",
+                usage: "Used to initiate photo or video taking, access the device's camera, or navigate to a gallery of captured media."
+            },
+            {
+                name: "Map",
+                glyph: "map",
+                description: "Represents a geographical map, location-based services, or navigation.",
+                usage: "Used to display directions, find points of interest, show a user's current location, or interact with map data."
+            },
+            {
+                name: "Alarm",
+                glyph: "alarm",
+                description: "Represents an alarm clock, a scheduled reminder, or a time-sensitive notification.",
+                usage: "Used for setting alarms, timers, event reminders, or indicating an upcoming deadline or appointment."
+            },
+            {
+                name: "Thumbs up",
+                glyph: "thumb_up",
+                description: "Indicates approval, agreement, a positive response, or a 'like'.",
+                usage: "Commonly used in social media, feedback systems, content rating, or voting mechanisms to express a favorable opinion."
+            },
+            {
+                name: "Zoom In",
+                glyph: "zoom_in",
+                description: "Represents the action of enlarging the view of content for closer inspection or detail.",
+                usage: "Used in image viewers, maps, document readers, or any interface where users might need to see content more closely."
+            },
+            {
+                name: "Security",
+                glyph: "security",
+                description: "Pertains to safety, protection, and measures against unauthorized access or harm.",
+                usage: "Indicates security settings, antivirus software, secure areas, privacy features, or system protection status."
+            },
+            {
+                name: "Update",
+                glyph: "update",
+                description: "Indicates an update is available, the action to update software/content, or a version change.",
+                usage: "Used for software updates, refreshing data feeds, app versioning, or indicating content has been recently modified."
+            },
+            {
+                name: "Sync",
+                glyph: "sync",
+                description: "Represents the action of synchronizing data between multiple devices, locations, or accounts.",
+                usage: "Used for cloud services, calendars, contacts, file hosting, ensuring data consistency across platforms."
+            },
+            {
+                name: "Build",
+                glyph: "build",
+                description: "Represents construction, creation, compilation processes, or configuration tools.",
+                usage: "Used in development tools (compiling code), project management (building a project), or advanced settings/configuration panels."
+            },
+            {
+                name: "Tune",
+                glyph: "tune",
+                description: "Represents fine-tuning, adjustments, customization, or advanced control settings.",
+                usage: "Used for adjusting preferences, audio/video settings, performance parameters, or color calibration."
+            },
+            {
+                name: "Emergency",
+                glyph: "emergency",
+                description: "Indicates an urgent situation, critical alert, emergency services, or a safety feature.",
+                usage: "Used for SOS signals, emergency contact information, critical system warnings, or access to emergency procedures."
+            },
+            {
+                name: "Visibility off",
+                glyph: "visibility_off",
+                description: "Indicates that an item is hidden, private, or allows toggling to a hidden state. The opposite of 'visibility'.",
+                usage: "Used for password fields (complement to 'visibility'), hiding layers, making content private, or muting notifications."
+            },
+            {
+                name: "Cloud",
+                glyph: "cloud",
+                description: "Represents cloud computing, online storage, or services hosted on the internet.",
+                usage: "Used for cloud storage access, syncing data across devices, online backup services, or indicating cloud-based features."
+            },
+            {
+                name: "Cloud upload",
+                glyph: "cloud_upload",
+                description: "Specifically indicates the action of uploading data to a cloud storage or service.",
+                usage: "Used for backing up files to the cloud, saving documents online, or transferring data to a remote server via cloud."
+            },
+            {
+                name: "Folder",
+                glyph: "folder",
+                description: "Represents a directory or container for organizing files and other folders.",
+                usage: "Used in file management systems to group related documents, media, or other digital assets."
+            },
+            {
+                name: "Dashboard",
+                glyph: "dashboard",
+                description: "Represents a central overview or control panel displaying key information, metrics, and shortcuts.",
+                usage: "Used in analytics platforms, admin panels, user account summaries, or project management tools for quick insights."
+            },
+            {
+                name: "Apps",
+                glyph: "apps",
+                description: "Represents a collection of applications, or access to an app launcher, store, or app management.",
+                usage: "Used to open an app drawer, view installed applications, browse for new apps, or manage app settings."
+            },
+            {
+                name: "Tab",
+                glyph: "tab",
+                description: "Represents a tab in a user interface, allowing multiple documents or sections to be open within a single window.",
+                usage: "Used in web browsers, text editors, settings panels, or any interface that benefits from tabbed navigation."
+            },
+            {
+                name: "Stacks",
+                glyph: "stacks",
+                description: "Represents a collection of items layered, grouped, or stacked together, often for organization or navigation.",
+                usage: "Used in card-based UIs, document management, representing multiple layers in design, or stacked notifications."
+            },
+            {
+                name: "New window",
+                glyph: "new_window",
+                description: "Represents the action of opening content or an application in a separate, new window.",
+                usage: "Used to view content alongside the current window, launch a distinct part of an application, or for pop-out features."
+            },
+            {
+                name: "Drag pan",
+                glyph: "drag_pan",
+                description: "Indicates the ability to move or navigate content by clicking and dragging (panning).",
+                usage: "Commonly used in maps, large images, virtual desktops, or draggable interface elements for exploration."
+            },
+            {
+                name: "Notifications",
+                glyph: "notifications",
+                description: "Indicates alerts, updates, or new messages that require user attention. Often a bell icon.",
+                usage: "Displays a count of unread notifications; clicking usually shows a list of recent activities, messages, or alerts."
+            },
+            {
+                name: "Send",
+                glyph: "send",
+                description: "Represents the action of sending a message, email, data, or initiating a dispatch.",
+                usage: "Commonly found in messaging apps, email clients, form submissions, or for dispatching orders/tasks."
+            },
+            {
+                name: "Group",
+                glyph: "group",
+                description: "Represents a collection of users, items, settings, or the action of grouping elements.",
+                usage: "Used for user groups, team collaboration, grouping layers in design software, or categorizing items."
+            },
+            {
+                name: "Person",
+                glyph: "person",
+                description: "Represents a user, individual profile, or a single person.",
+                usage: "Used for user login, viewing a user's profile, managing account settings, or assigning tasks to an individual."
+            },
+            {
+                name: "Account box",
+                glyph: "account_box",
+                description: "Represents a user's account, profile, or login information, often with a visual container or frame.",
+                usage: "Used for accessing user profiles, detailed account settings, login/registration areas, or contact cards."
+            },
+            {
+                name: "Chat",
+                glyph: "chat",
+                description: "Represents a chat, messaging functionality, or real-time conversation.",
+                usage: "Used to open a chat window, view messages, indicate online status for chat, or access direct messaging features."
+            },
+            {
+                name: "Forum",
+                glyph: "forum",
+                description: "Represents a discussion forum, community Q&A area, or a place for public discourse.",
+                usage: "Used to access community discussions, ask questions, provide answers, or participate in online forums."
+            },
+            {
+                name: "Feedback",
+                glyph: "feedback",
+                description: "Represents providing or viewing feedback, suggestions, reviews, or opinions.",
+                usage: "Used for submitting bug reports, product reviews, user satisfaction surveys, or leaving comments."
+            },
+            {
+                name: "Language",
+                glyph: "language",
+                description: "Represents language settings, translation options, or global/international features.",
+                usage: "Used to change the application's display language, access translation tools, or indicate content available in multiple languages."
+            },
+            {
+                name: "Receipt",
+                glyph: "receipt",
+                description: "Represents a proof of purchase, invoice, bill, or transaction record.",
+                usage: "Used in e-commerce order history, billing systems, expense tracking applications, or for generating sales slips."
+            },
+            {
+                name: "Wallet",
+                glyph: "wallet",
+                description: "Represents a digital or physical wallet for storing money, payment cards, passes, or cryptocurrencies.",
+                usage: "Used for accessing payment methods, managing funds, storing digital tickets/passes, or cryptocurrency transactions."
+            },
+            {
+                name: "Credit card",
+                glyph: "credit_card",
+                description: "Represents a credit card, debit card, or general card-based payment processing.",
+                usage: "Used for entering payment details, selecting a card as a payment method, or indicating accepted card types."
+            },
+            {
+                name: "Assessment",
+                glyph: "assessment",
+                description: "Represents evaluation, analysis, testing, or a formal review process.",
+                usage: "Used for quizzes, performance reviews, system diagnostics, skills tests, or formal assessments."
+            },
+            {
+                name: "Analytics",
+                glyph: "analytics",
+                description: "Represents data analysis, tracking, reporting, and insights derived from data.",
+                usage: "Used to view statistics, user behavior, performance metrics, business intelligence, or website traffic."
+            },
+            {
+                name: "Bar chart",
+                glyph: "bar_chart",
+                description: "Represents data visualized as a bar chart, typically used for comparing quantities across categories.",
+                usage: "Used for displaying comparisons, trends over time, statistical data, or survey results."
+            },
+            {
+                name: "Pie chart",
+                glyph: "pie_chart",
+                description: "Represents data visualized as a pie chart, showing proportions or percentages of a whole.",
+                usage: "Used for showing market share, budget allocations, demographic distributions, or survey response breakdowns."
+            },
+            {
+                name: "Event",
+                glyph: "event",
+                description: "Represents a calendar event, appointment, scheduled occurrence, or a significant date.",
+                usage: "Used for viewing or adding calendar entries, setting reminders, booking appointments, or highlighting special occasions."
+            },
+            {
+                name: "Link",
+                glyph: "link",
+                description: "Represents a hyperlink, a connection between two items, or the action of linking/attaching.",
+                usage: "Used to navigate to another webpage/document, share URLs, attach files, or show relationships between entities."
+            },
+            {
+                name: "Location on",
+                glyph: "location_on",
+                description: "Indicates a specific geographic location, often the current location or a pinned point on a map.",
+                usage: "Used for GPS services, displaying addresses, tagging content with a location, or finding nearby places."
+            },
+            {
+                name: "Cycle",
+                glyph: "cycle",
+                description: "Represents a recurring process, repetition, a circular flow, or a lifecycle.",
+                usage: "Used for refresh cycles, recurring events, iterative processes, recycling, or stages in a workflow."
+            },
+            {
+                name: "Terminal",
+                glyph: "terminal",
+                description: "Represents a command-line interface (CLI) or console for executing text-based commands.",
+                usage: "Used by developers or advanced users for system administration, coding, running scripts, or direct system interaction."
+            },
+            {
+                name: "Code blocks",
+                glyph: "code_blocks",
+                description: "Represents snippets of code, programming-related content, or structured text blocks.",
+                usage: "Used in developer documentation, code editors, tutorials to display formatted code, or for code embedding."
+            },
+            {
+                name: "Data object",
+                glyph: "data_object",
+                description: "Represents a structured piece of data, often in formats like JSON or XML, or a data entity.",
+                usage: "Used in programming contexts, API documentation, database schema visualization, or representing complex data structures."
+            },
+            {
+                name: "Schema",
+                glyph: "schema",
+                description: "Represents the structure, blueprint, or model of a database, system, or data organization.",
+                usage: "Used in database design, API development, system architecture diagrams, or defining data relationships."
+            },
+            {
+                name: "Variables",
+                glyph: "variables",
+                description: "Represents placeholders, named storage locations for data in programming, formulas, or configurations.",
+                usage: "Used in code editors, mathematical software, configuration settings, or dynamic content systems."
+            },
+            {
+                name: "API",
+                glyph: "api",
+                description: "Acronym for Application Programming Interface; represents a way for different software components to communicate and interact.",
+                usage: "Indicates settings, documentation, or tools related to integrating with other services or accessing data programmatically."
+            },
+            {
+                name: "Account tree",
+                glyph: "account_tree",
+                description: "Represents a hierarchical structure of accounts, elements, or organizational units, like a tree diagram.",
+                usage: "Used in financial systems (chart of accounts), directory services, complex navigation structures, or displaying organizational charts."
+            },
+            {
+                name: "ADB",
+                glyph: "adb",
+                description: "Stands for Android Debug Bridge, a command-line tool for developers to communicate with an Android device or emulator.",
+                usage: "Used in Android development environments for app installation, debugging, file transfer, and executing shell commands."
+            },
+            {
+                name: "Build circle",
+                glyph: "build_circle",
+                description: "Similar to 'build', often with a circular arrow or enclosed in a circle, emphasizing an ongoing, cyclical, or complete build/compilation process.",
+                usage: "Used in continuous integration/deployment (CI/CD) systems, software development status indicators, or to signify a build artifact."
+            },
+            {
+                name: "Public",
+                glyph: "public",
+                description: "Represents content, settings, or networks that are publicly accessible, shared with everyone, or related to the globe/world.",
+                usage: "Used for visibility settings (e.g., public posts), indicating open Wi-Fi networks, global access, or earth/map related features."
+            },
+            {
+                name: "Dns",
+                glyph: "dns",
+                description: "Stands for Domain Name System; relates to how domain names (e.g., www.google.com) are translated into IP addresses.",
+                usage: "Usually found in network settings, server configurations, or tools for managing website and internet connectivity."
+            },
+            {
+                name: "Hub",
+                glyph: "hub",
+                description: "Represents a central connection point, network hub, a collection of resources/services, or a central place for activity.",
+                usage: "Used in networking diagrams, project management dashboards, service aggregators, or community centers."
+            },
+            {
+                name: "Cast",
+                glyph: "cast",
+                description: "Represents streaming or projecting audio/video content from one device to another (e.g., phone to TV or speaker).",
+                usage: "Used for screen mirroring, media casting services (like Chromecast), remote display controls, or broadcasting."
+            },
+            {
+                name: "Satellite",
+                glyph: "satellite",
+                description: "Represents satellite communication, GPS, space-related technology, or global positioning.",
+                usage: "Used for location services, satellite imagery, telecommunication settings, or indicating satellite-based connectivity."
+            },
+            {
+                name: "Wifi proxy",
+                glyph: "wifi_proxy",
+                description: "Represents settings or status related to a Wi-Fi proxy server, used for routing internet traffic.",
+                usage: "Found in advanced network configurations for routing Wi-Fi traffic through a proxy for security, filtering, or access control."
+            },
+            {
+                name: "Cell tower",
+                glyph: "cell_tower",
+                description: "Represents a cellular network tower, mobile signal strength, or cellular connectivity.",
+                usage: "Used to indicate network connectivity quality, signal strength, mobile data settings, or cell network information."
+            },
+            {
+                name: "Wifi channel",
+                glyph: "wifi_channel",
+                description: "Represents settings, information, or analysis related to Wi-Fi channels for wireless networks.",
+                usage: "Used in network analysis tools or router configurations to select or optimize wireless channels for better performance and less interference."
+            },
+            {
+                name: "Power",
+                glyph: "power",
+                description: "Represents power on/off functionality, battery status, energy settings, or electrical power.",
+                usage: "Used for device power buttons, battery level indicators, power management options, or indicating an active power source."
+            },
+            {
+                name: "Memory",
+                glyph: "memory",
+                description: "Represents computer memory (RAM), storage capacity, or a memory chip/card.",
+                usage: "Used for system information display (RAM usage), memory usage monitoring, memory card access, or cognitive functions."
+            },
+            {
+                name: "Storage",
+                glyph: "storage",
+                description: "Represents data storage, disk space, database storage, or a physical storage device.",
+                usage: "Indicates information about available storage, memory usage, settings related to data persistence, or server storage."
+            },
+            {
+                name: "Settings cell",
+                glyph: "settings_cell",
+                description: "Represents settings or configuration options specifically related to cellular or mobile network connectivity.",
+                usage: "Used for configuring mobile data, Access Point Names (APN), network operators, roaming settings, or SIM card options."
+            },
+            {
+                name: "Privacy",
+                glyph: "privacy",
+                description: "Represents privacy settings, data protection, confidential information, or features ensuring user anonymity.",
+                usage: "Used for accessing privacy controls, managing data sharing preferences, indicating secure or incognito modes, or privacy policies."
+            },
+            {
+                name: "Vpn key",
+                glyph: "vpn_key",
+                description: "Represents a Virtual Private Network (VPN) key, indicating secure, encrypted connections or VPN access.",
+                usage: "Used in network settings to configure or activate a VPN service for enhanced privacy, security, or bypassing geo-restrictions."
+            },
+            {
+                name: "Psychology",
+                glyph: "psychology",
+                description: "Represents concepts related to the mind, mental processes, human behavior, or psychology as a field.",
+                usage: "Used in educational apps, health platforms, AI with emotional intelligence, or tools dealing with cognitive functions or mental well-being."
+            },
+            {
+                name: "Tornado",
+                glyph: "tornado",
+                description: "Represents a tornado, a severe weather warning for tornadoes, or highly destructive cyclonic winds.",
+                usage: "Used in weather applications, emergency alert systems, or to symbolize rapid, chaotic change."
+            },
+            {
+                name: "Storm",
+                glyph: "storm",
+                description: "Represents a storm (rain, thunder, lightning, wind), severe weather conditions, or a turbulent situation.",
+                usage: "Used in weather apps, to indicate disruptions, or metaphorically for intense activity or conflict."
+            },
+            {
+                name: "Pageless",
+                glyph: "pageless",
+                description: "Represents a continuous scrolling document format that does not have distinct pages, or infinite scroll.",
+                usage: "Used in document editors, web design to indicate a pageless layout option, or for continuous content feeds."
+            },
+            {
+                name: "Dirty lens",
+                glyph: "dirty_lens",
+                description: "Represents a dirty camera lens, smudged screen, or a need for cleaning optical equipment to improve clarity.",
+                usage: "Used in camera apps as a warning, in image editing to simulate lens imperfections, or as a general alert for cleaning."
+            },
+            {
+                name: "Inbox text",
+                glyph: "inbox_text",
+                description: "Represents messages, textual content within an inbox, or a summary of incoming text communications.",
+                usage: "Used in messaging apps, email clients to indicate textual communication, or notifications containing text."
+            },
+            {
+                name: "Menu book",
+                glyph: "menu_book",
+                description: "Represents a restaurant menu, recipe book, a detailed guide, manual, or a catalog of items.",
+                usage: "Used for food ordering apps, culinary resources, extensive help documentation, or library/catalog access."
+            },
+            {
+                name: "Cloud queue",
+                glyph: "cloud_queue",
+                description: "Represents a queue of tasks, data, or messages being processed or waiting in the cloud.",
+                usage: "Used in distributed systems, background job processing, data synchronization status, or cloud-based message queues."
+            },
+            {
+                name: "Pin drop",
+                glyph: "pin_drop",
+                description: "Represents marking a specific point on a map, often by dropping a pin, or indicating a saved/target location.",
+                usage: "Used in map applications for saving locations, setting destinations, sharing points of interest, or geofencing."
+            },
+            {
+                name: "Spatial audio",
+                glyph: "spatial_audio",
+                description: "Represents immersive audio technology that creates a 3D sound experience, where sound is perceived to come from different directions.",
+                usage: "Used in media players, headphones settings, gaming, virtual reality, or applications supporting spatial sound."
+            },
+            {
+                name: "Swap vert",
+                glyph: "swap_vert",
+                description: "Represents swapping items vertically, reordering in a vertical list, or vertical sorting controls.",
+                usage: "Used in list management, reordering elements up/down, data comparison, or indicating vertical scroll/swap actions."
+            },
+            {
+                name: "Swap horiz",
+                glyph: "swap_horiz",
+                description: "Represents swapping items horizontally, reordering in a horizontal list/tabs, or horizontal sorting controls.",
+                usage: "Used for reordering tabs, image carousels, comparing items side-by-side, or indicating horizontal scroll/swap actions."
+            },
+            {
+                name: "Open jam",
+                glyph: "open_jam",
+                description: "Represents an open session, collaborative work (jam session), an accessible container/package, or an unlocked resource.",
+                usage: "Often used for collaborative tools, open project files, user-accessible content packages, or indicating an 'open' status."
+            }
+        ];
+
+
+       let currentCardIndex = 0;
+    let shuffledIcons = [];
+    let isFlipping = false; // Flag to prevent multiple rapid flips
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+        }
+        return array;
+    }
+
+    function displayCard(index) {
+        const icon = shuffledIcons[index];
+        flashcardIconGlyph.textContent = icon.glyph;
+        flashcardBackName.textContent = icon.name;
+        flashcardBackDescription.textContent = icon.description;
+        flashcardBackUsage.textContent = icon.usage;
+
+        updateProgress();
+    }
+
+    function updateProgress() {
+        currentCardIndexSpan.textContent = currentCardIndex + 1;
+        totalCardsSpan.textContent = shuffledIcons.length;
+    }
+
+    function initializeFlashcards() {
+        shuffledIcons = shuffleArray([...iconsData]); // Shallow copy to shuffle
+        if (shuffledIcons.length > 0) {
+            displayCard(currentCardIndex);
+        } else {
+            // Handle no icons scenario
+            flashcard.innerHTML = "<p>No icons available for flashcards.</p>";
+            flipCardBtn.disabled = true;
+            nextCardBtn.disabled = true;
+        }
+    }
+
+    flipCardBtn.addEventListener('click', () => {
+        if (isFlipping) return; // Prevent rapid clicking while animating
+        isFlipping = true;
+        flashcard.classList.toggle('flipped');
+        // Add a small delay to reset the flag after the animation (0.6s is your CSS transition)
+        setTimeout(() => {
+            isFlipping = false;
+        }, 600);
+    });
+
+    nextCardBtn.addEventListener('click', () => {
+        if (isFlipping) return; // Prevent navigating during a flip
+        isFlipping = true; // Set flag to true
+
+        // 1. Ensure the card is unflipped first
+        flashcard.classList.remove('flipped');
+
+        // 2. Add a slight delay to allow the unflipping animation to complete
+        //    before showing the new card's content.
+        //    The 600ms here matches your .flashcard CSS transition duration.
+        setTimeout(() => {
+            currentCardIndex++;
+            if (currentCardIndex < shuffledIcons.length) {
+                displayCard(currentCardIndex);
+            } else {
+                // End of cards, restart or show completion message
+                alert("You've gone through all the icons! Starting over.");
+                currentCardIndex = 0;
+                initializeFlashcards(); // Reshuffle and start again
+            }
+            isFlipping = false; // Reset the flag after the new card is displayed
+        }, 600); // This delay should match your CSS transition time for the flip
+    });
+
+    // Initialize on page load
+    initializeFlashcards();
+    });
+  </script>
+</body>
+</html>
