@@ -511,6 +511,67 @@
                 padding: 10px 20px;
             }
         }
+
+        #streak-feedback {
+            color: var(--primary-medium); /* A prominent color for streak */
+            font-size: 16px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            position: absolute;
+            left: 24px; /* Align with score-display */
+            top: 45px; /* Adjust vertical position below score */
+            transform: translateY(0);
+        }
+
+        #streak-feedback.show {
+            opacity: 1;
+            transform: translateY(-5px); /* Slight lift effect */
+        }
+
+        /* Add these new CSS rules to your <style> block */
+
+        /* Base body transition for smooth background changes */
+        body {
+            transition: background 0.8s ease-in-out; /* Smooth transition for background */
+        }
+        
+        /* Streak specific backgrounds */
+        body.streak-2-bg {
+            background: linear-gradient(135deg, #4CAF50, #66BB6A); /* Greenish for 2x streak */
+        }
+        
+        body.streak-3-bg {
+            background: linear-gradient(135deg, #FFC107, #FFD54F); /* Yellowish for 3x streak */
+        }
+        
+        body.streak-4-bg {
+            background: linear-gradient(135deg, #FF9800, #FFB74D); /* Orangish for 4x streak */
+        }
+        
+        body.streak-5-bg {
+            background: linear-gradient(135deg, #2196F3, #64B5F6); /* Bluish for 5x streak */
+        }
+        
+        body.streak-6-bg {
+            background: linear-gradient(135deg, #9C27B0, #CE93D8); /* Purplish for 6x streak */
+        }
+        
+        body.streak-7-bg {
+            background: linear-gradient(135deg, #F44336, #E57373); /* Reddish for 7x streak */
+        }
+        
+        body.streak-8-bg {
+            background: linear-gradient(135deg, #795548, #A1887F); /* Brownish for 8x streak */
+        }
+        
+        body.streak-9-bg {
+            background: linear-gradient(135deg, #00BCD4, #4DD0E1); /* Cyan for 9x streak */
+        }
+        
+        body.streak-10-bg {
+            background: linear-gradient(135deg, #C2185B, #F06292); /* Deep Pink for 10+ streak */
+        }
     </style>
 </head>
 <body>
@@ -523,13 +584,6 @@
         Your browser does not support the audio element.
     </audio>
 
-    <audio id="correct-sound">
-        <source src="sounds/correct.mp3" type="audio/mp3" />
-    </audio>
-
-    <audio id="incorrect-sound">
-        <source src="sounds/incorrect.mp3" type="audio/mp3" />
-    </audio>
 
 
     <div id="start-screen">
@@ -555,6 +609,7 @@
         <div id="score-display">
             <div id="total-score">Score: 0</div>
             <div id="score-feedback"></div>
+            <div id="streak-feedback"></div>
         </div>
         <h2>What is this icon?</h2>
         <div id="icon-placeholder">🔲</div>
@@ -636,6 +691,7 @@
     let quizData = [];
     let currentQuestion = 0;
     let score = 0;
+    let scoreStreak = 0;
     let correctAnswers = 0;
     let difficulty = '';
     let questionStartTime = 0;
@@ -679,9 +735,6 @@
     const downloadCertificateBtn = document.getElementById("download-certificate-btn");
     const certificateCanvas = document.getElementById('certificate-canvas');
     const ctx = certificateCanvas.getContext('2d');
-    const bgMusic = document.getElementById("bg-music");
-    const correctSound = document.getElementById("correct-sound");
-    const incorrectSound = document.getElementById("incorrect-sound");
 
     // New message modal elements
     const messageModal = document.getElementById('message-modal');
@@ -880,6 +933,7 @@ function showMessageModal(title, message, autoCloseDelay = 0) {
         currentQuestion = 0;
         score = 0;
         correctAnswers = 0;
+        scoreStreak = 0; // <--- ADD THIS LINE TO RESET STREAK
         startScreen.style.display = "none";
         quizScreen.style.display = "flex"; // Changed to flex for proper layout
         startTimer();
@@ -891,7 +945,7 @@ function showMessageModal(title, message, autoCloseDelay = 0) {
         const colRef = collection(db, difficulty.charAt(0).toUpperCase() + difficulty.slice(1));
         const snapshot = await getDocs(colRef);
         let questions = [];
-
+        
         snapshot.forEach(doc => {
             const data = doc.data();
             questions.push({
@@ -900,8 +954,17 @@ function showMessageModal(title, message, autoCloseDelay = 0) {
                 answer: data.answer
             });
         });
-
-        return shuffleArray(questions).slice(0, 10);
+    
+        // --- MODIFY THIS SECTION ---
+        let numberOfQuestions = 10; // Default for Easy
+        if (difficulty === "Medium") {
+            numberOfQuestions = 15;
+        } else if (difficulty === "Hard") {
+            numberOfQuestions = 20;
+        }
+    
+        return shuffleArray(questions).slice(0, numberOfQuestions);
+        // --- END MODIFICATION ---
     }
 
     function shuffleArray(array) {
@@ -948,7 +1011,7 @@ function showMessageModal(title, message, autoCloseDelay = 0) {
     function checkAnswer(selectedBtn, correctAnswer) {
         clearInterval(timerInterval); // Stop the timer when an answer is selected
         const timeTaken = (Date.now() - questionStartTime) / 1000;
-
+        
         const buttons = document.querySelectorAll(".option");
         buttons.forEach(btn => {
             btn.disabled = true; // Disable all buttons
@@ -958,12 +1021,15 @@ function showMessageModal(title, message, autoCloseDelay = 0) {
                 btn.classList.add("incorrect");
             }
         });
-
+    
         if (selectedBtn.textContent === correctAnswer) {
             correctAnswers++;
-            correctSound.play(); // ✅ play correct sound
+            playCorrectSound(); // <--- CHANGE THIS LINE
+            scoreStreak++; // <--- INCREMENT STREAK ON CORRECT ANSWER
+        
             let multiplier = 0;
-
+            let streakBonus = 0; // Initialize streak bonus
+        
             if (difficulty === "Easy") {
                 multiplier = timeTaken <= 5 ? 2.0 : timeTaken <= 15 ? 1.0 : 0.5;
             } else if (difficulty === "Medium") {
@@ -971,18 +1037,25 @@ function showMessageModal(title, message, autoCloseDelay = 0) {
             } else if (difficulty === "Hard") {
                 multiplier = timeTaken <= 3 ? 4.0 : timeTaken <= 7 ? 3.0 : 1.5;
             }
-
-            if (multiplier > 0) {
-                const pointsEarned = Math.round(10 * multiplier);
-                score += pointsEarned;
-                updateScoreUI(pointsEarned);
+        
+            const basePoints = Math.round(10 * multiplier);
+        
+            // --- NEW: Calculate streak bonus ---
+            if (scoreStreak >= 2) { // Start giving bonus from 2 consecutive correct answers
+                streakBonus = (scoreStreak - 1) * 5; // e.g., 2 streak = +5, 3 streak = +10, etc.
             }
-            updateScoreUI(0); // Call with 0 to just update total score if no points earned, or remove if only points should trigger
+            // --- END NEW ---
+        
+            const totalPointsEarned = basePoints + streakBonus; // Combine base and bonus
+        
+            score += totalPointsEarned;
+            updateScoreUI(totalPointsEarned, scoreStreak); // <--- PASS scoreStreak to updateScoreUI
+        } else {
+            playIncorrectSound(); // <--- CHANGE THIS LINE
+            scoreStreak = 0; // <--- RESET STREAK ON INCORRECT ANSWER
+            updateScoreUI(0, scoreStreak); // <--- Pass 0 points and reset streak
         }
-        else {
-            incorrectSound.play(); // ✅ play incorrect sound
-        }
-
+    
         setTimeout(() => {
             currentQuestion++;
             if (currentQuestion < quizData.length) {
@@ -1194,7 +1267,9 @@ function showMessageModal(title, message, autoCloseDelay = 0) {
                 btn.classList.add("incorrect");
             }
         });
-        incorrectSound.play(); // Play incorrect sound if time runs out (considered an incorrect answer)
+        playIncorrectSound(); // <--- CHANGE THIS LINE (if time runs out, it's like an incorrect answer)
+        scoreStreak = 0; // <--- RESET STREAK WHEN TIME IS UP
+        updateScoreUI(0, scoreStreak); // <--- Pass 0 points and reset streak
 
         setTimeout(() => {
             currentQuestion++;
@@ -1207,21 +1282,92 @@ function showMessageModal(title, message, autoCloseDelay = 0) {
         }, 1000);
     }
 
-    function updateScoreUI(points) {
+    // Get the new streak feedback element
+const streakFeedback = document.getElementById("streak-feedback"); // Add this line near other element queries
+
+    function updateScoreUI(points, currentStreak) { // currentStreak is already passed from previous steps
         totalScoreDisplay.textContent = `Score: ${score}`;
+
+        // Update score feedback (existing logic)
         if (points > 0) {
             scoreFeedback.textContent = `+${points}`;
             scoreFeedback.classList.add("show");
-
-            setTimeout(() => {
-                scoreFeedback.classList.remove("show");
-                scoreFeedback.textContent = "";
-            }, 800);
+        } else {
+            scoreFeedback.classList.remove("show");
+            scoreFeedback.textContent = "";
         }
+
+        // Update streak feedback (existing logic)
+        if (currentStreak >= 2) {
+            streakFeedback.textContent = `🔥 ${currentStreak}x Streak!`;
+            streakFeedback.classList.add("show");
+        } else {
+            streakFeedback.classList.remove("show");
+            streakFeedback.textContent = "";
+        }
+
+        // --- NEW: Handle Background Color Change based on Streak ---
+
+        // 1. Remove all existing streak background classes from the body
+        const bodyClasses = Array.from(document.body.classList); // Get current classes as array
+        bodyClasses.forEach(className => {
+            if (className.startsWith('streak-') && className.endsWith('-bg')) {
+                document.body.classList.remove(className);
+            }
+        });
+
+        // 2. Add the appropriate new streak background class
+        if (currentStreak >= 2) {
+            // We'll apply the specific background for streaks 2 through 9.
+            // For streaks 10 and above, we'll use the 'streak-10-bg' class.
+            let streakBgClass = '';
+            if (currentStreak >= 10) {
+                streakBgClass = 'streak-10-bg';
+            } else if (currentStreak >= 2) { // For streaks 2 to 9
+                streakBgClass = `streak-${currentStreak}-bg`;
+            }
+
+            if (streakBgClass) {
+                document.body.classList.add(streakBgClass);
+            }
+        } else {
+            // If streak is 0 or 1, ensure the default primary gradient is applied
+            // (which is defined in your initial body styles). No specific streak class is needed.
+            // The filtering above already removes any existing streak classes.
+        }
+
+        // --- END NEW BACKGROUND LOGIC ---
+
+
+        // Hide feedback after a delay (existing logic)
+        setTimeout(() => {
+            scoreFeedback.classList.remove("show");
+            scoreFeedback.textContent = "";
+            // You might want streakFeedback to stay longer or fade out with points.
+            // If you want it to fade out here too:
+            // streakFeedback.classList.remove("show");
+            // streakFeedback.textContent = "";
+        }, 800);
     }
+
+    const bgMusic = document.getElementById("bg-music");
+    // const correctSound = document.getElementById("correct-sound"); // REMOVE OR COMMENT OUT THIS LINE
+    // const incorrectSound = document.getElementById("incorrect-sound"); // REMOVE OR COMMENT OUT THIS LINE
+    
+    // NEW: Define functions to play sounds dynamically
+    function playCorrectSound() {
+        const sound = new Audio('sounds/correct.mp3');
+        sound.volume = 1.0; // Set volume here
+        sound.play().catch(e => console.error("Error playing correct sound:", e));
+    }
+    
+    function playIncorrectSound() {
+        const sound = new Audio('sounds/incorrect.mp3');
+        sound.volume = 1.0; // Set volume here
+        sound.play().catch(e => console.error("Error playing incorrect sound:", e));
+    }
+
     bgMusic.volume = 0.1;
-    correctSound.volume = 1.0;
-    incorrectSound.volume = 1.0;
 
 
 
